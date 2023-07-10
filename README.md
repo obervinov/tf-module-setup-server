@@ -24,8 +24,10 @@ This module performs the initial creation of a server in digitalocean, as well a
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack.png" width="25" title="stack"> Repository map
 ```sh
 .
+├── CHANGELOG.md
 ├── LICENSE
 ├── README.md
+├── SECURITY.md
 ├── ansible
 │   ├── playbook.yml
 │   └── roles
@@ -59,8 +61,7 @@ This module performs the initial creation of a server in digitalocean, as well a
 └── variables.tf
 ```
 
-
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack2.png" width="25" title="stack2">## <img src="https://github.com/obervinov/_templates/blob/main/icons/requirements.png" width="25" title="requirements"> Requirements
+## <img src="https://github.com/obervinov/_templates/blob/main/icons/requirements.png" width="25" title="requirements"> Requirements
 | Name | Version |
 |------|---------|
 | <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | 2.28.1 |
