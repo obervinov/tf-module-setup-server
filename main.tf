@@ -10,14 +10,20 @@ resource "digitalocean_droplet" "droplet" {
     #!/bin/bash
     echo "https://github.com/obervinov"
   EOF
+  connection {
+    host = self.ipv4_address
+    user = "root"
+    type = "ssh"
+    private_key = data.digitalocean_ssh_key.ssh_key.public_key
+    timeout = "2m"
+  }
   provisioner "local-exec" {
     command = <<-EOT
-      ansible-playbook -i "${digitalocean_droplet.droplet.ipv4_address}," ${var.ansible_playbook} \
+      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i "${digitalocean_droplet.droplet.ipv4_address}," ${var.ansible_playbook} \
       -e '{"public_key":"${data.digitalocean_ssh_key.ssh_key.public_key}","ansible_host":"${digitalocean_droplet.droplet.ipv4_address}","username":"${var.username}","password":"${var.password}","packages_list":[${join(",", var.packages_list)}]}'
     EOT
     working_dir = path.module
   }
-
   connection {
     host = self.ipv4_address
     user = "${var.username}"
@@ -25,7 +31,6 @@ resource "digitalocean_droplet" "droplet" {
     private_key = data.digitalocean_ssh_key.ssh_key.public_key
     timeout = "2m"
   }
-
   provisioner "remote-exec" {
     inline = var.remote_commands
   }
