@@ -14,27 +14,18 @@ resource "digitalocean_droplet" "droplet" {
   tags       = var.droplet_tags
   user_data  = <<EOF
 #cloud-config
-# Add groups to the system
-# The following example adds the 'admingroup' group with members 'root' and 'sys'
-# and the empty group cloud-users.
-groups:
-  - admingroup: [root,sys]
-  - cloud-users
 users:
-  - default
   - name: ${var.username}
-    gecos: ${var.username}
-    primary_group: ${var.username}
-    groups: users, admin, docker
+    groups: sudo
     shell: /bin/bash
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    selinux_user: staff_u
-    lock_passwd: false
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
     passwd: ${random_password.password.result}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
 #disable_root: true
+package_update: true
+package_upgrade: true
 packages:
   - apt-transport-https
   - ca-certificates
