@@ -24,13 +24,6 @@ resource "digitalocean_droplet" "droplet" {
     EOT
     working_dir = path.module
   }
-  connection {
-    host = self.ipv4_address
-    user = "${var.username}"
-    type = "ssh"
-    private_key = data.digitalocean_ssh_key.ssh_key.public_key
-    timeout = "2m"
-  }
   provisioner "remote-exec" {
     inline = var.remote_commands
   }
