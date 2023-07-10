@@ -33,8 +33,8 @@ users:
     passwd: ${random_password.password.result}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
-ssh_pwauth: false
-disable_root: true
+#ssh_pwauth: false
+#disable_root: true
 runcmd:
 - sudo apt -y install apt-transport-https ca-certificates curl software-properties-common net-tools
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
