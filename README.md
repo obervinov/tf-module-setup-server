@@ -28,32 +28,6 @@ This module performs the initial creation of a server in digitalocean, as well a
 ├── LICENSE
 ├── README.md
 ├── SECURITY.md
-├── ansible
-│   ├── playbook.yml
-│   └── roles
-│       ├── config_sshd
-│       │   ├── default
-│       │   │   └── main.yml
-│       │   ├── meta
-│       │   │   └── main.yml
-│       │   ├── tasks
-│       │   │   └── main.yml
-│       │   └── templates
-│       │       └── sshd_config.j2
-│       ├── create_user
-│       │   ├── default
-│       │   │   └── main.yml
-│       │   ├── meta
-│       │   │   └── main.yml
-│       │   └── tasks
-│       │       └── main.yml
-│       └── install_packages
-│           ├── defaults
-│           │   └── main.yml
-│           ├── meta
-│           │   └── main.yml
-│           └── tasks
-│               └── main.yml
 ├── data.tf
 ├── main.tf
 ├── output.tf
@@ -99,7 +73,6 @@ No modules.
 | <a name="input_droplet_region"></a> [droplet\_region](#input\_droplet\_region) | The region of the droplet | `string` | `""` | no |
 | <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet | `string` | n/a | yes |
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
-| <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | n/a | yes |
 | <a name="input_public_key_name"></a> [public\_key\_name](#input\_public\_key\_name) | Name of the public key in digitalocean | `string` | n/a | yes |
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | n/a | yes |
 | <a name="input_username"></a> [username](#input\_username) | Name for creating a new user | `string` | n/a | yes |
@@ -118,18 +91,14 @@ No modules.
 module "prepare_environment" {
   source               = "git@github.com:obervinov/tf-module-setup-server.git/?ref=v1.0.0"
   username             = var.username
-  password             = var.password
-  droplet_name         = "droplet1"
+  droplet_name         = "server1"
   droplet_region       = "ams3"
   droplet_image        = "ubuntu-22-10-x64"
   droplet_size         = "s-1vcpu-512mb-10gb"
-  droplet_tags         = ["ubuntu", "nginx"]
+  droplet_tags         = ["ubuntu", "ssh", "nginx"]
   droplet_project_name = "project1"
-  ansible_playbook     = "./ansible/playbook.yml"
   digitalocean_token   = var.digitalocean_token
   public_key_name      = var.public_key_name
-  packages_list        = ["htop", "python3", "net-tools", "curl", "git", "vim", "ca-certificates", "gnupg", "docker-ce"]
-  restart_sshd         = true
-  remote_commands      = ["echo 'Hello, world!'"]
+  remote_commands      = ["apt install -y htop git vim docker-ce", "echo 'Hello, world!'"]
 }
 ```

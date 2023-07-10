@@ -17,11 +17,6 @@ variable "public_key_name" {
   type        = string
 }
 
-variable "packages_list" {
-  description = "List of packages to install"
-  type        = list(string)
-}
-
 variable "digitalocean_token" {
   description = "DigitalOcean API Token"
   type        = string
