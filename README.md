@@ -131,5 +131,6 @@ module "prepare_environment" {
   public_key_name      = var.public_key_name
   packages_list        = ["htop", "python3", "net-tools", "curl", "git", "vim", "ca-certificates", "gnupg", "docker-ce"]
   restart_sshd         = true
+  remote_commands      = ["echo 'Hello, world!'"]
 }
 ```
