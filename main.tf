@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "droplet" {
     host = self.ipv4_address
     user = "${var.username}"
     type = "ssh"
-    private_key = file(data.digitalocean_ssh_key.ssh_key.public_key)
+    private_key = data.digitalocean_ssh_key.ssh_key.public_key
     timeout = "2m"
   }
 
