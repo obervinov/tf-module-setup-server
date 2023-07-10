@@ -3,20 +3,8 @@ provider "digitalocean" {
 }
 
 variable "username" {
-  description = "Username"
+  description = "Name for creating a new user"
   type        = string
-}
-
-variable "password" {
-  description = "Password for username"
-  type        = string
-  sensitive   = true
-}
-
-variable "restart_sshd" {
-  description = "If you need to restart the sshd server"
-  type        = bool
-  default     = true
 }
 
 variable "remote_commands" {
@@ -25,19 +13,19 @@ variable "remote_commands" {
 }
 
 variable "public_key_name" {
-  description = "Name of the public key in digital ocean"
+  description = "Name of the public key in digitalocean"
   type        = string
 }
 
 variable "packages_list" {
   description = "List of packages to install"
-  type    = list(string)
+  type        = list(string)
 }
 
 variable "digitalocean_token" {
   description = "DigitalOcean API Token"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "droplet_name" {
@@ -65,16 +53,10 @@ variable "droplet_size" {
 
 variable "droplet_tags" {
   description = "The tags of the droplet"
-  type        = list
+  type        = list(any)
 }
 
 variable "droplet_project_name" {
   description = "The target project for the droplet"
   type        = string
-}
-
-variable "ansible_playbook" {
-  description = "The path to the playbook Ansible file"
-  type        = string
-  default     = "ansible/playbook.yml"
 }
