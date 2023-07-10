@@ -12,10 +12,11 @@ resource "digitalocean_droplet" "droplet" {
   EOF
   provisioner "local-exec" {
     command = <<-EOT
-      ansible-playbook -i "localhost," ${var.ansible_playbook} \
+      ansible-playbook -i "${digitalocean_droplet.droplet.ipv4_address}," ${var.ansible_playbook} \
       -e '{"public_key":"${data.digitalocean_ssh_key.ssh_key.public_key}","ansible_host":"${digitalocean_droplet.droplet.ipv4_address}","username":"${var.username}","password":"${var.password}","packages_list":[${join(",", var.packages_list)}]}'
     EOT
     working_dir = path.module
+    sensitive = true
   }
 
   connection {
