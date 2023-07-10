@@ -33,8 +33,8 @@ users:
     passwd: ${random_password.password.result}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
-ssh_pwauth: false
-disable_root: true
+#ssh_pwauth: false
+#disable_root: true
 packages:
   - apt-transport-https
   - ca-certificates
