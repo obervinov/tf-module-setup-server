@@ -33,13 +33,19 @@ users:
     passwd: ${random_password.password.result}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
-#ssh_pwauth: false
-#disable_root: true
+ssh_pwauth: false
+disable_root: true
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - net-tools
 runcmd:
-- sudo apt -y install apt-transport-https ca-certificates curl software-properties-common net-tools
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-- sudo apt -y update && sudo apt-get -y upgrade
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -y update
+  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -y upgrade
 EOF
   connection {
     host = self.ipv4_address
