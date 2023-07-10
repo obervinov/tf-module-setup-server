@@ -102,6 +102,7 @@ No modules.
 | <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | n/a | yes |
 | <a name="input_password"></a> [password](#input\_password) | Password for username | `string` | n/a | yes |
 | <a name="input_public_key_name"></a> [public\_key\_name](#input\_public\_key\_name) | Name of the public key in digital ocean | `string` | n/a | yes |
+| <a name="input_restart_sshd"></a> [restart\_sshd](#input\_restart\_sshd) | If you need to restart the sshd server | `bool` | `true` | no |
 | <a name="input_username"></a> [username](#input\_username) | Username | `string` | n/a | yes |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack2.png" width="25" title="outputs"> Outputs
@@ -128,5 +129,6 @@ module "prepare_environment" {
   digitalocean_token   = var.digitalocean_token
   public_key_name      = var.public_key_name
   packages_list        = ["htop", "python3", "net-tools", "curl", "git", "vim", "ca-certificates", "gnupg", "docker-ce"]
+  restart_sshd         = true
 }
 ```

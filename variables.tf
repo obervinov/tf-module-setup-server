@@ -13,6 +13,12 @@ variable "password" {
   sensitive   = true
 }
 
+variable "restart_sshd" {
+  description = "If you need to restart the sshd server"
+  type        = bool
+  default     = true
+}
+
 variable "public_key_name" {
   description = "Name of the public key in digital ocean"
   type        = string

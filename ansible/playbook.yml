@@ -7,6 +7,7 @@
     password: "{{ password }}"
     public_key: "{{ public_key }}"
     packages_list: "{{ packages_list }}"
+    restart_sshd: "{{ restart_sshd }}"
   roles:
     - create_user
     - install_packages
