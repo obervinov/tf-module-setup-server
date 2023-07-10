@@ -21,7 +21,7 @@ variable "restart_sshd" {
 
 variable "remote_commands" {
   description = "List of commands to execute custom remote-exec"
-  type        = list()
+  type        = list(string)
 }
 
 variable "public_key_name" {
