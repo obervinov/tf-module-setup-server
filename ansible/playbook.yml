@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  vars:
+    username: "{{ username }}"
+    password: "{{ password }}"
+    public_key: "{{ public_key }}"
+    packages_list: "{{ packages_list }}"
+  roles:
+    - create_user
+    - install_packages
+    - config_sshd

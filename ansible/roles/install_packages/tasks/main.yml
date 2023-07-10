@@ -1,0 +1,26 @@
+---
+- name: Import Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: packages_list | select('match', '^docker-') | list | length > 0
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+    update_cache: yes
+  when: packages_list | select('match', '^docker-') | list | length > 0
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    force_apt_get: yes
+  loop: "{{ packages_list }}"
+
+- name: Reboot system after upgrade
+  ansible.builtin.reboot:
+    reboot_timeout: 3600
+  when: restart_system
