@@ -19,6 +19,11 @@ variable "restart_sshd" {
   default     = true
 }
 
+variable "remote_commands" {
+  description = "List of commands to execute custom remote-exec"
+  type        = list()
+}
+
 variable "public_key_name" {
   description = "Name of the public key in digital ocean"
   type        = string

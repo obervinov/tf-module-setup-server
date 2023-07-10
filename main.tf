@@ -10,19 +10,6 @@ resource "digitalocean_droplet" "droplet" {
     #!/bin/bash
     echo "https://github.com/obervinov"
   EOF
-}
-
-resource "digitalocean_project_resources" "project_resources" {
-  project = data.digitalocean_project.project.id
-  resources = [
-    digitalocean_droplet.droplet.urn
-  ]
-}
-
-resource "null_resource" "ansible" {
-  triggers = {
-    timestamp = timestamp()
-  }
   provisioner "local-exec" {
     command = <<-EOT
       ansible-playbook -i "localhost," ${var.ansible_playbook} \
@@ -30,4 +17,23 @@ resource "null_resource" "ansible" {
     EOT
     working_dir = path.module
   }
+
+  connection {
+    host = self.ipv4_address
+    user = "${var.username}"
+    type = "ssh"
+    private_key = file(data.digitalocean_ssh_key.ssh_key.public_key)
+    timeout = "2m"
+  }
+
+  provisioner "remote-exec" {
+    inline = var.remote_commands
+  }
+}
+
+resource "digitalocean_project_resources" "project_resources" {
+  project = data.digitalocean_project.project.id
+  resources = [
+    digitalocean_droplet.droplet.urn
+  ]
 }
