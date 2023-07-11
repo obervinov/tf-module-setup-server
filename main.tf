@@ -10,9 +10,11 @@ resource "digitalocean_droplet" "droplet" {
 #cloud-config
 users:
   - name: ${var.username}
-    groups: sudo
+    groups:
+      - sudo
     shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
