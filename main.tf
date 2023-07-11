@@ -1,16 +1,3 @@
-resource "random_password" "password" {
-  length = 16
-  special = false
-  provisioner "local-exec" {
-    # docker, because mkpasswd is missing on macos
-    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result} > ${path.module}/.password"
-    interpreter = ["sh", "-c"]
-    environment = {
-      LC_ALL = "C.UTF-8"
-    }
-  }
-}
-
 resource "digitalocean_droplet" "droplet" {
   name       = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
   image      = var.droplet_image
@@ -26,7 +13,6 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    passwd: ${fileexists("${path.module}/.password")} ? ${file("${path.module}/.password")}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
@@ -48,7 +34,6 @@ EOF
   connection {
     host = self.ipv4_address
     user = "${var.username}"
-    password = "${random_password.password.result}"
     type = "ssh"
     private_key = data.digitalocean_ssh_key.ssh_key.public_key
     timeout = "2m"
