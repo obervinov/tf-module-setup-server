@@ -7,12 +7,6 @@ variable "username" {
   type        = string
 }
 
-variable "password_hash" {
-  description = "Hash of the password to create a new user"
-  type = string
-  default = null_resource.password_hash.*.stdout[0]
-}
-
 variable "remote_commands" {
   description = "List of commands to execute custom remote-exec"
   type        = list(string)
