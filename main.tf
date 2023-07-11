@@ -1,23 +1,14 @@
 resource "random_password" "password" {
   length = 16
   special = false
-}
-
-resource "null_resource" "password_hash" {
   provisioner "local-exec" {
     # docker, because mkpasswd is missing on macos
-    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result}"
+    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result} > .password"
     interpreter = ["sh", "-c"]
     environment = {
       LC_ALL = "C.UTF-8"
     }
   }
-}
-
-variable "password_hash" {
-  description = "Hash of the password to create a new user"
-  type = string
-  default = null_resource.password_hash.*.stdout[0]
 }
 
 resource "digitalocean_droplet" "droplet" {
@@ -35,7 +26,7 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    passwd: ${var.password_hash}
+    passwd: ${file(".password")}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
