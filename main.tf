@@ -15,10 +15,10 @@ users:
     shell: /bin/bash
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
-    ssh_authorized_keys:
+    ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
-#ssh_pwauth: false
-#disable_root: true
+ssh_pwauth: false
+ådisable_root: true
 package_update: true
 package_upgrade: true
 packages:
