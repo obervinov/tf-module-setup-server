@@ -10,7 +10,7 @@ output "username" {
 
 output "password" {
   description = "Password hash for new user"
-  value       = null_resource.password_hash.output["stdout"]
+  value       = file(".password")
 }
 output "sshkey" {
   description = "SSH Key fingerprint"
