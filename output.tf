@@ -9,8 +9,8 @@ output "username" {
 }
 
 output "password" {
-  description = "Password hash for new user"
-  value       = file("${path.module}/.password")
+  description = "Password for new user"
+  value       = random_password.password.result
 }
 output "sshkey" {
   description = "SSH Key fingerprint"

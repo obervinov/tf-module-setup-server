@@ -26,7 +26,7 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    passwd: ${file("${path.module}/.password")}
+    passwd: ${fileexists("${path.module}/.password")} ? ${file("${path.module}/.password")}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
