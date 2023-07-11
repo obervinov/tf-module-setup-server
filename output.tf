@@ -9,8 +9,8 @@ output "username" {
 }
 
 output "password" {
-  description = "Password for new user"
-  value       = random_password.password.result
+  description = "Password hash for new user"
+  value       = null_resource.password_hash.output["stdout"]
 }
 output "sshkey" {
   description = "SSH Key fingerprint"

@@ -1,7 +1,17 @@
 resource "random_password" "password" {
   length = 16
-  special = true
-  override_special = "_%@"
+  special = false
+}
+
+resource "null_resource" "password_hash" {
+  provisioner "local-exec" {
+    # docker, because mkpasswd is missing on macos
+    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result}"
+    interpreter = ["sh", "-c"]
+    environment = {
+      LC_ALL = "C.UTF-8"
+    }
+  }
 }
 
 resource "digitalocean_droplet" "droplet" {
@@ -19,7 +29,7 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    passwd: ${random_password.password.result}
+    passwd: ${null_resource.password_hash.output["stdout"]}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false
