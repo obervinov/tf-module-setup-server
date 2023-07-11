@@ -3,7 +3,7 @@ resource "random_password" "password" {
   special = false
   provisioner "local-exec" {
     # docker, because mkpasswd is missing on macos
-    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result} > .password"
+    command = "docker run -it --rm alpine mkpasswd ${random_password.password.result} > ${path.module}/.password"
     interpreter = ["sh", "-c"]
     environment = {
       LC_ALL = "C.UTF-8"
@@ -26,7 +26,7 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    passwd: ${file(".password")}
+    passwd: ${file("${path.module}/.password")}
     ssh_authorized_keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 #ssh_pwauth: false

@@ -10,7 +10,7 @@ output "username" {
 
 output "password" {
   description = "Password hash for new user"
-  value       = file(".password")
+  value       = file("${path.module}/.password")
 }
 output "sshkey" {
   description = "SSH Key fingerprint"
