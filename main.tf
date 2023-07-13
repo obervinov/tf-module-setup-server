@@ -12,13 +12,12 @@ users:
   - name: ${var.username}
     groups:
       - sudo
-    shell: /bin/bash
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.ssh_key.public_key}
 ssh_pwauth: false
-ådisable_root: true
+disable_root: true
 package_update: true
 package_upgrade: true
 packages:
@@ -27,22 +26,16 @@ packages:
   - curl
   - software-properties-common
   - net-tools
+  - gpg
+${join("\n", formatlist("  - %s", var.packages_list))}
 runcmd:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -y update
-  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -y upgrade
+  # Install docker for all environment
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  # Directory for files provisioner
+  - sudo mkdir -p /opt/configs && sudo chown ${var.username}.${var.username} /opt/configs && sudo chmod 755 /opt/configs
 EOF
-  connection {
-    host = self.ipv4_address
-    user = "${var.username}"
-    type = "ssh"
-    private_key = data.digitalocean_ssh_key.ssh_key.public_key
-    timeout = "2m"
-  }
-  provisioner "remote-exec" {
-    inline = var.remote_commands
-  }
 }
 
 resource "digitalocean_project_resources" "project_resources" {
@@ -50,4 +43,40 @@ resource "digitalocean_project_resources" "project_resources" {
   resources = [
     digitalocean_droplet.droplet.urn
   ]
+  depends_on = [digitalocean_droplet.droplet]
+}
+
+resource "null_resource" "waiting-cloudinit" {
+  triggers = {
+    run_always = timestamp()
+  }
+  connection {
+    host    = digitalocean_droplet.droplet.ipv4_address
+    user    = var.username
+    type    = "ssh"
+    agent   = true
+    timeout = "3m"
+  }
+  provisioner "remote-exec" {
+    inline = ["cloud-init status --wait"]
+  }
+  depends_on = [digitalocean_droplet.droplet]
+}
+
+resource "null_resource" "remote-commands" {
+  connection {
+    host    = digitalocean_droplet.droplet.ipv4_address
+    user    = var.username
+    type    = "ssh"
+    agent   = true
+    timeout = "3m"
+  }
+  provisioner "file" {
+    source      = "${var.configs_path}/"
+    destination = "/opt/configs"
+  }
+  provisioner "remote-exec" {
+    inline = var.remote_commands
+  }
+  depends_on = [null_resource.waiting-cloudinit]
 }

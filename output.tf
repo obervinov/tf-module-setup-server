@@ -3,6 +3,11 @@ output "droplet" {
   value       = digitalocean_droplet.droplet.name
 }
 
+output "external-ip" {
+  description = "Droplet external ip-address"
+  value       = digitalocean_droplet.droplet.ipv4_address
+}
+
 output "username" {
   description = "Username for new user"
   value       = var.username

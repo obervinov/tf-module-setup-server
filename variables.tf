@@ -7,9 +7,20 @@ variable "username" {
   type        = string
 }
 
+variable "packages_list" {
+  description = "List of packages to install"
+  type        = list(string)
+}
+
 variable "remote_commands" {
   description = "List of commands to execute custom remote-exec"
   type        = list(string)
+}
+
+variable "configs_path" {
+  description = "The path to the directories with configurations that will be copied to the created server"
+  type        = string
+  default     = "configs/"
 }
 
 variable "public_key_name" {
