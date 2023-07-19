@@ -44,14 +44,13 @@ This module performs the initial creation of a server in digitalocean, as well a
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.2 |
-| <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | 2.28.1 |
 | <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | >= 2.28.1 |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/file.png" width="18" title="porviders"> Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | 2.28.1 >= 2.28.1 |
+| <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | >= 2.28.1 |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
 ## Modules
