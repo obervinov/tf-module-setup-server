@@ -1,3 +1,3 @@
-provider "digitalocean" {
+digitalocean {
   source  = "hashicorp/digitalocean"
 }
