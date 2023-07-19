@@ -20,10 +20,10 @@ output "sshkey" {
 
 output "dns_record" {
   description = "Dns record for new droplet"
-  value       = digitalocean_domain.domain.name
+  value       = var.droplet_dns_record ? digitalocean_domain.domain[0].name : ""
 }
 
 output "reserved_ip" {
   description = "Reserved ip for new droplet"
-  value       = digitalocean_reserved_ip.reserved_ip.ip_address
+  value       = var.droplet_reserved_ip ? digitalocean_reserved_ip.reserved_ip[0].ip_address : ""
 }

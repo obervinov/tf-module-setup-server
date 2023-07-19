@@ -106,7 +106,7 @@ resource "digitalocean_domain" "domain" {
 
 resource "digitalocean_record" "record" {
   count  = var.droplet_dns_record ? 1 : 0
-  domain = digitalocean_domain.domain[count.index].id
+  domain = element(digitalocean_domain.domain.*.id, 0)
   type   = "A"
   name   = var.domain_name
   value  = digitalocean_reserved_ip.reserved_ip[count.index].ip_address != "" ? digitalocean_reserved_ip.reserved_ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
