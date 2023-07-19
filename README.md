@@ -43,13 +43,15 @@ This module performs the initial creation of a server in digitalocean, as well a
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.2 |
 | <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | 2.28.1 |
+| <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | >= 2.28.1 |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/file.png" width="18" title="porviders"> Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | 2.28.1 |
+| <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | 2.28.1 >= 2.28.1 |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
 ## Modules
@@ -60,16 +62,16 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/domain) | resource |
-| [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/droplet) | resource |
-| [digitalocean_project_resources.project_resources](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/project_resources) | resource |
-| [digitalocean_record.record](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/record) | resource |
-| [digitalocean_reserved_ip.reserved_ip](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/reserved_ip) | resource |
-| [null_resource.remote-commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.remote-files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.waiting-cloudinit](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/project) | data source |
-| [digitalocean_ssh_key.ssh_key](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/ssh_key) | data source |
+| [digitalocean_droplet.droplet](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/droplet) | resource |
+| [digitalocean_project_resources.project](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/project_resources) | resource |
+| [digitalocean_record.record](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/record) | resource |
+| [digitalocean_reserved_ip.ip](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/reserved_ip) | resource |
+| [null_resource.cloudinit](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [digitalocean_domain.domain](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/domain) | data source |
+| [digitalocean_project.project](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/project) | data source |
+| [digitalocean_ssh_key.key](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/build.png" width="25" title="inputs"> Inputs
 
@@ -96,30 +98,34 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_dns_record"></a> [dns\_record](#output\_dns\_record) | Dns record for new droplet |
-| <a name="output_droplet"></a> [droplet](#output\_droplet) | Droplet name |
-| <a name="output_external-ip"></a> [external-ip](#output\_external-ip) | Droplet external ip-address |
-| <a name="output_reserved_ip"></a> [reserved\_ip](#output\_reserved\_ip) | Reserved ip for new droplet |
-| <a name="output_sshkey"></a> [sshkey](#output\_sshkey) | SSH Key fingerprint |
-| <a name="output_username"></a> [username](#output\_username) | Username for new user |
+| <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Dns record for new droplet |
+| <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
+| <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
+| <a name="output_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#output\_droplet\_reserved\_ip) | Reserved ip for new droplet |
+| <a name="output_droplet_ssh_key_fingerprint"></a> [droplet\_ssh\_key\_fingerprint](#output\_droplet\_ssh\_key\_fingerprint) | SSH Key fingerprint |
+| <a name="output_droplet_username"></a> [droplet\_username](#output\_droplet\_username) | Username for new user |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
 ```hcl
 module "prepare_environment" {
   source               = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
   username             = var.username
-  droplet_name         = "server1"
-  droplet_region       = "ams3"
+  droplet_name         = "server-1"
+  droplet_region       = "nyc1"
   droplet_image        = "ubuntu-22-10-x64"
   droplet_size         = "s-1vcpu-1gb"
   droplet_tags         = ["ssh", "ubuntu"]
-  droplet_project_name = "project1"
+  droplet_project_name = "project-1"
   digitalocean_token   = var.digitalocean_token
   public_key_name      = var.public_key_name
+  domain_zone          = "example.com"
+  domain_name          = "webui"
+  droplet_dns_record   = true
+  droplet_reserved_ip  = true
   packages_list        = ["python3", "libsecret-tools", "python3-pip"]
   remote_commands      = [
-    "echo 'Hello, world!'",
-    "docker compose -f /opt/configs/docker-compose.yml up -d",
+    "sudo mkdir -p /opt/vault/data && sudo chmod -R 777 /opt/vault",
+    "sudo docker compose -f /opt/configs/docker-compose.yml up -d",
   ]
 }
 

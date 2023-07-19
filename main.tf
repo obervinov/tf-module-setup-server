@@ -15,7 +15,7 @@ users:
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.ssh_key.public_key}
+      - ${data.digitalocean_ssh_key.key.public_key}
 ssh_pwauth: false
 disable_root: true
 package_update: true
@@ -38,7 +38,7 @@ runcmd:
 EOF
 }
 
-resource "digitalocean_project_resources" "project_resources" {
+resource "digitalocean_project_resources" "project" {
   project = data.digitalocean_project.project.id
   resources = [
     digitalocean_droplet.droplet.urn
@@ -46,7 +46,7 @@ resource "digitalocean_project_resources" "project_resources" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
-resource "null_resource" "waiting-cloudinit" {
+resource "null_resource" "cloudinit" {
   triggers = {
     run_always = timestamp()
   }
@@ -63,7 +63,7 @@ resource "null_resource" "waiting-cloudinit" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
-resource "null_resource" "remote-files" {
+resource "null_resource" "files" {
   count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
@@ -76,10 +76,10 @@ resource "null_resource" "remote-files" {
     source      = "${var.remote_files}/"
     destination = "/opt/configs"
   }
-  depends_on = [null_resource.waiting-cloudinit]
+  depends_on = [null_resource.cloudinit]
 }
 
-resource "null_resource" "remote-commands" {
+resource "null_resource" "commands" {
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = var.username
@@ -90,10 +90,10 @@ resource "null_resource" "remote-commands" {
   provisioner "remote-exec" {
     inline = var.remote_commands
   }
-  depends_on = [null_resource.waiting-cloudinit]
+  depends_on = [null_resource.cloudinit]
 }
 
-resource "digitalocean_reserved_ip" "reserved_ip" {
+resource "digitalocean_reserved_ip" "ip" {
   count      = var.droplet_reserved_ip ? 1 : 0
   droplet_id = digitalocean_droplet.droplet.id
   region     = digitalocean_droplet.droplet.region
@@ -104,5 +104,5 @@ resource "digitalocean_record" "record" {
   domain = element(data.digitalocean_domain.domain.*.id, 0)
   type   = "A"
   name   = var.domain_name
-  value  = digitalocean_reserved_ip.reserved_ip[count.index].ip_address != "" ? digitalocean_reserved_ip.reserved_ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
+  value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
 }
