@@ -64,7 +64,7 @@ resource "null_resource" "waiting-cloudinit" {
 }
 
 resource "null_resource" "remote-files" {
-  count = can(var.configs_path) && fileset(var.configs_path, "*") != [] ? 1 : 0
+  count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = var.username
@@ -73,7 +73,7 @@ resource "null_resource" "remote-files" {
     timeout = "3m"
   }
   provisioner "file" {
-    source      = "${var.configs_path}/"
+    source      = "${var.remote_files}/"
     destination = "/opt/configs"
   }
   depends_on = [null_resource.waiting-cloudinit]
@@ -91,4 +91,23 @@ resource "null_resource" "remote-commands" {
     inline = var.remote_commands
   }
   depends_on = [null_resource.waiting-cloudinit]
+}
+
+resource "digitalocean_reserved_ip" "reserved_ip" {
+  count      = var.droplet_reserved_ip ? 1 : 0
+  droplet_id = digitalocean_droplet.droplet.id
+  region     = digitalocean_droplet.droplet.region
+}
+
+resource "digitalocean_domain" "domain" {
+  count = var.droplet_reserved_ip ? 1 : 0
+  name  = var.domain_zone
+}
+
+resource "digitalocean_record" "record" {
+  count  = var.droplet_dns_record ? 1 : 0
+  domain = digitalocean_domain.domain.id
+  type   = "A"
+  name   = var.domain_name
+  value  = digitalocean_reserved_ip.reserved_ip.ip_address != "" ? digitalocean_reserved_ip.reserved_ip.ip_address : digitalocean_droplet.droplet.ipv4_address
 }

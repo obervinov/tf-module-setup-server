@@ -17,7 +17,7 @@ variable "remote_commands" {
   type        = list(string)
 }
 
-variable "configs_path" {
+variable "remote_files" {
   description = "The path to the directories with configurations that will be copied to the created server"
   type        = string
   default     = "configs/"
@@ -64,5 +64,27 @@ variable "droplet_tags" {
 
 variable "droplet_project_name" {
   description = "The target project for the droplet"
+  type        = string
+}
+
+variable "droplet_reserved_ip" {
+  description = "Link a reserved address to a droplet"
+  type        = bool
+  default     = false
+}
+
+variable "droplet_dns_record" {
+  description = "Create a dns record for this droplet"
+  type        = bool
+  default     = false
+}
+
+variable "domain_zone" {
+  description = "Name of the domain zone to create record"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Name of the new domain to create the record"
   type        = string
 }

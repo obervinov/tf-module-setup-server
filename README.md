@@ -60,9 +60,13 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/domain) | resource |
 | [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/droplet) | resource |
 | [digitalocean_project_resources.project_resources](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/project_resources) | resource |
+| [digitalocean_record.record](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/record) | resource |
+| [digitalocean_reserved_ip.reserved_ip](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/reserved_ip) | resource |
 | [null_resource.remote-commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.remote-files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.waiting-cloudinit](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/project) | data source |
 | [digitalocean_ssh_key.ssh_key](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/ssh_key) | data source |
@@ -71,25 +75,31 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_configs_path"></a> [configs\_path](#input\_configs\_path) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
 | <a name="input_digitalocean_token"></a> [digitalocean\_token](#input\_digitalocean\_token) | DigitalOcean API Token | `string` | n/a | yes |
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Name of the new domain to create the record | `string` | n/a | yes |
+| <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | n/a | yes |
+| <a name="input_droplet_dns_record"></a> [droplet\_dns\_record](#input\_droplet\_dns\_record) | Create a dns record for this droplet | `bool` | `false` | no |
 | <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet | `string` | `""` | no |
 | <a name="input_droplet_name"></a> [droplet\_name](#input\_droplet\_name) | The name of the droplet | `string` | `""` | no |
 | <a name="input_droplet_project_name"></a> [droplet\_project\_name](#input\_droplet\_project\_name) | The target project for the droplet | `string` | n/a | yes |
 | <a name="input_droplet_region"></a> [droplet\_region](#input\_droplet\_region) | The region of the droplet | `string` | `""` | no |
+| <a name="input_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#input\_droplet\_reserved\_ip) | Link a reserved address to a droplet | `bool` | `false` | no |
 | <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet | `string` | n/a | yes |
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
 | <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | n/a | yes |
 | <a name="input_public_key_name"></a> [public\_key\_name](#input\_public\_key\_name) | Name of the public key in digitalocean | `string` | n/a | yes |
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | n/a | yes |
+| <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
 | <a name="input_username"></a> [username](#input\_username) | Name for creating a new user | `string` | n/a | yes |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack2.png" width="25" title="outputs"> Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_dns_record"></a> [dns\_record](#output\_dns\_record) | Dns record for new droplet |
 | <a name="output_droplet"></a> [droplet](#output\_droplet) | Droplet name |
 | <a name="output_external-ip"></a> [external-ip](#output\_external-ip) | Droplet external ip-address |
+| <a name="output_reserved_ip"></a> [reserved\_ip](#output\_reserved\_ip) | Reserved ip for new droplet |
 | <a name="output_sshkey"></a> [sshkey](#output\_sshkey) | SSH Key fingerprint |
 | <a name="output_username"></a> [username](#output\_username) | Username for new user |
 
