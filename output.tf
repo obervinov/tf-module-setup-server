@@ -19,13 +19,11 @@ output "sshkey" {
 }
 
 output "dns_record" {
-  count       = var.droplet_dns_record ? 1 : 0
   description = "Dns record for new droplet"
   value       = digitalocean_domain.domain.name
 }
 
 output "reserved_ip" {
-  count       = var.reserved_ip ? 1 : 0
   description = "Reserved ip for new droplet"
   value       = digitalocean_reserved_ip.reserved_ip.ip_address
 }
