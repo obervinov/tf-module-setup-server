@@ -63,7 +63,8 @@ resource "null_resource" "waiting-cloudinit" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
-resource "null_resource" "remote-commands" {
+resource "null_resource" "remote-files" {
+  count = can(var.configs_path) && fileset(var.configs_path, "*") != [] ? 1 : 0
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = var.username
@@ -74,6 +75,17 @@ resource "null_resource" "remote-commands" {
   provisioner "file" {
     source      = "${var.configs_path}/"
     destination = "/opt/configs"
+  }
+  depends_on = [null_resource.waiting-cloudinit]
+}
+
+resource "null_resource" "remote-commands" {
+  connection {
+    host    = digitalocean_droplet.droplet.ipv4_address
+    user    = var.username
+    type    = "ssh"
+    agent   = true
+    timeout = "3m"
   }
   provisioner "remote-exec" {
     inline = var.remote_commands
