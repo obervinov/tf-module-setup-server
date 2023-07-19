@@ -4,7 +4,7 @@ resource "digitalocean_droplet" "droplet" {
   region     = var.droplet_region
   size       = var.droplet_size
   monitoring = true
-  ssh_keys   = [data.digitalocean_ssh_key.ssh_key.id]
+  ssh_keys   = [data.digitalocean_ssh_key.key.id]
   tags       = var.droplet_tags
   user_data  = <<EOF
 #cloud-config
