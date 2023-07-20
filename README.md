@@ -61,16 +61,16 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [digitalocean_droplet.droplet](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/droplet) | resource |
-| [digitalocean_project_resources.project](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/project_resources) | resource |
-| [digitalocean_record.record](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/record) | resource |
-| [digitalocean_reserved_ip.ip](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/resources/reserved_ip) | resource |
+| [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
+| [digitalocean_project_resources.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/project_resources) | resource |
+| [digitalocean_record.record](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/record) | resource |
+| [digitalocean_reserved_ip.ip](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/reserved_ip) | resource |
 | [null_resource.cloudinit](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [digitalocean_domain.domain](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/domain) | data source |
-| [digitalocean_project.project](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/project) | data source |
-| [digitalocean_ssh_key.key](https://registry.terraform.io/providers/hashicorp/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
+| [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
+| [digitalocean_ssh_key.key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/build.png" width="25" title="inputs"> Inputs
 
@@ -123,7 +123,7 @@ module "prepare_environment" {
   droplet_reserved_ip  = true
   packages_list        = ["python3", "libsecret-tools", "python3-pip"]
   remote_commands      = [
-    "sudo mkdir -p /opt/vault/data && sudo chmod -R 777 /opt/vault",
+    "sudo mkdir -p /opt/data && sudo chmod -R 777 /opt/data",
     "sudo docker compose -f /opt/configs/docker-compose.yml up -d",
   ]
 }
