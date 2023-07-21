@@ -39,6 +39,7 @@ This module performs the initial creation of a server in digitalocean, as well a
 ├── data.tf
 ├── main.tf
 ├── output.tf
+├── providers.tf
 ├── variables.tf
 └── versions.tf
 ```
