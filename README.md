@@ -13,6 +13,7 @@
 
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/github-actions.png" width="25" title="github-actions"> GitHub Actions
+
 | Name  | Version |
 | ------------------------ | ----------- |
 | GitHub Actions Templates | [v1.0.4](https://github.com/obervinov/_templates/tree/v1.0.4) |
@@ -20,12 +21,15 @@
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/book.png" width="25" title="about"> About this project
 This module performs the initial creation of a server in digitalocean, as well as performs basic preparation of the environment:
+
 * create user
 * install packages
 * configuring sshd
-* custom commands
+* copy files
+* custom remote commands
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack.png" width="25" title="stack"> Repository map
+
 ```sh
 .
 ├── CHANGELOG.md
@@ -35,8 +39,8 @@ This module performs the initial creation of a server in digitalocean, as well a
 ├── data.tf
 ├── main.tf
 ├── output.tf
-├── providers.tf
-└── variables.tf
+├── variables.tf
+└── versions.tf
 ```
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/requirements.png" width="25" title="requirements"> Requirements
