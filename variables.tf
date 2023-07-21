@@ -1,7 +1,3 @@
-provider "digitalocean" {
-  token = var.digitalocean_token
-}
-
 variable "username" {
   description = "Name for creating a new user"
   type        = string
