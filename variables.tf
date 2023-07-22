@@ -78,9 +78,11 @@ variable "droplet_dns_record" {
 variable "domain_zone" {
   description = "Name of the domain zone to create record"
   type        = string
+  default     = ""
 }
 
 variable "domain_name" {
   description = "Name of the new domain to create the record"
   type        = string
+  default     = ""
 }
