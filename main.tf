@@ -69,6 +69,9 @@ resource "null_resource" "cloudinit" {
 
 resource "null_resource" "files" {
   count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
+  triggers = {
+    always_run = timestamp()
+  }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = var.username
