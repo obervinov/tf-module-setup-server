@@ -87,6 +87,10 @@ resource "null_resource" "files" {
 }
 
 resource "null_resource" "commands" {
+
+  triggers = {
+    always_run = timestamp()
+  }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = var.username
