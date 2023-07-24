@@ -60,8 +60,7 @@ resource "null_resource" "cloudinit" {
   }
   provisioner "remote-exec" {
     inline = [
-      "cloud-init status --wait",
-      "sudo shutdown -r now"
+      "cloud-init status --wait"
     ]
   }
   depends_on = [digitalocean_droplet.droplet]
