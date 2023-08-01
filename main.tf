@@ -20,6 +20,7 @@ ssh_pwauth: false
 disable_root: true
 package_update: true
 package_upgrade: true
+manage_etc_hosts: true
 packages:
   - apt-transport-https
   - ca-certificates
