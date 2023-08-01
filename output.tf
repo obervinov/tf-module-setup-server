@@ -18,14 +18,9 @@ output "droplet_ssh_key_fingerprint" {
   value       = data.digitalocean_ssh_key.key.fingerprint
 }
 
-output "droplet_dns_record_external" {
+output "droplet_dns_record" {
   description = "Public dns record for new droplet"
-  value       = var.droplet_dns_record ? digitalocean_record.record_external[0].fqdn : ""
-}
-
-output "droplet_dns_record_internal" {
-  description = "Private dns record for new droplet"
-  value       = var.droplet_dns_record ? digitalocean_record.record_internal[0].fqdn : ""
+  value       = var.droplet_dns_record ? digitalocean_record.record[0].fqdn : ""
 }
 
 output "droplet_reserved_ip" {
