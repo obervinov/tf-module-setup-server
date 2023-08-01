@@ -109,10 +109,18 @@ resource "digitalocean_reserved_ip" "ip" {
   region     = digitalocean_droplet.droplet.region
 }
 
-resource "digitalocean_record" "record" {
+resource "digitalocean_record" "record_external" {
   count  = var.droplet_dns_record ? 1 : 0
   domain = element(data.digitalocean_domain.domain.*.id, 0)
   type   = "A"
   name   = var.domain_name
   value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
+}
+
+resource "digitalocean_record" "record_internal" {
+  count  = var.droplet_dns_record ? 1 : 0
+  domain = element(data.digitalocean_domain.domain.*.id, 0)
+  type   = "A"
+  name   = "internal.${var.domain_name}"
+  value  = digitalocean_droplet.droplet.ipv4_address_private
 }
