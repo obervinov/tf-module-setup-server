@@ -2,7 +2,7 @@ name: Check terraform code
 
 on:
   push:
-    branches:    
+    branches:
       - '*'
       - '*/*'
       - '**'
