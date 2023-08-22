@@ -13,4 +13,3 @@ env:
 jobs:
   terraform-check:
     uses: obervinov/_templates/.github/workflows/verify.terraform.yml@release/v1.0.5
-
