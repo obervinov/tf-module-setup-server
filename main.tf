@@ -117,3 +117,12 @@ resource "digitalocean_record" "record" {
   name   = var.domain_name
   value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
 }
+
+resource "digitalocean_volume" "volume" {
+  count                   = var.additional_volume_size ? 1 : 0
+  region                  = digitalocean_droplet.droplet.region
+  name                    = "${digitalocean_droplet.droplet.name}-volume"
+  size                    = var.additional_volume_size
+  initial_filesystem_type = "ext4"
+  description             = "Additional volume for ${digitalocean_droplet.droplet.name}"
+}

@@ -1,3 +1,4 @@
+---
 name: Check terraform code
 
 on:
