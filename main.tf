@@ -67,6 +67,34 @@ resource "null_resource" "cloudinit" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
+resource "digitalocean_reserved_ip" "this" {
+  count      = var.droplet_reserved_ip ? 1 : 0
+  droplet_id = digitalocean_droplet.droplet.id
+  region     = digitalocean_droplet.droplet.region
+}
+
+resource "digitalocean_record" "this" {
+  count  = var.droplet_dns_record ? 1 : 0
+  domain = element(data.digitalocean_domain.domain.*.id, 0)
+  type   = "A"
+  name   = var.domain_name
+  value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
+}
+
+resource "digitalocean_volume" "this" {
+  count                   = var.additional_volume_size ? 1 : 0
+  region                  = digitalocean_droplet.droplet.region
+  name                    = "${digitalocean_droplet.droplet.name}-volume"
+  size                    = var.additional_volume_size
+  initial_filesystem_type = "ext4"
+  description             = "Additional volume for ${digitalocean_droplet.droplet.name}"
+}
+
+resource "digitalocean_volume_attachment" "this" {
+  droplet_id = digitalocean_droplet.this.id
+  volume_id  = digitalocean_volume.this.id
+}
+
 resource "null_resource" "files" {
   count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
   triggers = {
@@ -102,32 +130,4 @@ resource "null_resource" "commands" {
     inline = var.remote_commands
   }
   depends_on = [null_resource.cloudinit]
-}
-
-resource "digitalocean_reserved_ip" "this" {
-  count      = var.droplet_reserved_ip ? 1 : 0
-  droplet_id = digitalocean_droplet.droplet.id
-  region     = digitalocean_droplet.droplet.region
-}
-
-resource "digitalocean_record" "this" {
-  count  = var.droplet_dns_record ? 1 : 0
-  domain = element(data.digitalocean_domain.domain.*.id, 0)
-  type   = "A"
-  name   = var.domain_name
-  value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
-}
-
-resource "digitalocean_volume" "this" {
-  count                   = var.additional_volume_size ? 1 : 0
-  region                  = digitalocean_droplet.droplet.region
-  name                    = "${digitalocean_droplet.droplet.name}-volume"
-  size                    = var.additional_volume_size
-  initial_filesystem_type = "ext4"
-  description             = "Additional volume for ${digitalocean_droplet.droplet.name}"
-}
-
-resource "digitalocean_volume_attachment" "this" {
-  droplet_id = digitalocean_droplet.this.id
-  volume_id  = digitalocean_volume.this.id
 }
