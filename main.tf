@@ -82,7 +82,7 @@ resource "digitalocean_record" "record" {
 }
 
 resource "digitalocean_volume" "volume" {
-  count                   = var.additional_volume_size ? 1 : 0
+  count                   = var.additional_volume_size > 0 ? 1 : 0
   region                  = digitalocean_droplet.droplet.region
   name                    = "${digitalocean_droplet.droplet.name}-volume"
   size                    = var.additional_volume_size
@@ -91,7 +91,7 @@ resource "digitalocean_volume" "volume" {
 }
 
 resource "digitalocean_volume_attachment" "volume_attachment" {
-  count      = var.additional_volume_size ? 1 : 0
+  count      = var.additional_volume_size > 0 ? 1 : 0
   droplet_id = digitalocean_droplet.droplet.id
   volume_id  = digitalocean_volume.volume[count.index].id
   depends_on = [digitalocean_volume.volume]
