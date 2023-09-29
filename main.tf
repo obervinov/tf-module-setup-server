@@ -1,4 +1,4 @@
-resource "digitalocean_droplet" "this" {
+resource "digitalocean_droplet" "droplet" {
   name       = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
   image      = var.droplet_image
   region     = var.droplet_region
@@ -40,7 +40,7 @@ runcmd:
 EOF
 }
 
-resource "digitalocean_project_resources" "this" {
+resource "digitalocean_project_resources" "project" {
   project = data.digitalocean_project.project.id
   resources = [
     digitalocean_droplet.droplet.urn
@@ -67,13 +67,13 @@ resource "null_resource" "cloudinit" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
-resource "digitalocean_reserved_ip" "this" {
+resource "digitalocean_reserved_ip" "reserved_ip" {
   count      = var.droplet_reserved_ip ? 1 : 0
   droplet_id = digitalocean_droplet.droplet.id
   region     = digitalocean_droplet.droplet.region
 }
 
-resource "digitalocean_record" "this" {
+resource "digitalocean_record" "record" {
   count  = var.droplet_dns_record ? 1 : 0
   domain = element(data.digitalocean_domain.domain.*.id, 0)
   type   = "A"
@@ -81,7 +81,7 @@ resource "digitalocean_record" "this" {
   value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
 }
 
-resource "digitalocean_volume" "this" {
+resource "digitalocean_volume" "volume" {
   count                   = var.additional_volume_size ? 1 : 0
   region                  = digitalocean_droplet.droplet.region
   name                    = "${digitalocean_droplet.droplet.name}-volume"
@@ -90,9 +90,10 @@ resource "digitalocean_volume" "this" {
   description             = "Additional volume for ${digitalocean_droplet.droplet.name}"
 }
 
-resource "digitalocean_volume_attachment" "this" {
+resource "digitalocean_volume_attachment" "volume_attachment" {
   droplet_id = digitalocean_droplet.this.id
   volume_id  = digitalocean_volume.this.id
+  depends_on = [digitalocean_volume.volume]
 }
 
 resource "null_resource" "files" {
