@@ -91,8 +91,8 @@ resource "digitalocean_volume" "volume" {
 }
 
 resource "digitalocean_volume_attachment" "volume_attachment" {
-  droplet_id = digitalocean_droplet.this.id
-  volume_id  = digitalocean_volume.this.id
+  droplet_id = digitalocean_droplet.volume.id
+  volume_id  = digitalocean_volume.volume.id
   depends_on = [digitalocean_volume.volume]
 }
 

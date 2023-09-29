@@ -25,7 +25,7 @@ output "droplet_dns_record" {
 
 output "droplet_reserved_ip" {
   description = "Reserved ip for new droplet"
-  value       = var.droplet_reserved_ip ? digitalocean_reserved_ip.ip[0].ip_address : ""
+  value       = var.droplet_reserved_ip ? digitalocean_reserved_ip.reserver_ip[0].ip_address : ""
 }
 
 output "droplet_private_ip" {
