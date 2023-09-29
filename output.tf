@@ -32,3 +32,8 @@ output "droplet_private_ip" {
   description = "Private ip for new droplet"
   value       = digitalocean_droplet.droplet.ipv4_address_private
 }
+
+output "persistent_data_path" {
+  description = "The path to the directory for storing persistent information and configurations"
+  value       = var.persistent_data_path
+}

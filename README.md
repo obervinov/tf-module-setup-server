@@ -91,6 +91,7 @@ No modules.
 | <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet | `string` | n/a | yes |
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
 | <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | n/a | yes |
+| <a name="input_persistent_data_path"></a> [persistent\_data\_path](#input\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
 | <a name="input_public_key_name"></a> [public\_key\_name](#input\_public\_key\_name) | Name of the public key in digitalocean | `string` | n/a | yes |
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | n/a | yes |
 | <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
@@ -106,6 +107,7 @@ No modules.
 | <a name="output_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#output\_droplet\_reserved\_ip) | Reserved ip for new droplet |
 | <a name="output_droplet_ssh_key_fingerprint"></a> [droplet\_ssh\_key\_fingerprint](#output\_droplet\_ssh\_key\_fingerprint) | SSH Key fingerprint |
 | <a name="output_droplet_username"></a> [droplet\_username](#output\_droplet\_username) | Username for new user |
+| <a name="output_persistent_data_path"></a> [persistent\_data\_path](#output\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
 ```hcl
@@ -125,6 +127,7 @@ module "prepare_environment" {
   droplet_dns_record     = true
   droplet_reserved_ip    = true
   additional_volume_size = 10
+  persistent_data_path   = "/mnt/my-volume"
   packages_list          = ["python3", "libsecret-tools", "python3-pip"]
   remote_commands        = [
     "sudo mkdir -p /opt/data && sudo chmod -R 777 /opt/data",

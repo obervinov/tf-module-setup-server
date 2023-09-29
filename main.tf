@@ -35,8 +35,8 @@ runcmd:
   - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   - sudo usermod -aG docker ${var.username}
-  # Directory for files provisioner
-  - sudo mkdir -p /opt/configs && sudo chown ${var.username}.${var.username} /opt/configs && sudo chmod 755 /opt/configs
+  # Directory for configuration files provisioner
+  - sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.username}.${var.username} ${var.persistent_data_path}/configs && sudo chmod 755 ${var.persistent_data_path}/configs
 EOF
 }
 
@@ -111,7 +111,7 @@ resource "null_resource" "files" {
   }
   provisioner "file" {
     source      = "${var.remote_files}/"
-    destination = "/opt/configs"
+    destination = "${var.persistent_data_path}/configs"
   }
   depends_on = [null_resource.cloudinit]
 }

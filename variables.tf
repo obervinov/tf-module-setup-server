@@ -8,6 +8,12 @@ variable "packages_list" {
   type        = list(string)
 }
 
+variable "persistent_data_path" {
+  description = "The path to the directory for storing persistent information and configurations"
+  type        = string
+  default     = "/opt"
+}
+
 variable "remote_commands" {
   description = "List of commands to execute custom remote-exec"
   type        = list(string)
