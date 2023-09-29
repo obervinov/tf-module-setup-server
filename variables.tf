@@ -86,3 +86,9 @@ variable "domain_name" {
   type        = string
   default     = ""
 }
+
+variable "additional_volume_size" {
+  description = "Additional volume size (if required)"
+  type        = number
+  default     = 0
+}
