@@ -67,7 +67,7 @@ resource "null_resource" "cloudinit" {
   depends_on = [digitalocean_droplet.droplet]
 }
 
-resource "digitalocean_reserved_ip" "reserved_ip" {
+resource "digitalocean_reserved_ip" "ip" {
   count      = var.droplet_reserved_ip ? 1 : 0
   droplet_id = digitalocean_droplet.droplet.id
   region     = digitalocean_droplet.droplet.region
