@@ -91,6 +91,7 @@ resource "digitalocean_volume" "volume" {
 }
 
 resource "digitalocean_volume_attachment" "volume_attachment" {
+  count      = var.additional_volume_size ? 1 : 0
   droplet_id = digitalocean_droplet.droplet.id
   volume_id  = digitalocean_volume.volume.id
   depends_on = [digitalocean_volume.volume]

@@ -110,22 +110,23 @@ No modules.
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
 ```hcl
 module "prepare_environment" {
-  source               = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
-  username             = var.username
-  droplet_name         = "server-1"
-  droplet_region       = "nyc1"
-  droplet_image        = "ubuntu-22-10-x64"
-  droplet_size         = "s-1vcpu-1gb"
-  droplet_tags         = ["ssh", "ubuntu"]
-  droplet_project_name = "project-1"
-  digitalocean_token   = var.digitalocean_token
-  public_key_name      = var.public_key_name
-  domain_zone          = "example.com"
-  domain_name          = "webui"
-  droplet_dns_record   = true
-  droplet_reserved_ip  = true
-  packages_list        = ["python3", "libsecret-tools", "python3-pip"]
-  remote_commands      = [
+  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
+  username               = var.username
+  droplet_name           = "server-1"
+  droplet_region         = "nyc1"
+  droplet_image          = "ubuntu-22-10-x64"
+  droplet_size           = "s-1vcpu-1gb"
+  droplet_tags           = ["ssh", "ubuntu"]
+  droplet_project_name   = "project-1"
+  digitalocean_token     = var.digitalocean_token
+  public_key_name        = var.public_key_name
+  domain_zone            = "example.com"
+  domain_name            = "webui"
+  droplet_dns_record     = true
+  droplet_reserved_ip    = true
+  additional_volume_size = 10
+  packages_list          = ["python3", "libsecret-tools", "python3-pip"]
+  remote_commands        = [
     "sudo mkdir -p /opt/data && sudo chmod -R 777 /opt/data",
     "sudo docker compose -f /opt/configs/docker-compose.yml up -d",
   ]
