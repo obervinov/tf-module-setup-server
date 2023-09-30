@@ -97,7 +97,25 @@ resource "digitalocean_volume_attachment" "volume_attachment" {
   depends_on = [digitalocean_volume.volume]
 }
 
-resource "null_resource" "files" {
+resource "null_resource" "set_environment_variables" {
+  count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
+  triggers = {
+    env_vars = join(",", var.environment_variables)
+  }
+  connection {
+    host    = digitalocean_droplet.droplet.ipv4_address
+    user    = var.username
+    type    = "ssh"
+    agent   = true
+    timeout = "3m"
+  }
+  provisioner "remote-exec" {
+    inline = ["echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null"]
+  }
+  depends_on = [null_resource.cloudinit]
+}
+
+resource "null_resource" "copy_files" {
   count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
   triggers = {
     always_run = timestamp()
@@ -116,7 +134,7 @@ resource "null_resource" "files" {
   depends_on = [null_resource.cloudinit]
 }
 
-resource "null_resource" "commands" {
+resource "null_resource" "exec_additional_commands" {
 
   triggers = {
     always_run = timestamp()

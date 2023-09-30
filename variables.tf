@@ -92,3 +92,8 @@ variable "additional_volume_size" {
   type        = number
   default     = 0
 }
+
+variable "environment_variables" {
+  description = "List with environmetn variables for server"
+  type        = list(any)
+}
