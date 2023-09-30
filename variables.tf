@@ -30,12 +30,6 @@ variable "public_key_name" {
   type        = string
 }
 
-variable "digitalocean_token" {
-  description = "DigitalOcean API Token"
-  type        = string
-  sensitive   = true
-}
-
 variable "droplet_name" {
   description = "The name of the droplet"
   type        = string
