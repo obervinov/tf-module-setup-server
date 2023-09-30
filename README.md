@@ -130,6 +130,7 @@ module "prepare_environment" {
   additional_volume_size = 10
   persistent_data_path   = "/mnt/my-volume"
   packages_list          = ["python3", "libsecret-tools", "python3-pip"]
+  environment_variables  = ["ENV1=VALUE1", "ENV2=VALUE2"]
   remote_commands        = [
     "sudo mkdir -p /opt/data && sudo chmod -R 777 /opt/data",
     "sudo docker compose -f /opt/configs/docker-compose.yml up -d",
