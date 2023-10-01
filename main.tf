@@ -153,6 +153,6 @@ resource "null_resource" "exec_additional_commands" {
   }
   depends_on = [
     null_resource.cloudinit,
-    set_environment_variables
+    null_resource.set_environment_variables
   ]
 }
