@@ -35,7 +35,6 @@ runcmd:
   - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   - sudo usermod -aG docker ${var.username}
-  - sudo docker swarm init --advertise-addr eth1
   # Directory for configuration files provisioner
   - sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.username}.${var.username} ${var.persistent_data_path}/configs && sudo chmod 755 ${var.persistent_data_path}/configs
 EOF
