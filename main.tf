@@ -151,5 +151,8 @@ resource "null_resource" "exec_additional_commands" {
   provisioner "remote-exec" {
     inline = var.remote_commands
   }
-  depends_on = [null_resource.cloudinit]
+  depends_on = [
+    null_resource.cloudinit,
+    set_environment_variables
+  ]
 }
