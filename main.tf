@@ -111,8 +111,7 @@ resource "null_resource" "set_environment_variables" {
   }
   provisioner "remote-exec" {
     inline = [
-      "echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null",
-      "sudo -i"
+      "echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
   depends_on = [null_resource.cloudinit]
