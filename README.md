@@ -30,7 +30,7 @@ This module performs the initial creation of a server in digitalocean, as well a
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack.png" width="25" title="stack"> Repository map
 
-```sh
+```bash
 .
 ├── CHANGELOG.md
 ├── LICENSE
@@ -39,7 +39,6 @@ This module performs the initial creation of a server in digitalocean, as well a
 ├── data.tf
 ├── main.tf
 ├── output.tf
-├── providers.tf
 ├── variables.tf
 └── versions.tf
 ```
@@ -75,10 +74,9 @@ No modules.
 | [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
 | [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
 | [digitalocean_ssh_key.key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_ssh_key.terraform_key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/build.png" width="25" title="inputs"> Inputs
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Name of the new domain to create the record | `string` | `""` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
