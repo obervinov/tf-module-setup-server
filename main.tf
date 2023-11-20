@@ -86,10 +86,10 @@ resource "digitalocean_reserved_ip" "ip" {
 
 resource "digitalocean_record" "record" {
   count  = var.droplet_dns_record ? 1 : 0
-  domain = element(data.digitalocean_domain.domain.*.id, 0)
+  domain = var.droplet_dns_record ? element(data.digitalocean_domain.domain.*.id, 0) : null
   type   = "A"
   name   = var.domain_name
-  value  = digitalocean_reserved_ip.ip[count.index].ip_address != "" ? digitalocean_reserved_ip.ip[count.index].ip_address : digitalocean_droplet.droplet.ipv4_address
+  value  = var.droplet_reserved_ip ? digitalocean_reserved_ip.ip[0].ip_address : digitalocean_droplet.droplet.ipv4_address
 }
 
 resource "digitalocean_volume" "volume" {
