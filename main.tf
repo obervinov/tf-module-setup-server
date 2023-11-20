@@ -16,6 +16,13 @@ users:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.key.public_key}
+  - name: terraform
+    groups:
+      - sudo
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ${data.digitalocean_ssh_key.terraform_key.public_key}
 ssh_pwauth: false
 disable_root: true
 package_update: true
