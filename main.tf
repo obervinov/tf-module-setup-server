@@ -64,7 +64,7 @@ resource "null_resource" "cloudinit" {
   }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
-    user    = var.username
+    user    = "terraform"
     type    = "ssh"
     agent   = true
     timeout = "3m"
@@ -114,7 +114,7 @@ resource "null_resource" "set_environment_variables" {
   }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
-    user    = var.username
+    user    = "terraform"
     type    = "ssh"
     agent   = true
     timeout = "3m"
@@ -134,7 +134,7 @@ resource "null_resource" "copy_files" {
   }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
-    user    = var.username
+    user    = "terraform"
     type    = "ssh"
     agent   = true
     timeout = "3m"
@@ -153,7 +153,7 @@ resource "null_resource" "exec_additional_commands" {
   }
   connection {
     host    = digitalocean_droplet.droplet.ipv4_address
-    user    = var.username
+    user    = "terraform"
     type    = "ssh"
     agent   = true
     timeout = "3m"
