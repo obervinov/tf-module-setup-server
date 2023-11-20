@@ -97,3 +97,16 @@ variable "environment_variables" {
   description = "List with environmetn variables for server"
   type        = list(any)
 }
+
+variable "droplet_backups" {
+  description = "Enable backups for droplet"
+  type        = bool
+  default     = false
+}
+
+variable "droplet_monitoring" {
+  description = "Enable monitoring for droplet"
+  type        = bool
+  default     = false
+}
+

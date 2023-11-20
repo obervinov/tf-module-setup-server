@@ -3,7 +3,8 @@ resource "digitalocean_droplet" "droplet" {
   image      = var.droplet_image
   region     = var.droplet_region
   size       = var.droplet_size
-  monitoring = true
+  backups    = var.droplet_backups
+  monitoring = var.droplet_monitoring
   ssh_keys = [
     data.digitalocean_ssh_key.key.id,
     data.digitalocean_ssh_key.terraform_key.id
