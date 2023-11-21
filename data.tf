@@ -11,6 +11,5 @@ data "digitalocean_project" "project" {
 }
 
 data "digitalocean_domain" "domain" {
-  count = var.droplet_reserved_ip ? 1 : 0
   name  = var.domain_zone
 }
