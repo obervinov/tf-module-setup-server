@@ -67,7 +67,7 @@ resource "null_resource" "cloudinit" {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = "terraform"
     type    = "ssh"
-    agent   = true
+    agent   = false
     timeout = "3m"
   }
   provisioner "remote-exec" {
@@ -117,7 +117,7 @@ resource "null_resource" "set_environment_variables" {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = "terraform"
     type    = "ssh"
-    agent   = true
+    agent   = false
     timeout = "3m"
   }
   provisioner "remote-exec" {
@@ -137,7 +137,7 @@ resource "null_resource" "copy_files" {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = "terraform"
     type    = "ssh"
-    agent   = true
+    agent   = false
     timeout = "3m"
   }
   provisioner "file" {
@@ -156,7 +156,7 @@ resource "null_resource" "exec_additional_commands" {
     host    = digitalocean_droplet.droplet.ipv4_address
     user    = "terraform"
     type    = "ssh"
-    agent   = true
+    agent   = false
     timeout = "3m"
   }
   provisioner "remote-exec" {
