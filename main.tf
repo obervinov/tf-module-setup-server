@@ -111,6 +111,11 @@ resource "digitalocean_volume_attachment" "volume_attachment" {
   depends_on = [digitalocean_volume.volume]
 }
 
+resource "digitalocean_volume_snapshot" "volume_snapshot" {
+  name      = "${var.droplet_name}--${var.droplet_region}-volume-snapshot"
+  volume_id = digitalocean_volume.volume.id
+}
+
 resource "null_resource" "set_environment_variables" {
   count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
   triggers = {

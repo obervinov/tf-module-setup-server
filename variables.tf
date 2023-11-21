@@ -1,4 +1,4 @@
-variable "username" {
+variable "droplet_username" {
   description = "Name for creating a new user"
   type        = string
 }
@@ -25,32 +25,28 @@ variable "remote_files" {
   default     = "configs/"
 }
 
-variable "public_key_name" {
-  description = "Name of the public key in digitalocean"
-  type        = string
-}
-
 variable "droplet_name" {
   description = "The name of the droplet"
   type        = string
-  default     = ""
+  default     = "server-0001"
 }
 
 variable "droplet_image" {
   description = "The image of the droplet"
   type        = string
-  default     = ""
+  default     = "ubuntu-23-04-x64"
 }
 
 variable "droplet_region" {
   description = "The region of the droplet"
   type        = string
-  default     = ""
+  default     = "ams3"
 }
 
 variable "droplet_size" {
   description = "The size of the droplet"
   type        = string
+  default     = "s-1vcpu-1gb"
 }
 
 variable "droplet_tags" {
@@ -72,7 +68,7 @@ variable "droplet_reserved_ip" {
 variable "droplet_dns_record" {
   description = "Create a dns record for this droplet"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "domain_zone" {
@@ -107,7 +103,7 @@ variable "droplet_backups" {
 variable "droplet_monitoring" {
   description = "Enable monitoring for droplet"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "ssh_private_key" {

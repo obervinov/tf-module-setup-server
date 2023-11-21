@@ -1,9 +1,9 @@
 data "digitalocean_ssh_key" "key" {
-  name = var.public_key_name
+  name = var.droplet_username
 }
 
 data "digitalocean_ssh_key" "terraform_key" {
-  name = "terraform-cloud"
+  name = "terraform"
 }
 
 data "digitalocean_project" "project" {

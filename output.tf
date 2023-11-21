@@ -37,3 +37,13 @@ output "persistent_data_path" {
   description = "The path to the directory for storing persistent information and configurations"
   value       = var.persistent_data_path
 }
+
+output "droplet_additional_volume" {
+  description = "Additional volume for new droplet"
+  value       = var.additional_volume_size > 0 ? digitalocean_volume.volume[0].id : ""
+}
+
+output "additional_volume" {
+  description = "Additional volume for new droplet"
+  value       = var.additional_volume_size > 0 ? digitalocean_volume.volume[0].name : ""
+}
