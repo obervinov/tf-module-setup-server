@@ -106,7 +106,6 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
-| <a name="output_droplet_additional_volume"></a> [droplet\_additional\_volume](#output\_droplet\_additional\_volume) | Additional volume for new droplet |
 | <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
 | <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
 | <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
