@@ -11,5 +11,5 @@ data "digitalocean_project" "project" {
 }
 
 data "digitalocean_domain" "domain" {
-  name  = var.domain_zone
+  name = var.domain_zone
 }

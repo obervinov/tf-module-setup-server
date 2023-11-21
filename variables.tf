@@ -110,3 +110,8 @@ variable "droplet_monitoring" {
   default     = false
 }
 
+variable "TF_VAR_SSH_KEY_PRIVATE" {
+  description = "Private key for ssh connection in Terraform Cloud (base64)"
+  type        = string
+  default     = ""
+}

@@ -64,11 +64,12 @@ resource "null_resource" "cloudinit" {
     run_always = timestamp()
   }
   connection {
-    host    = digitalocean_droplet.droplet.ipv4_address
-    user    = "terraform"
-    type    = "ssh"
-    agent   = false
-    timeout = "3m"
+    host        = digitalocean_droplet.droplet.ipv4_address
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
   }
   provisioner "remote-exec" {
     inline = [
@@ -114,11 +115,12 @@ resource "null_resource" "set_environment_variables" {
     env_vars = join(",", var.environment_variables)
   }
   connection {
-    host    = digitalocean_droplet.droplet.ipv4_address
-    user    = "terraform"
-    type    = "ssh"
-    agent   = false
-    timeout = "3m"
+    host        = digitalocean_droplet.droplet.ipv4_address
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
   }
   provisioner "remote-exec" {
     inline = [
@@ -134,11 +136,12 @@ resource "null_resource" "copy_files" {
     always_run = timestamp()
   }
   connection {
-    host    = digitalocean_droplet.droplet.ipv4_address
-    user    = "terraform"
-    type    = "ssh"
-    agent   = false
-    timeout = "3m"
+    host        = digitalocean_droplet.droplet.ipv4_address
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
   }
   provisioner "file" {
     source      = "${var.remote_files}/"
@@ -153,11 +156,12 @@ resource "null_resource" "exec_additional_commands" {
     always_run = timestamp()
   }
   connection {
-    host    = digitalocean_droplet.droplet.ipv4_address
-    user    = "terraform"
-    type    = "ssh"
-    agent   = false
-    timeout = "3m"
+    host        = digitalocean_droplet.droplet.ipv4_address
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
   }
   provisioner "remote-exec" {
     inline = var.remote_commands
