@@ -33,7 +33,7 @@ This module performs the initial creation of a server in digitalocean, as well a
 module "prepare_environment" {
   source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
 
-  username               = var.ssh_username
+  droplet_username       = var.ssh_username
   ssh_private_key        = var.ssh_private_key
   droplet_name           = "database"
   droplet_tags           = ["postgres", "ssh"]
