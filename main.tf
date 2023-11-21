@@ -82,13 +82,15 @@ resource "null_resource" "cloudinit" {
 }
 
 resource "digitalocean_reserved_ip" "ip" {
-  count      = var.droplet_reserved_ip ? 1 : 0
+  count = var.droplet_reserved_ip ? 1 : 0
+
   droplet_id = digitalocean_droplet.droplet.id
   region     = digitalocean_droplet.droplet.region
 }
 
 resource "digitalocean_record" "record" {
-  count  = var.droplet_dns_record ? 1 : 0
+  count = var.droplet_dns_record ? 1 : 0
+
   domain = var.droplet_dns_record ? element(data.digitalocean_domain.domain.*.id, 0) : null
   type   = "A"
   name   = var.droplet_name
@@ -96,7 +98,8 @@ resource "digitalocean_record" "record" {
 }
 
 resource "digitalocean_volume" "volume" {
-  count                   = var.additional_volume_size > 0 ? 1 : 0
+  count = var.additional_volume_size > 0 ? 1 : 0
+
   region                  = digitalocean_droplet.droplet.region
   name                    = "${digitalocean_droplet.droplet.name}-volume"
   size                    = var.additional_volume_size
@@ -105,19 +108,23 @@ resource "digitalocean_volume" "volume" {
 }
 
 resource "digitalocean_volume_attachment" "volume_attachment" {
-  count      = var.additional_volume_size > 0 ? 1 : 0
+  count = var.additional_volume_size > 0 ? 1 : 0
+
   droplet_id = digitalocean_droplet.droplet.id
   volume_id  = digitalocean_volume.volume[count.index].id
   depends_on = [digitalocean_volume.volume]
 }
 
 resource "digitalocean_volume_snapshot" "volume_snapshot" {
+  count = var.additional_volume_size > 0 ? 1 : 0
+
   name      = "${var.droplet_name}--${var.droplet_region}-volume-snapshot"
   volume_id = digitalocean_volume.volume.id
 }
 
 resource "null_resource" "set_environment_variables" {
   count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
+
   triggers = {
     env_vars = join(",", var.environment_variables)
   }
@@ -139,6 +146,7 @@ resource "null_resource" "set_environment_variables" {
 
 resource "null_resource" "copy_files" {
   count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
+
   triggers = {
     always_run = timestamp()
   }
@@ -158,7 +166,6 @@ resource "null_resource" "copy_files" {
 }
 
 resource "null_resource" "exec_additional_commands" {
-
   triggers = {
     always_run = timestamp()
   }

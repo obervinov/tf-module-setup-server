@@ -10,7 +10,7 @@ output "droplet_external_ip" {
 
 output "droplet_username" {
   description = "Username for new user"
-  value       = var.username
+  value       = var.droplet_username
 }
 
 output "droplet_ssh_key_fingerprint" {
