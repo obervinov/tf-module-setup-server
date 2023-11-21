@@ -48,7 +48,7 @@ runcmd:
   - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   - sudo usermod -aG docker ${var.droplet_username}
   # Directory for configuration files provisioner
-  - sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.droplet_username}.${var.droplet_username} ${var.persistent_data_path}/configs && sudo chmod 755 ${var.persistent_data_path}/configs
+  - sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.droplet_username}.terraform ${var.persistent_data_path}/configs && sudo chmod 775 ${var.persistent_data_path}/configs
 EOF
 }
 
