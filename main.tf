@@ -101,7 +101,7 @@ resource "digitalocean_volume" "volume" {
   count = var.additional_volume_size > 0 ? 1 : 0
 
   region                  = digitalocean_droplet.droplet.region
-  name                    = "${digitalocean_droplet.droplet.name}-volume"
+  name                    = "${var.droplet_name}-${var.droplet_region}-volume"
   size                    = var.additional_volume_size
   initial_filesystem_type = "ext4"
   description             = "Additional volume for ${digitalocean_droplet.droplet.name}"
