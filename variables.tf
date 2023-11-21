@@ -114,3 +114,9 @@ variable "ssh_private_key" {
   description = "Private key for ssh connection in Terraform Cloud (base64)"
   type        = string
 }
+
+variable "droplet_agent" {
+  description = "Enable agent for droplet"
+  type        = bool
+  default     = true
+}

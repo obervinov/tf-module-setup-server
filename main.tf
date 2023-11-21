@@ -1,10 +1,11 @@
 resource "digitalocean_droplet" "droplet" {
-  name       = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
-  image      = var.droplet_image
-  region     = var.droplet_region
-  size       = var.droplet_size
-  backups    = var.droplet_backups
-  monitoring = var.droplet_monitoring
+  name          = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
+  image         = var.droplet_image
+  region        = var.droplet_region
+  size          = var.droplet_size
+  backups       = var.droplet_backups
+  monitoring    = var.droplet_monitoring
+  droplet_agent = var.droplet_agent
   ssh_keys = [
     data.digitalocean_ssh_key.key.id,
     data.digitalocean_ssh_key.terraform_key.id
@@ -70,7 +71,7 @@ resource "null_resource" "cloudinit" {
     agent       = false
     timeout     = "3m"
     private_key = base64decode(var.ssh_private_key)
-    
+
   }
   provisioner "remote-exec" {
     inline = [
