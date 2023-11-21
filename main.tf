@@ -119,7 +119,7 @@ resource "digitalocean_volume_snapshot" "volume_snapshot" {
   count = var.additional_volume_size > 0 ? 1 : 0
 
   name      = "${var.droplet_name}--${var.droplet_region}-volume-snapshot"
-  volume_id = digitalocean_volume.volume.id
+  volume_id = digitalocean_volume.volume[count.index].id
 }
 
 resource "null_resource" "set_environment_variables" {
