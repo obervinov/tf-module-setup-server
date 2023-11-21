@@ -69,7 +69,8 @@ resource "null_resource" "cloudinit" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
+    private_key = base64decode(var.ssh_private_key)
+    
   }
   provisioner "remote-exec" {
     inline = [
@@ -120,7 +121,7 @@ resource "null_resource" "set_environment_variables" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
+    private_key = base64decode(var.ssh_private_key)
   }
   provisioner "remote-exec" {
     inline = [
@@ -141,7 +142,7 @@ resource "null_resource" "copy_files" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
+    private_key = base64decode(var.ssh_private_key)
   }
   provisioner "file" {
     source      = "${var.remote_files}/"
@@ -161,7 +162,7 @@ resource "null_resource" "exec_additional_commands" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.TF_VAR_SSH_KEY_PRIVATE)
+    private_key = base64decode(var.ssh_private_key)
   }
   provisioner "remote-exec" {
     inline = var.remote_commands

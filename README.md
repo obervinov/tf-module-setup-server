@@ -77,9 +77,6 @@ No modules.
 | [digitalocean_ssh_key.terraform_key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/build.png" width="25" title="inputs"> Inputs
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_TF_VAR_SSH_KEY_PRIVATE"></a> [TF\_VAR\_SSH\_KEY\_PRIVATE](#input\_TF\_VAR\_SSH\_KEY\_PRIVATE) | Private key for ssh connection in Terraform Cloud (base64) | `string` | `""` | no |
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Name of the new domain to create the record | `string` | `""` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
@@ -99,6 +96,7 @@ No modules.
 | <a name="input_public_key_name"></a> [public\_key\_name](#input\_public\_key\_name) | Name of the public key in digitalocean | `string` | n/a | yes |
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | n/a | yes |
 | <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
+| <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
 | <a name="input_username"></a> [username](#input\_username) | Name for creating a new user | `string` | n/a | yes |
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack2.png" width="25" title="outputs"> Outputs
