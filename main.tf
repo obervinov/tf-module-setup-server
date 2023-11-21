@@ -14,7 +14,7 @@ resource "digitalocean_droplet" "droplet" {
   user_data = <<EOF
 #cloud-config
 users:
-  - name: ${var.username}
+  - name: ${var.droplet_username}
     groups:
       - sudo
     sudo:
@@ -91,7 +91,7 @@ resource "digitalocean_record" "record" {
   count  = var.droplet_dns_record ? 1 : 0
   domain = var.droplet_dns_record ? element(data.digitalocean_domain.domain.*.id, 0) : null
   type   = "A"
-  name   = var.domain_name
+  name   = var.droplet_name
   value  = var.droplet_reserved_ip ? digitalocean_reserved_ip.ip[0].ip_address : digitalocean_droplet.droplet.ipv4_address
 }
 

@@ -77,12 +77,6 @@ variable "domain_zone" {
   default     = ""
 }
 
-variable "domain_name" {
-  description = "Name of the new domain to create the record"
-  type        = string
-  default     = ""
-}
-
 variable "additional_volume_size" {
   description = "Additional volume size (if required)"
   type        = number

@@ -28,37 +28,47 @@ This module performs the initial creation of a server in digitalocean, as well a
 * copy files
 * custom remote commands
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack.png" width="25" title="stack"> Repository map
+## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
+```hcl
+module "prepare_environment" {
+  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
 
-```bash
-.
-├── CHANGELOG.md
-├── LICENSE
-├── README.md
-├── SECURITY.md
-├── data.tf
-├── main.tf
-├── output.tf
-├── variables.tf
-└── versions.tf
+  username               = var.ssh_username
+  ssh_private_key        = var.ssh_private_key
+  droplet_name           = "database"
+  droplet_tags           = ["postgres", "ssh"]
+  droplet_project_name   = "my-project-1"
+  domain_zone            = "example.com"
+  droplet_backups        = true
+  additional_volume_size = 10
+  packages_list          = ["python3", "libsecret-tools", "python3-pip"]
+  environment_variables  = ["ENV1=VALUE1", "ENV2=VALUE2"]
+  remote_commands = [
+    "hostname -a",
+  ]
+}
 ```
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/requirements.png" width="25" title="requirements"> Requirements
+## Requirements
+
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.2 |
 | <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | >= 2.28.1 |
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/file.png" width="18" title="porviders"> Providers
+## Providers
+
 | Name | Version |
 |------|---------|
 | <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | >= 2.28.1 |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
+
 ## Modules
 
 No modules.
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="resources">  Resources
+## Resources
+
 | Name | Type |
 |------|------|
 | [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
@@ -77,11 +87,11 @@ No modules.
 | [digitalocean_ssh_key.key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 | [digitalocean_ssh_key.terraform_key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/build.png" width="25" title="inputs"> Inputs
+## Inputs
+
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
-| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Name of the new domain to create the record | `string` | `""` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
 | <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |
 | <a name="input_droplet_backups"></a> [droplet\_backups](#input\_droplet\_backups) | Enable backups for droplet | `bool` | `false` | no |
@@ -102,7 +112,8 @@ No modules.
 | <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
 | <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
 
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/stack2.png" width="25" title="outputs"> Outputs
+## Outputs
+
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
@@ -114,27 +125,3 @@ No modules.
 | <a name="output_droplet_ssh_key_fingerprint"></a> [droplet\_ssh\_key\_fingerprint](#output\_droplet\_ssh\_key\_fingerprint) | SSH Key fingerprint |
 | <a name="output_droplet_username"></a> [droplet\_username](#output\_droplet\_username) | Username for new user |
 | <a name="output_persistent_data_path"></a> [persistent\_data\_path](#output\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations |
-
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
-```hcl
-module "prepare_environment" {
-  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
-
-  username               = var.ssh_username
-  ssh_private_key        = var.ssh_private_key
-  droplet_name           = "database-server"
-  droplet_tags           = ["postgres", "ssh"]
-  droplet_project_name   = "my-project-1"
-  domain_zone            = "example.com"
-  domain_name            = "database"
-  droplet_backups        = true
-  additional_volume_size = 10
-  packages_list          = ["python3", "libsecret-tools", "python3-pip"]
-  environment_variables  = ["ENV1=VALUE1", "ENV2=VALUE2"]
-  remote_commands = [
-    "hostname -a",
-  ]
-}
-```
-
-
