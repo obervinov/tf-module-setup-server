@@ -43,6 +43,7 @@ module "prepare_environment" {
   additional_volume_size = 10
   packages_list          = ["python3", "libsecret-tools", "python3-pip"]
   environment_variables  = ["ENV1=VALUE1", "ENV2=VALUE2"]
+  consul_service_port    = 5432
   remote_commands = [
     "hostname -a",
   ]
@@ -54,12 +55,14 @@ module "prepare_environment" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.2 |
+| <a name="requirement_consul"></a> [consul](#requirement\_consul) | 2.20.0 |
 | <a name="requirement_digitalocean"></a> [digitalocean](#requirement\_digitalocean) | >= 2.28.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
+| <a name="provider_consul"></a> [consul](#provider\_consul) | 2.20.0 |
 | <a name="provider_digitalocean"></a> [digitalocean](#provider\_digitalocean) | >= 2.28.1 |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
@@ -71,6 +74,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [consul_service.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/service) | resource |
 | [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
 | [digitalocean_project_resources.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/project_resources) | resource |
 | [digitalocean_record.record](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/record) | resource |
@@ -92,6 +96,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
+| <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | n/a | yes |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
 | <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |
 | <a name="input_droplet_backups"></a> [droplet\_backups](#input\_droplet\_backups) | Enable backups for droplet | `bool` | `false` | no |

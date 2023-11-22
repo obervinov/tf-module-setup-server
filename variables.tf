@@ -110,3 +110,8 @@ variable "droplet_agent" {
   type        = bool
   default     = true
 }
+
+variable "consul_service_port" {
+  description = "Port for registration service in consul"
+  type        = number
+}

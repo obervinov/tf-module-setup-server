@@ -185,3 +185,11 @@ resource "null_resource" "exec_additional_commands" {
     null_resource.set_environment_variables
   ]
 }
+
+resource "consul_service" "default" {
+  node    = digitalocean_droplet.droplet.name
+  name    = var.droplet_name
+  tags    = var.droplet_tags
+  port    = 5432
+  address = digitalocean_droplet.example.ipv4_address
+}
