@@ -187,9 +187,11 @@ resource "null_resource" "exec_additional_commands" {
 }
 
 resource "consul_service" "default" {
+  count   = var.consul_service_port != 0 ? 1 : 0
+
   node    = digitalocean_droplet.droplet.name
   name    = var.droplet_name
   tags    = var.droplet_tags
-  port    = 5432
-  address = digitalocean_droplet.example.ipv4_address
+  port    = var.consul_service_port
+  address = digitalocean_droplet.example.ipv4_address_private
 }
