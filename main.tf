@@ -65,7 +65,7 @@ resource "null_resource" "cloudinit" {
     run_always = timestamp()
   }
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address
+    host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -129,7 +129,7 @@ resource "null_resource" "set_environment_variables" {
     env_vars = join(",", var.environment_variables)
   }
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address
+    host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -151,7 +151,7 @@ resource "null_resource" "copy_files" {
     always_run = timestamp()
   }
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address
+    host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -170,7 +170,7 @@ resource "null_resource" "exec_additional_commands" {
     always_run = timestamp()
   }
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address
+    host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
