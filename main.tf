@@ -193,5 +193,5 @@ resource "consul_service" "default" {
   name    = var.droplet_name
   tags    = var.droplet_tags
   port    = var.consul_service_port
-  address = digitalocean_droplet.example.ipv4_address_private
+  address = digitalocean_droplet.droplet.ipv4_address_private
 }
