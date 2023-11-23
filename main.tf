@@ -187,11 +187,16 @@ resource "null_resource" "exec_additional_commands" {
 }
 
 resource "consul_service" "default" {
-  count   = var.consul_service_port != 0 ? 1 : 0
+  count = var.consul_service_port != 0 ? 1 : 0
 
   node    = digitalocean_droplet.droplet.name
   name    = var.droplet_name
   tags    = var.droplet_tags
   port    = var.consul_service_port
   address = digitalocean_droplet.droplet.ipv4_address_private
+
+  depends_on = [
+    null_resource.cloudinit,
+    null_resource.exec_additional_commands
+  ]
 }
