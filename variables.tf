@@ -118,3 +118,23 @@ variable "consul_service_port" {
   type        = number
   default     = 0
 }
+
+variable "consul_service_check" {
+  description = "Check for registration service in consul"
+  type = object({
+    check_id                          = string
+    name                              = string
+    http                              = string
+    status                            = string
+    tls_skip_verify                   = bool
+    method                            = string
+    interval                          = string
+    timeout                           = string
+    deregister_critical_service_after = string
+    header = object({
+      name  = string
+      value = list(string)
+    })
+  })
+  default = null
+}

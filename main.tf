@@ -231,6 +231,23 @@ resource "consul_service" "default" {
   address    = digitalocean_droplet.droplet.ipv4_address_private
   datacenter = var.droplet_region
 
+  check {
+    check_id                          = var.consul_service_check.check_id
+    name                              = var.consul_service_check.name
+    http                              = var.consul_service_check.http
+    status                            = var.consul_service_check.status
+    tls_skip_verify                   = var.consul_service_check.tls_skip_verify
+    method                            = var.consul_service_check.method
+    interval                          = var.consul_service_check.interval
+    timeout                           = var.consul_service_check.timeout
+    deregister_critical_service_after = var.consul_service_check.deregister_critical_service_after
+
+    header {
+      name  = var.consul_service_check.header.name
+      value = var.consul_service_check.header.value
+    }
+  }
+
   depends_on = [
     consul_node.default
   ]
