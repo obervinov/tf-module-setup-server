@@ -131,10 +131,6 @@ variable "consul_service_check" {
     interval                          = string
     timeout                           = string
     deregister_critical_service_after = string
-    header = object({
-      name  = string
-      value = list(string)
-    })
   })
   default = null
 }

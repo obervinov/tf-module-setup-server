@@ -241,11 +241,6 @@ resource "consul_service" "default" {
     interval                          = var.consul_service_check.interval
     timeout                           = var.consul_service_check.timeout
     deregister_critical_service_after = var.consul_service_check.deregister_critical_service_after
-
-    header {
-      name  = var.consul_service_check.header.name
-      value = var.consul_service_check.header.value
-    }
   }
 
   depends_on = [
