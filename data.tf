@@ -13,11 +13,3 @@ data "digitalocean_project" "project" {
 data "digitalocean_domain" "domain" {
   name = var.domain_zone
 }
-
-data "digitalocean_droplet_snapshot" "default" {
-  count = regex("^packer", var.droplet_image) ? 1 : 0
-
-  name        = var.droplet_image
-  region      = "ams3"
-  most_recent = true
-}
