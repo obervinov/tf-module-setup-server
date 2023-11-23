@@ -10,7 +10,8 @@ resource "digitalocean_droplet" "droplet" {
     data.digitalocean_ssh_key.key.id,
     data.digitalocean_ssh_key.terraform_key.id
   ]
-  tags      = var.droplet_tags
+  tags = var.droplet_tags
+
   user_data = <<EOF
 #cloud-config
 users:
@@ -28,11 +29,23 @@ users:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.terraform_key.public_key}
+
 ssh_pwauth: false
 disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
+manage_resolv_conf: true
+
+resolv_conf:
+  nameservers: ['8.8.4.4', '8.8.8.8']
+  searchdomains:
+    - consul
+  domain: example.com
+  options:
+    rotate: true
+    timeout: 1
+
 packages:
   - apt-transport-https
   - ca-certificates
@@ -41,6 +54,7 @@ packages:
   - net-tools
   - gpg
 ${var.packages_list != null ? join("\n", formatlist("  - %s", var.packages_list)) : ""}
+
 runcmd:
   # Install docker for all environment
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -57,6 +71,7 @@ resource "digitalocean_project_resources" "project" {
   resources = [
     digitalocean_droplet.droplet.urn
   ]
+
   depends_on = [digitalocean_droplet.droplet]
 }
 
@@ -64,6 +79,7 @@ resource "null_resource" "cloudinit" {
   triggers = {
     run_always = timestamp()
   }
+
   connection {
     host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
@@ -78,6 +94,7 @@ resource "null_resource" "cloudinit" {
       "cloud-init status --wait"
     ]
   }
+
   depends_on = [digitalocean_droplet.droplet]
 }
 
@@ -128,6 +145,7 @@ resource "null_resource" "set_environment_variables" {
   triggers = {
     always = timestamp()
   }
+
   connection {
     host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
@@ -141,6 +159,7 @@ resource "null_resource" "set_environment_variables" {
       "echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
+
   depends_on = [null_resource.cloudinit]
 }
 
@@ -150,6 +169,7 @@ resource "null_resource" "copy_files" {
   triggers = {
     always_run = timestamp()
   }
+
   connection {
     host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
@@ -162,6 +182,7 @@ resource "null_resource" "copy_files" {
     source      = "${var.remote_files}/"
     destination = "${var.persistent_data_path}/configs"
   }
+
   depends_on = [null_resource.cloudinit]
 }
 
@@ -169,6 +190,7 @@ resource "null_resource" "exec_additional_commands" {
   triggers = {
     always_run = timestamp()
   }
+
   connection {
     host        = digitalocean_droplet.droplet.ipv4_address_private
     user        = "terraform"
@@ -180,23 +202,36 @@ resource "null_resource" "exec_additional_commands" {
   provisioner "remote-exec" {
     inline = var.remote_commands
   }
+
   depends_on = [
     null_resource.cloudinit,
     null_resource.set_environment_variables
   ]
 }
 
-resource "consul_service" "default" {
+resource "consul_node" "default" {
   count = var.consul_service_port != 0 ? 1 : 0
 
-  node    = digitalocean_droplet.droplet.name
-  name    = var.droplet_name
-  tags    = var.droplet_tags
-  port    = var.consul_service_port
-  address = digitalocean_droplet.droplet.ipv4_address_private
+  name       = digitalocean_droplet.droplet.name
+  address    = digitalocean_droplet.droplet.ipv4_address_private
+  datacenter = var.droplet_region
 
   depends_on = [
     null_resource.cloudinit,
     null_resource.exec_additional_commands
+  ]
+}
+resource "consul_service" "default" {
+  count = var.consul_service_port != 0 ? 1 : 0
+
+  node       = consul_node.default[0].name
+  name       = var.droplet_name
+  tags       = var.droplet_tags
+  port       = var.consul_service_port
+  address    = digitalocean_droplet.droplet.ipv4_address_private
+  datacenter = var.droplet_region
+
+  depends_on = [
+    consul_node.default
   ]
 }
