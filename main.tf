@@ -1,6 +1,6 @@
 resource "digitalocean_droplet" "droplet" {
   name          = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
-  image         = data.digitalocean_droplet_snapshot.default.id
+  image         = var.droplet_image
   region        = var.droplet_region
   size          = var.droplet_size
   backups       = var.droplet_backups
