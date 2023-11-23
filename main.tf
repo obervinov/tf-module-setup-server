@@ -40,7 +40,7 @@ packages:
   - software-properties-common
   - net-tools
   - gpg
-${join("\n", formatlist("  - %s", var.packages_list))}
+${var.packages_list != null ? join("\n", formatlist("  - %s", var.packages_list)) : ""}
 runcmd:
   # Install docker for all environment
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
