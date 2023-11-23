@@ -6,6 +6,7 @@ variable "droplet_username" {
 variable "packages_list" {
   description = "List of packages to install"
   type        = list(string)
+  default     = null
 }
 
 variable "persistent_data_path" {
@@ -86,6 +87,7 @@ variable "additional_volume_size" {
 variable "environment_variables" {
   description = "List with environmetn variables for server"
   type        = list(any)
+  default     = null
 }
 
 variable "droplet_backups" {

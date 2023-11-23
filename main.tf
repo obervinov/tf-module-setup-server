@@ -126,7 +126,7 @@ resource "null_resource" "set_environment_variables" {
   count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
 
   triggers = {
-    env_vars = join(",", var.environment_variables)
+    always = timestamp()
   }
   connection {
     host        = digitalocean_droplet.droplet.ipv4_address_private
