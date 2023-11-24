@@ -1,5 +1,4 @@
 # Register the droplet as a Consul node and service
-
 resource "consul_node" "default" {
   count = var.consul_service_port != 0 ? 1 : 0
 
