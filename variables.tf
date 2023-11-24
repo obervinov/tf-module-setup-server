@@ -135,13 +135,13 @@ variable "consul_service_check" {
   default = null
 }
 
-variable "consul_internal_ip" {
-  description = "Internal ip for consul. Using in nameservers"
+variable "nameserver_ip" {
+  description = "Private IP for cloudinit nameserver"
   type        = string
 }
 
-variable "consul_internal_port" {
-  description = "Internal port for consul. Using in nameservers"
+variable "nameserver_port" {
+  description = "Port for cloudinit nameserver"
   type        = number
   default     = 8600
 }

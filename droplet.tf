@@ -41,7 +41,7 @@ manage_etc_hosts: true
 manage_resolv_conf: true
 
 resolv_conf:
-  nameservers: ['${var.consul_internal_ip}#${var.consul_internal_port}']
+  nameservers: ['${var.nameserver_ip}#${var.nameserver_port}']
   searchdomains:
     - consul
   options:

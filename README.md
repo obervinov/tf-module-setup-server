@@ -97,8 +97,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
-| <a name="input_consul_internal_ip"></a> [consul\_internal\_ip](#input\_consul\_internal\_ip) | Internal ip for consul. Using in nameservers | `string` | n/a | yes |
-| <a name="input_consul_internal_port"></a> [consul\_internal\_port](#input\_consul\_internal\_port) | Internal port for consul. Using in nameservers | `number` | `8600` | no |
 | <a name="input_consul_service_check"></a> [consul\_service\_check](#input\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
 | <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | `0` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
@@ -115,6 +113,8 @@ No modules.
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
 | <a name="input_droplet_username"></a> [droplet\_username](#input\_droplet\_username) | Name for creating a new user | `string` | n/a | yes |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | List with environmetn variables for server | `list(any)` | `null` | no |
+| <a name="input_nameserver_ip"></a> [nameserver\_ip](#input\_nameserver\_ip) | Private IP for cloudinit nameserver | `string` | n/a | yes |
+| <a name="input_nameserver_port"></a> [nameserver\_port](#input\_nameserver\_port) | Port for cloudinit nameserver | `number` | `8600` | no |
 | <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | `null` | no |
 | <a name="input_persistent_data_path"></a> [persistent\_data\_path](#input\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | n/a | yes |
