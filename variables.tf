@@ -135,13 +135,8 @@ variable "consul_service_check" {
   default = null
 }
 
-variable "nameserver_ip" {
-  description = "Private IP for cloudinit nameserver"
-  type        = string
-}
-
-variable "nameserver_port" {
-  description = "Port for cloudinit nameserver"
-  type        = number
-  default     = 8600
+variable "nameserver_ips" {
+  description = "Private IPs for cloudinit nameserver"
+  type        = list(string)
+  default     = ["8.8.8.8", "8.8.4.4"]
 }

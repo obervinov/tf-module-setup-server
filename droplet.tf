@@ -41,9 +41,11 @@ manage_etc_hosts: true
 manage_resolv_conf: true
 
 resolv_conf:
-  nameservers: ['${var.nameserver_ip}#${var.nameserver_port}']
+  nameservers:
+${join("\n", formatlist("    - %s", var.nameserver_ips))}
   searchdomains:
     - consul
+  domain: consul
   options:
     rotate: true
     timeout: 1
