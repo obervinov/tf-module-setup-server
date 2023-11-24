@@ -134,3 +134,14 @@ variable "consul_service_check" {
   })
   default = null
 }
+
+variable "consul_internal_ip" {
+  description = "Internal ip for consul. Using in nameservers"
+  type        = string
+}
+
+variable "consul_internal_port" {
+  description = "Internal port for consul. Using in nameservers"
+  type        = number
+  default     = 8600
+}

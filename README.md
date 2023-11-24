@@ -50,7 +50,6 @@ module "prepare_environment" {
 }
 ```
 
-
 ## Requirements
 
 | Name | Version |
@@ -98,7 +97,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
-| <a name="input_consul_service_check"></a> [consul\_service\_check](#input\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>    header = object({<br>      name  = string<br>      value = list(string)<br>    })<br>  })</pre> | `null` | no |
+| <a name="input_consul_internal_ip"></a> [consul\_internal\_ip](#input\_consul\_internal\_ip) | Internal ip for consul. Using in nameservers | `string` | n/a | yes |
+| <a name="input_consul_internal_port"></a> [consul\_internal\_port](#input\_consul\_internal\_port) | Internal port for consul. Using in nameservers | `number` | `8600` | no |
+| <a name="input_consul_service_check"></a> [consul\_service\_check](#input\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
 | <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | `0` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
 | <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |

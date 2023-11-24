@@ -1,3 +1,6 @@
+# Provising resources in DigitalOcean
+# Droplet, reserved IP, DNS record, volume, volume snapshot
+
 resource "digitalocean_droplet" "droplet" {
   name          = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
   image         = var.droplet_image
@@ -38,10 +41,9 @@ manage_etc_hosts: true
 manage_resolv_conf: true
 
 resolv_conf:
-  nameservers: ['8.8.4.4', '8.8.8.8']
+  nameservers: ['${var.consul_internal_ip}#${var.consul_internal_port}']
   searchdomains:
     - consul
-  domain: example.com
   options:
     rotate: true
     timeout: 1
@@ -71,29 +73,6 @@ resource "digitalocean_project_resources" "project" {
   resources = [
     digitalocean_droplet.droplet.urn
   ]
-
-  depends_on = [digitalocean_droplet.droplet]
-}
-
-resource "null_resource" "cloudinit" {
-  triggers = {
-    run_always = timestamp()
-  }
-
-  connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
-    user        = "terraform"
-    type        = "ssh"
-    agent       = false
-    timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
-
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait"
-    ]
-  }
 
   depends_on = [digitalocean_droplet.droplet]
 }
@@ -137,113 +116,4 @@ resource "digitalocean_volume_snapshot" "volume_snapshot" {
 
   name      = "${var.droplet_name}--${var.droplet_region}-volume-snapshot"
   volume_id = digitalocean_volume.volume[count.index].id
-}
-
-resource "null_resource" "set_environment_variables" {
-  count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
-
-  triggers = {
-    always = timestamp()
-  }
-
-  connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
-    user        = "terraform"
-    type        = "ssh"
-    agent       = false
-    timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
-    ]
-  }
-
-  depends_on = [null_resource.cloudinit]
-}
-
-resource "null_resource" "copy_files" {
-  count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
-
-  triggers = {
-    always_run = timestamp()
-  }
-
-  connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
-    user        = "terraform"
-    type        = "ssh"
-    agent       = false
-    timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
-  }
-  provisioner "file" {
-    source      = "${var.remote_files}/"
-    destination = "${var.persistent_data_path}/configs"
-  }
-
-  depends_on = [null_resource.cloudinit]
-}
-
-resource "null_resource" "exec_additional_commands" {
-  triggers = {
-    always_run = timestamp()
-  }
-
-  connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
-    user        = "terraform"
-    type        = "ssh"
-    agent       = false
-    timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
-  }
-  provisioner "remote-exec" {
-    inline = var.remote_commands
-  }
-
-  depends_on = [
-    null_resource.cloudinit,
-    null_resource.set_environment_variables
-  ]
-}
-
-resource "consul_node" "default" {
-  count = var.consul_service_port != 0 ? 1 : 0
-
-  name       = digitalocean_droplet.droplet.name
-  address    = digitalocean_droplet.droplet.ipv4_address_private
-  datacenter = var.droplet_region
-
-  depends_on = [
-    null_resource.cloudinit,
-    null_resource.exec_additional_commands
-  ]
-}
-resource "consul_service" "default" {
-  count = var.consul_service_port != 0 ? 1 : 0
-
-  node       = consul_node.default[0].name
-  name       = var.droplet_name
-  tags       = var.droplet_tags
-  port       = var.consul_service_port
-  address    = digitalocean_droplet.droplet.ipv4_address_private
-  datacenter = var.droplet_region
-
-  check {
-    check_id                          = var.consul_service_check.check_id
-    name                              = var.consul_service_check.name
-    http                              = var.consul_service_check.http
-    status                            = var.consul_service_check.status
-    tls_skip_verify                   = var.consul_service_check.tls_skip_verify
-    method                            = var.consul_service_check.method
-    interval                          = var.consul_service_check.interval
-    timeout                           = var.consul_service_check.timeout
-    deregister_critical_service_after = var.consul_service_check.deregister_critical_service_after
-  }
-
-  depends_on = [
-    consul_node.default
-  ]
 }
