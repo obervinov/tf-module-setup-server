@@ -72,7 +72,7 @@ resource "null_resource" "copy_files" {
 }
 
 resource "null_resource" "exec_additional_commands" {
-  count = var.remote_commands != null && length(var.remote_commands) > 0 ? 1 : 0
+  count = length(coalesce(var.remote_commands, [])) > 0 ? 1 : 0
   triggers = {
     always_run = timestamp()
   }

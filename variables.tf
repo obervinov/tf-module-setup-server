@@ -6,7 +6,7 @@ variable "droplet_username" {
 variable "packages_list" {
   description = "List of packages to install"
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "persistent_data_path" {
