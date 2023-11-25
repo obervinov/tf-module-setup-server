@@ -18,6 +18,7 @@ variable "persistent_data_path" {
 variable "remote_commands" {
   description = "List of commands to execute custom remote-exec"
   type        = list(string)
+  default     = null
 }
 
 variable "remote_files" {

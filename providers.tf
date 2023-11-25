@@ -1,3 +1,3 @@
 provider "consul" {
-    scheme = "https"
+  scheme = "https"
 }
