@@ -12,7 +12,6 @@ locals {
   network = {
     ethernets = {
       eth1 = {
-        addresses     = [data.digitalocean_vpc.vpc.ip_range]
         mtu           = 1500
         nameservers   = sort(var.nameserver_ips)
         searchdomains = ["consul"]
@@ -37,6 +36,7 @@ disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
+manage_resolv_conf: true
 
 users:
   - name: ${var.droplet_username}
@@ -54,13 +54,21 @@ users:
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.terraform_key.public_key}
 
+resolv_conf:
+  nameservers:
+${var.nameserver_ips != null ? join("\n", formatlist("    - '%s'", var.nameserver_ips)) : "8.8.8.8"}
+  searchdomains:
+    - service.consul
+  options:
+    rotate: true
+    timeout: 1
+
 packages:
 ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}
 ${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
 run_cmd:
 ${local.default_commands != null ? join("\n", formatlist("  - '%s'", local.default_commands)) : ""}
-
 EOF
 }
 
