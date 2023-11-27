@@ -27,12 +27,6 @@ locals {
       groups              = ["sudo"]
       sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
       ssh_authorized_keys = [data.digitalocean_ssh_key.key.public_key]
-    },
-    {
-      name                = "terraform"
-      groups              = ["sudo"]
-      sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
-      ssh_authorized_keys = [data.digitalocean_ssh_key.terraform_key.public_key]
     }
   ]
 
@@ -49,6 +43,13 @@ locals {
   user_data = <<EOF
 #cloud-config
 users:
+  - name: terraform
+    groups:
+      - sudo
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ${data.digitalocean_ssh_key.terraform_key.public_key}
 ${join("\n", flatten([for u in local.users : [
     "- name: ${u.name}",
     "  groups: ${jsonencode(u.groups)}",
