@@ -55,7 +55,7 @@ package_upgrade: true
 manage_etc_hosts: true
 
 users:
-${yamlencode(local.users)}
+${indent(2, yamlencode(local.users))}
 EOF
 }
 
