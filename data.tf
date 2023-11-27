@@ -51,12 +51,10 @@ locals {
 users:
 ${join("\n", flatten([for u in local.users : [
     "- name: ${u.name}",
-    "  groups:",
-    "    - ${join("\n    - ", u.groups)}",
-    "  sudo:",
-    "    - ${join("\n    - ", u.sudo)}",
+    "  groups: ${jsonencode(u.groups)}",
+    "  sudo: ${jsonencode(u.sudo)}",
     "  ssh-authorized-keys:",
-    "    - ${u.ssh_authorized_keys[0]}"
+    "    - ${jsonencode(u.ssh_authorized_keys)}"
   ]]))}
 
 ssh_pwauth: false
@@ -65,8 +63,8 @@ package_update: true
 package_upgrade: true
 manage_etc_hosts: true
 
-network:
-${indent(2, yamlencode(local.network))}
+#network:
+#${indent(2, yamlencode(local.network))}
 
 packages:
 ${join("\n", formatlist("  - '%s'", local.default_packages))}
