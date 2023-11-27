@@ -6,18 +6,29 @@ users:
     groups: ['sudo']
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.key.public_key}
+      - "${tr("\n", "", data.digitalocean_ssh_key.key.public_key)}"
   - name: terraform
     groups: ['sudo']
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.terraform_key.public_key}
+      - "${tr("\n", "", data.digitalocean_ssh_key.key.public_key)}"
 
 ssh_pwauth: false
 disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
+manage_resolv_conf: true
+
+resolv_conf:
+  nameservers:
+${join("\n", formatlist("    - '%s'", var.nameserver_ips))}
+  searchdomains:
+    - service.consul
+  domain: 'consul'
+  options:
+    rotate: true
+    timeout: 1
 
 packages:
   - 'apt-transport-https'
