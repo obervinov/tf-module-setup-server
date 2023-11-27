@@ -66,12 +66,12 @@ manage_etc_hosts: true
 #network:
 #${indent(2, yamlencode(local.network))}
 
-packages:
-${join("\n", formatlist("  - '%s'", local.default_packages))}
-${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
+#packages:
+#${join("\n", formatlist("  - '%s'", local.default_packages))}
+#${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
-runcmd:
-${indent(2, join("\n", local.runcmd))}
+#runcmd:
+#${indent(2, join("\n", local.runcmd))}
 EOF
 }
 
