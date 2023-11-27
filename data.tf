@@ -10,7 +10,7 @@ locals {
   ]
 
   network = {
-    interfaces = {
+    ethernets = {
       eth1 = {
         addresses     = ["${data.digitalocean_vpc.vpc.ip_range}"]
         mtu           = 1500
