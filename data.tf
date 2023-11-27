@@ -6,12 +6,12 @@ users:
     groups: ['sudo']
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      - "${tr("\n", "", data.digitalocean_ssh_key.key.public_key)}"
+      - "${replace(data.digitalocean_ssh_key.key.public_key, "\n", "")}"
   - name: terraform
     groups: ['sudo']
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      - "${tr("\n", "", data.digitalocean_ssh_key.key.public_key)}"
+      - "${replace(data.digitalocean_ssh_key.key.public_key, "\n", "")}"
 
 ssh_pwauth: false
 disable_root: true
