@@ -1,61 +1,71 @@
 locals {
-  resolv_conf = {
-    nameservers   = sort(var.nameserver_ips)
-    searchdomains = ["service.consul"]
-    domain        = "consul"
-    options       = {
-      rotate  = true
-      timeout = 1
+
+  default_packages = [
+    "apt-transport-https",
+    "ca-certificates",
+    "curl",
+    "software-properties-common",
+    "net-tools",
+    "gpg"
+  ]
+
+  network = {
+    interfaces = {
+      eth1 = {
+        addresses     = ["${data.digitalocean_vpc.vpc.ip_range}"]
+        mtu           = 1500
+        nameservers   = sort(var.nameserver_ips)
+        searchdomains = ["consul"]
+        domain        = "consul"
+      }
     }
   }
+
+  users = [
+    {
+      name                = var.droplet_username
+      groups              = ["sudo"]
+      sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
+      ssh_authorized_keys = [data.digitalocean_ssh_key.key.public_key]
+    },
+    {
+      name                = "terraform"
+      groups              = ["sudo"]
+      sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
+      ssh_authorized_keys = [data.digitalocean_ssh_key.terraform_key.public_key]
+    }
+  ]
+
+  runcmd = [
+    # Install docker for all environment
+    "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
+    "echo \"deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \"$$(. /etc/os-release && echo \"$VERSION_CODENAME\")\" stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+    "DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
+    "sudo usermod -aG docker ${var.droplet_username}",
+    # Directory for configuration files provisioner
+    "sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.droplet_username}.terraform ${var.persistent_data_path}/configs && sudo chmod 775 ${var.persistent_data_path}/configs"
+  ]
 
   user_data = <<EOF
 #cloud-config
 users:
-  - name: ${var.droplet_username}
-    groups: ['sudo']
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.key.public_key}
-  - name: terraform
-    groups: ['sudo']
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.terraform_key.public_key}
+${join("\n", [for u in local.users : "- name: ${u.name}\n  groups: ${jsonencode(u.groups)}\n  sudo: ${jsonencode(u.sudo)}\n  ssh-authorized-keys:\n    - ${jsonencode(u.ssh_authorized_keys)}"])}
 
 ssh_pwauth: false
 disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
-manage_resolv_conf: true
 
-resolv_conf:
-  nameservers: ${jsonencode(local.resolv_conf.nameservers)}
-  searchdomains:
-${indent(2, join("\n", formatlist("    - %s", local.resolv_conf.searchdomains)))}
-  domain: ${jsonencode(local.resolv_conf.domain)}
-  options:
-    rotate: ${local.resolv_conf.options.rotate}
-    timeout: ${local.resolv_conf.options.timeout}
+network:
+${indent(2, to_yaml(local.network))}
 
 packages:
-  - 'apt-transport-https'
-  - 'ca-certificates'
-  - 'curl'
-  - 'software-properties-common'
-  - 'net-tools'
-  - 'gpg'
+${join("\n", formatlist("  - '%s'", local.default_packages))}
 ${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
 runcmd:
-  # Install docker for all environment
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  - DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  - sudo usermod -aG docker ${var.droplet_username}
-  # Directory for configuration files provisioner
-  - sudo mkdir -p ${var.persistent_data_path}/configs && sudo chown ${var.droplet_username}.terraform ${var.persistent_data_path}/configs && sudo chmod 775 ${var.persistent_data_path}/configs
+${indent(2, join("\n", local.runcmd))}
 EOF
 }
 
@@ -73,4 +83,8 @@ data "digitalocean_project" "project" {
 
 data "digitalocean_domain" "domain" {
   name = var.domain_zone
+}
+
+data "digitalocean_vpc" "vpc" {
+  name = var.vpc
 }
