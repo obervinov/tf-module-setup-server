@@ -1,4 +1,14 @@
 locals {
+  resolv_conf = {
+    nameservers   = sort(var.nameserver_ips)
+    searchdomains = ["service.consul"]
+    domain        = "consul"
+    options       = {
+      rotate  = true
+      timeout = 1
+    }
+  }
+
   user_data = <<EOF
 #cloud-config
 users:
@@ -21,14 +31,13 @@ manage_etc_hosts: true
 manage_resolv_conf: true
 
 resolv_conf:
-  nameservers:
-${join("\n", formatlist("    - '%s'", var.nameserver_ips))}
+  nameservers: ${jsonencode(local.resolv_conf.nameservers)}
   searchdomains:
-    - service.consul
-  domain: 'consul'
+${indent(2, join("\n", formatlist("    - %s", local.resolv_conf.searchdomains)))}
+  domain: ${jsonencode(local.resolv_conf.domain)}
   options:
-    rotate: true
-    timeout: 1
+    rotate: ${local.resolv_conf.options.rotate}
+    timeout: ${local.resolv_conf.options.timeout}
 
 packages:
   - 'apt-transport-https'
