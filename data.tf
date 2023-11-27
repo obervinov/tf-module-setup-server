@@ -26,13 +26,13 @@ locals {
       name                = var.droplet_username
       groups              = ["sudo"]
       sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
-      ssh_authorized_keys = [data.digitalocean_ssh_key.key.public_key]
+      ssh_authorized_keys = ["${data.digitalocean_ssh_key.key.public_key}"]
     },
     {
       name                = "terraform"
       groups              = ["sudo"]
       sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
-      ssh_authorized_keys = [data.digitalocean_ssh_key.terraform_key.public_key]
+      ssh_authorized_keys = ["${data.digitalocean_ssh_key.terraform_key.public_key}"]
     }
   ]
 
@@ -49,7 +49,7 @@ locals {
   user_data = <<EOF
 #cloud-config
 users:
-${join("\n", [for u in local.users : "- name: ${u.name}\n  groups: ${jsonencode(u.groups)}\n  sudo: ${jsonencode(u.sudo)}\n  ssh-authorized-keys:\n    - ${jsonencode(u.ssh_authorized_keys)}"])}
+${join("\n", [for u in local.users : "- name: ${u.name}\n  groups: ${jsonencode(u.groups)}\n  sudo: ${jsonencode(u.sudo)}\n  ssh-authorized-keys:\n    - ${u.ssh_authorized_keys[0]}"])}
 
 ssh_pwauth: false
 disable_root: true
