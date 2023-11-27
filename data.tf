@@ -75,9 +75,6 @@ packages:
 ${join("\n", formatlist("  - '%s'", local.default_packages))}
 ${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
-network:
-${indent(2, yamlencode(local.network))}
-
 runcmd:
 ${indent(2, join("\n", local.runcmd))}
 EOF
