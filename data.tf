@@ -86,5 +86,6 @@ data "digitalocean_domain" "domain" {
 }
 
 data "digitalocean_vpc" "vpc" {
-  name = var.vpc
+  name   = var.vpc
+  region = var.droplet_region
 }
