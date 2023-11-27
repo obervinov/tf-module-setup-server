@@ -21,20 +21,20 @@ locals {
     }
   }
 
-  users = [
-    {
+  users = {
+    "${var.droplet_username}" = {
       name                = var.droplet_username
       groups              = ["sudo"]
       sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
       ssh_authorized_keys = [data.digitalocean_ssh_key.key.public_key]
     },
-    {
+    "terraform" = {
       name                = "terraform"
       groups              = ["sudo"]
       sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
       ssh_authorized_keys = [data.digitalocean_ssh_key.terraform_key.public_key]
     }
-  ]
+  }
 
   runcmd = [
     # Install docker for all environment
@@ -56,27 +56,7 @@ package_upgrade: true
 manage_etc_hosts: true
 
 users:
-  - name: ${var.droplet_username}
-    groups:
-      - sudo
-    sudo:
-      - ALL=(ALL) NOPASSWD:ALL
-    ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.key.public_key}
-  - name: terraform
-    groups:
-      - sudo
-    sudo:
-      - ALL=(ALL) NOPASSWD:ALL
-    ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.terraform_key.public_key}
-
-packages:
-${join("\n", formatlist("  - '%s'", local.default_packages))}
-${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
-
-runcmd:
-${indent(2, join("\n", local.runcmd))}
+${yamlencode(local.users)}
 EOF
 }
 
