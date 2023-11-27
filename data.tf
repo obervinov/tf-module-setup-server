@@ -48,6 +48,13 @@ locals {
 
   user_data = <<EOF
 #cloud-config
+
+ssh_pwauth: false
+disable_root: true
+package_update: true
+package_upgrade: true
+manage_etc_hosts: true
+
 users:
   - name: ${var.droplet_username}
     groups:
@@ -64,13 +71,15 @@ users:
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.terraform_key.public_key}
 
-ssh_pwauth: false
-disable_root: true
-package_update: true
-package_upgrade: true
-manage_etc_hosts: true
+packages:
+${join("\n", formatlist("  - '%s'", local.default_packages))}
+${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
+network:
+${indent(2, yamlencode(local.network))}
 
+runcmd:
+${indent(2, join("\n", local.runcmd))}
 EOF
 }
 
