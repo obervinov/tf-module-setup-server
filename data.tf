@@ -21,22 +21,7 @@ locals {
     }
   }
 
-  users = {
-    "${var.droplet_username}" = {
-      name                = var.droplet_username
-      groups              = ["sudo"]
-      sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
-      ssh_authorized_keys = [data.digitalocean_ssh_key.key.public_key]
-    },
-    "terraform" = {
-      name                = "terraform"
-      groups              = ["sudo"]
-      sudo                = ["ALL=(ALL) NOPASSWD:ALL"]
-      ssh_authorized_keys = [data.digitalocean_ssh_key.terraform_key.public_key]
-    }
-  }
-
-  runcmd = [
+  default_commands = [
     # Install docker for all environment
     "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
     "echo \"deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \"$$(. /etc/os-release && echo \"$VERSION_CODENAME\")\" stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
@@ -49,13 +34,34 @@ locals {
   user_data = <<EOF
 #cloud-config
 
-users:
-${indent(2, yamlencode(local.users))}
-
 ssh_pwauth: false
+disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
+
+users:
+  - name: ${var.droplet_username}
+    groups:
+      - sudo
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ${data.digitalocean_ssh_key.key.public_key}
+  - name: terraform
+    groups:
+      - sudo
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ${data.digitalocean_ssh_key.terraform_key.public_key}
+
+packages:
+${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}
+${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
+
+run_cmd:
+${local.default_commands != null ? join("\n", formatlist("  - '%s'", local.default_commands)) : ""}
 
 EOF
 }
