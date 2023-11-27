@@ -21,8 +21,10 @@ manage_etc_hosts: true
 manage_resolv_conf: true
 
 resolv_conf:
-  nameservers: ${var.nameserver_ips}
-  searchdomains: ['service.consul']
+  nameservers:
+${join("\n", formatlist("    - '%s'", var.nameserver_ips))}
+  searchdomains:
+    - service.consul
   domain: 'consul'
   options:
     rotate: true
