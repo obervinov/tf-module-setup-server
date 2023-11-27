@@ -49,13 +49,14 @@ locals {
   user_data = <<EOF
 #cloud-config
 
+users:
+${indent(2, yamlencode(local.users))}
+
 ssh_pwauth: false
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
 
-users:
-${indent(2, yamlencode(local.users))}
 EOF
 }
 
