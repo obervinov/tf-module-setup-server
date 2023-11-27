@@ -12,7 +12,7 @@ locals {
   network = {
     ethernets = {
       eth1 = {
-        addresses     = ["${data.digitalocean_vpc.vpc.ip_range}"]
+        addresses     = [data.digitalocean_vpc.vpc.ip_range]
         mtu           = 1500
         nameservers   = sort(var.nameserver_ips)
         searchdomains = ["consul"]
@@ -58,7 +58,7 @@ package_upgrade: true
 manage_etc_hosts: true
 
 network:
-${indent(2, to_yaml(local.network))}
+${indent(2, yamlencode(local.network))}
 
 packages:
 ${join("\n", formatlist("  - '%s'", local.default_packages))}
