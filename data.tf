@@ -48,6 +48,7 @@ locals {
 
   user_data = <<EOF
 #cloud-config
+users:
 ${join("\n", flatten([for u in local.users : [
     "- name: ${u.name}",
     "  groups:",
