@@ -22,7 +22,7 @@ locals {
 
   default_commands = [
     "sudo mkdir -p ${var.persistent_data_path}/configs",
-    "sudo chown ${var.droplet_username}.terraform ${var.persistent_data_path}/configs",
+    "sudo chown ${var.droplet_username}:terraform ${var.persistent_data_path}/configs",
     "sudo chmod 775 ${var.persistent_data_path}/configs",
     "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
     "echo \"deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \"$(. /etc/os-release && echo \"$VERSION_CODENAME\")\" stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
@@ -38,7 +38,6 @@ disable_root: true
 package_update: true
 package_upgrade: true
 manage_etc_hosts: true
-manage-resolv-conf: true
 
 users:
   - name: ${var.droplet_username}
@@ -56,20 +55,20 @@ users:
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.terraform_key.public_key}
 
-resolv_conf:
-  nameservers:
-${var.nameserver_ips != null ? join("\n", formatlist("    - '%s'", var.nameserver_ips)) : "8.8.8.8"}
-  searchdomains:
-    - service.consul
-  options:
-    rotate: true
-    timeout: 1
+write_files:
+  - path: /etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf
+    content: |
+      [Resolve]
+      DNS=${join(" ", formatlist("%s", var.nameserver_ips))}
+      DNSSEC=false
+      Domains=~consul
 
 packages:
 ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}
 ${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
 
 runcmd:
+  - systemctl restart systemd-resolved
 ${local.default_commands != null ? join("\n", formatlist("  - '%s'", local.default_commands)) : ""}
 EOF
 }
@@ -91,5 +90,5 @@ data "digitalocean_domain" "domain" {
 }
 
 data "digitalocean_vpc" "vpc" {
-  name   = "${var.vpc}-${var.droplet_region}"
+  name = "${var.vpc}-${var.droplet_region}"
 }
