@@ -8,6 +8,7 @@ resource "digitalocean_droplet" "droplet" {
   backups       = var.droplet_backups
   monitoring    = var.droplet_monitoring
   droplet_agent = var.droplet_agent
+  vpc_uuid      = data.digitalocean_vpc.vpc.id
   ssh_keys = [
     data.digitalocean_ssh_key.key.id,
     data.digitalocean_ssh_key.terraform_key.id

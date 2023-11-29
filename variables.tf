@@ -142,8 +142,8 @@ variable "nameserver_ips" {
   default     = ["8.8.8.8", "8.8.4.4"]
 }
 
-variable "vpc" {
-  description = "VPC name and CIDR for cloudinit"
+variable "vpc_name" {
+  description = "VPC name"
   type        = string
   default     = "default"
 }

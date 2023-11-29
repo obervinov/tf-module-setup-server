@@ -50,7 +50,6 @@ module "prepare_environment" {
 }
 ```
 
-
 ## Requirements
 
 | Name | Version |
@@ -121,7 +120,7 @@ No modules.
 | <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
 | <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
 | <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
-| <a name="input_vpc"></a> [vpc](#input\_vpc) | VPC name and CIDR for cloudinit | `string` | `"default"` | no |
+| <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | VPC name | `string` | `"default"` | no |
 
 ## Outputs
 
