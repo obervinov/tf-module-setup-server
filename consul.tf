@@ -101,7 +101,7 @@ resource "null_resource" "setup_env_consul_agent_token" {
   }
   provisioner "remote-exec" {
     inline = [
-      "echo 'CONSUL_HTTP_TOKEN=${consul_acl_token.acl_token.secret_id}' | sudo tee -a /etc/environment > /dev/null"
+      "echo 'CONSUL_HTTP_TOKEN=${consul_acl_token.acl_token[count.index].secret_id}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
 
