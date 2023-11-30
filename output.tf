@@ -42,8 +42,3 @@ output "additional_volume" {
   description = "Additional volume for new droplet"
   value       = var.additional_volume_size > 0 ? digitalocean_volume.volume[0].name : ""
 }
-
-output "consul_acl_token" {
-  value = length(consul_acl_token.acl_token) > 0 ? consul_acl_token.acl_token[0].secret_id : null
-  sensitive = true
-}
