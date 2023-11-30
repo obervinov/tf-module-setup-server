@@ -44,6 +44,6 @@ output "additional_volume" {
 }
 
 output "consul_acl_token" {
-  value     = consul_acl_token.acl_token[*].secret_id
+  value     = length(consul_acl_token.acl_token[*]) > 0 ? consul_acl_token.acl_token[*].secret_id : null
   sensitive = true
 }
