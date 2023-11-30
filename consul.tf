@@ -1,6 +1,51 @@
+# Create acl policy for registering nodes
+resource "consul_acl_policy" "node_policy" {
+  count = var.consul_agent ? 1 : 0
+
+  name        = "register-policy-${var.droplet_name}"
+  description = "Policy for ${var.droplet_name} server registration"
+  rules       = <<-EOT
+    node_prefix "" {
+      policy = "write"
+    }
+  EOT
+}
+
+# Create acl policy for registering services
+resource "consul_acl_policy" "service_policy" {
+  count = var.consul_agent ? 1 : 0
+
+  name        = "service-policy-${var.droplet_name}"
+  description = "Policy for ${var.droplet_name} service registration"
+  rules       = <<-EOT
+    service_prefix "" {
+      policy = "write"
+    }
+  EOT
+}
+
+# Create acl token for registering nodes and services
+resource "consul_acl_token" "acl_token" {
+  count = var.consul_agent ? 1 : 0
+
+  description = "ACL Token for ${var.droplet_name} register and service policies"
+  local       = true
+  policies = [
+    consul_acl_policy.node_policy.name,
+    consul_acl_policy.service_policy.name,
+  ]
+  node_identities {
+    node_name  = var.droplet_name
+    datacenter = var.droplet_region
+  }
+  service_identities {
+    service_name = var.droplet_name
+  }
+}
+
 # Register the droplet as a Consul node and service
 resource "consul_node" "default" {
-  count = var.consul_service_port != 0 ? 1 : 0
+  count = var.consul_agent ? 1 : 0
 
   name       = digitalocean_droplet.droplet.name
   address    = digitalocean_droplet.droplet.ipv4_address_private
@@ -13,7 +58,7 @@ resource "consul_node" "default" {
 }
 
 resource "consul_service" "default" {
-  count = var.consul_service_port != 0 ? 1 : 0
+  count = var.consul_agent ? 1 : 0
 
   node       = consul_node.default[0].name
   name       = var.droplet_name

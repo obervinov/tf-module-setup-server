@@ -114,10 +114,16 @@ variable "droplet_agent" {
   default     = true
 }
 
+variable "consul_agent" {
+  description = "Enable consul agent and registration service in Consul"
+  type        = bool
+  default     = true
+}
+
 variable "consul_service_port" {
   description = "Port for registration service in consul"
   type        = number
-  default     = 0
+  default     = 80
 }
 
 variable "consul_service_check" {

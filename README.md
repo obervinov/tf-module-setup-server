@@ -74,6 +74,9 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [consul_acl_policy.node_policy](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
+| [consul_acl_policy.service_policy](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
+| [consul_acl_token.acl_token](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_token) | resource |
 | [consul_node.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/node) | resource |
 | [consul_service.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/service) | resource |
 | [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
@@ -98,8 +101,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
+| <a name="input_consul_agent"></a> [consul\_agent](#input\_consul\_agent) | Enable consul agent and registration service in Consul | `bool` | `true` | no |
 | <a name="input_consul_service_check"></a> [consul\_service\_check](#input\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
-| <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | `0` | no |
+| <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | `80` | no |
 | <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
 | <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |
 | <a name="input_droplet_backups"></a> [droplet\_backups](#input\_droplet\_backups) | Enable backups for droplet | `bool` | `false` | no |
@@ -127,6 +131,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
+| <a name="output_consul_acl_token"></a> [consul\_acl\_token](#output\_consul\_acl\_token) | n/a |
 | <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
 | <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
 | <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
