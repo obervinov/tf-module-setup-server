@@ -83,3 +83,29 @@ resource "consul_service" "default" {
     consul_node.default
   ]
 }
+
+resource "null_resource" "setup_env_consul_agent_token" {
+  count = var.consul_agent ? 1 : 0
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  connection {
+    host        = digitalocean_droplet.droplet.ipv4_address_private
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.ssh_private_key)
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'CONSUL_HTTP_TOKEN=${consul_acl_token.acl_token.secret_id}' | sudo tee -a /etc/environment > /dev/null"
+    ]
+  }
+
+  depends_on = [
+    consul_acl_token.acl_token
+  ]
+}
