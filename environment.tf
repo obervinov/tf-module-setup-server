@@ -25,7 +25,7 @@ resource "null_resource" "cloudinit" {
 }
 
 resource "null_resource" "set_etc_hosts" {
-  count = var.etc_hosts != null && length([for h in var.etc_hosts : h]) > 0 ? 1 : 0
+  count = var.etc_hosts != null && length(var.etc_hosts) > 0 ? 1 : 0
 
   triggers = {
     hash = sha1(join(",", var.etc_hosts))
@@ -39,7 +39,7 @@ resource "null_resource" "set_etc_hosts" {
     timeout     = "3m"
     private_key = base64decode(var.ssh_private_key)
   }
-  
+
   provisioner "remote-exec" {
     inline = count > 0 ? [
       "echo '${join("\n", var.etc_hosts)}' | sudo tee -a /etc/hosts > /dev/null",

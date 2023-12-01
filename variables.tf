@@ -88,7 +88,7 @@ variable "additional_volume_size" {
 variable "environment_variables" {
   description = "List with environmetn variables for server"
   type        = list(any)
-  default     = null
+  default     = []
 }
 
 variable "droplet_backups" {
@@ -157,5 +157,5 @@ variable "vpc_name" {
 variable "etc_hosts" {
   description = "List with etc hosts"
   type        = list(string)
-  default     = null
+  default     = []
 }
