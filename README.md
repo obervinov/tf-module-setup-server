@@ -91,6 +91,7 @@ No modules.
 | [null_resource.copy_files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.exec_additional_commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.set_environment_variables](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.set_etc_hosts](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.setup_env_consul_agent_token](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
 | [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
@@ -120,6 +121,7 @@ No modules.
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
 | <a name="input_droplet_username"></a> [droplet\_username](#input\_droplet\_username) | Name for creating a new user | `string` | n/a | yes |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | List with environmetn variables for server | `list(any)` | `null` | no |
+| <a name="input_etc_hosts"></a> [etc\_hosts](#input\_etc\_hosts) | List with etc hosts | `list(string)` | `null` | no |
 | <a name="input_nameserver_ips"></a> [nameserver\_ips](#input\_nameserver\_ips) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
 | <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | `[]` | no |
 | <a name="input_persistent_data_path"></a> [persistent\_data\_path](#input\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
@@ -133,7 +135,6 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
-| <a name="output_consul_acl_token"></a> [consul\_acl\_token](#output\_consul\_acl\_token) | n/a |
 | <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
 | <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
 | <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
