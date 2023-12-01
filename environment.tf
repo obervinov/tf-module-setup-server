@@ -21,7 +21,9 @@ resource "null_resource" "cloudinit" {
     ]
   }
 
-  depends_on = [digitalocean_droplet.droplet]
+  depends_on = [
+    digitalocean_droplet.droplet
+  ]
 }
 
 resource "null_resource" "set_etc_hosts" {
@@ -47,7 +49,9 @@ resource "null_resource" "set_etc_hosts" {
     ]
   }
 
-  depends_on = [null_resource.cloudinit]
+  depends_on = [
+    null_resource.cloudinit
+  ]
 }
 
 resource "null_resource" "set_environment_variables" {
@@ -71,7 +75,9 @@ resource "null_resource" "set_environment_variables" {
     ]
   }
 
-  depends_on = [null_resource.cloudinit]
+  depends_on = [
+    null_resource.cloudinit
+  ]
 }
 
 resource "null_resource" "copy_files" {
@@ -94,7 +100,9 @@ resource "null_resource" "copy_files" {
     destination = "${var.persistent_data_path}/configs"
   }
 
-  depends_on = [null_resource.cloudinit]
+  depends_on = [
+    null_resource.cloudinit
+  ]
 }
 
 resource "null_resource" "exec_additional_commands" {
@@ -117,6 +125,8 @@ resource "null_resource" "exec_additional_commands" {
 
   depends_on = [
     null_resource.cloudinit,
+    null_resource.copy_files,
+    null_resource.set_etc_hosts,
     null_resource.set_environment_variables
   ]
 }

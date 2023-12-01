@@ -9,6 +9,11 @@ resource "consul_acl_policy" "node_policy" {
       policy = "write"
     }
   EOT
+
+  depends_on = [ 
+    null_resource.cloudinit,
+    null_resource.exec_additional_commands
+  ]
 }
 
 # Create acl policy for registering services
@@ -22,6 +27,11 @@ resource "consul_acl_policy" "service_policy" {
       policy = "write"
     }
   EOT
+
+  depends_on = [ 
+    null_resource.cloudinit,
+    null_resource.exec_additional_commands
+  ]
 }
 
 # Create acl token for registering nodes and services
@@ -41,6 +51,11 @@ resource "consul_acl_token" "acl_token" {
   service_identities {
     service_name = var.droplet_name
   }
+
+  depends_on = [ 
+    null_resource.cloudinit,
+    null_resource.exec_additional_commands
+  ]
 }
 
 # Register the droplet as a Consul node and service
@@ -51,7 +66,7 @@ resource "consul_node" "default" {
   address    = digitalocean_droplet.droplet.ipv4_address_private
   datacenter = var.droplet_region
 
-  depends_on = [
+  depends_on = [ 
     null_resource.cloudinit,
     null_resource.exec_additional_commands
   ]
