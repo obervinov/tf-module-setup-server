@@ -41,10 +41,10 @@ resource "null_resource" "set_etc_hosts" {
   }
 
   provisioner "remote-exec" {
-    inline = count > 0 ? [
+    inline = [
       "echo '${join("\n", var.etc_hosts)}' | sudo tee -a /etc/hosts > /dev/null",
       "echo '${join("\n", var.etc_hosts)}' | sudo tee -a /etc/cloud/templates/hosts.debian.tmpl > /dev/null",
-    ] : []
+    ]
   }
 
   depends_on = [null_resource.cloudinit]
