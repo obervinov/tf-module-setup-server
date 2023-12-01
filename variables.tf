@@ -153,3 +153,9 @@ variable "vpc_name" {
   type        = string
   default     = "default"
 }
+
+variable "etc_hosts" {
+  description = "List with etc hosts"
+  type        = list(string)
+  default     = null
+}
