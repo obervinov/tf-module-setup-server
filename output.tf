@@ -1,11 +1,11 @@
 output "droplet_name" {
   description = "Droplet name"
-  value       = digitalocean_droplet.droplet.name
+  value       = digitalocean_droplet.default.name
 }
 
 output "droplet_external_ip" {
   description = "Droplet external ip-address"
-  value       = digitalocean_droplet.droplet.ipv4_address
+  value       = digitalocean_droplet.default.ipv4_address
 }
 
 output "droplet_username" {
@@ -15,22 +15,22 @@ output "droplet_username" {
 
 output "droplet_ssh_key_fingerprint" {
   description = "SSH Key fingerprint"
-  value       = data.digitalocean_ssh_key.key.fingerprint
+  value       = data.digitalocean_ssh_key.default.fingerprint
 }
 
 output "droplet_dns_record" {
   description = "Public dns record for new droplet"
-  value       = var.droplet_dns ? digitalocean_record.record[0].fqdn : ""
+  value       = var.droplet_dns ? digitalocean_record.default[0].fqdn : ""
 }
 
 output "droplet_reserved_ip" {
   description = "Reserved ip for new droplet"
-  value       = var.droplet_reserved_ip ? digitalocean_reserved_ip.ip[0].ip_address : ""
+  value       = var.droplet_reserved_ip ? digitalocean_reserved_ip.default[0].ip_address : ""
 }
 
 output "droplet_private_ip" {
   description = "Private ip for new droplet"
-  value       = digitalocean_droplet.droplet.ipv4_address_private
+  value       = digitalocean_droplet.default.ipv4_address_private
 }
 
 output "persistent_data_path" {
@@ -40,5 +40,5 @@ output "persistent_data_path" {
 
 output "additional_volume" {
   description = "Additional volume for new droplet"
-  value       = var.droplet_volume_size > 0 ? digitalocean_volume.volume[0].name : ""
+  value       = var.droplet_volume_size > 0 ? digitalocean_volume.default[0].name : ""
 }
