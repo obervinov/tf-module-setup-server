@@ -40,23 +40,24 @@ It performs tasks such as:
 module "prepare_environment" {
   source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
 
-  droplet_username       = var.ssh_username
-  ssh_private_key        = var.ssh_private_key
-  droplet_name           = "database"
-  droplet_tags           = ["postgres", "ssh"]
-  droplet_project_name   = "my-project-1"
-  domain_zone            = "example.com"
-  droplet_backups        = true
-  additional_volume_size = 10
-  packages_list          = ["python3", "libsecret-tools", "python3-pip"]
-  environment_variables  = ["ENV1=VALUE1", "ENV2=VALUE2"]
-  consul_service_port    = 5432
-  remote_commands = [
+  droplet_username         = var.ssh_username
+  droplet_ssh_key          = var.ssh_private_key
+  droplet_name             = "consul"
+  droplet_tags             = ["ssh", "nginx"]
+  droplet_project          = "myproject1"
+  droplet_size             = "s-1vcpu-512mb-1gb"
+  droplet_image            = data.digitalocean_droplet_snapshot.default.id
+  domain_dns_zone          = var.domain_zone
+  droplet_vpc              = "default-vpc"
+  droplet_volume_size      = 10
+  os_consul_agent          = false
+  os_environment_variables = ["ENV1=value1", "ENV2=value2"]
+  os_commands = [
     "hostname -a",
+    "lsb_release"
   ]
 }
 ```
-
 
 ## Requirements
 
