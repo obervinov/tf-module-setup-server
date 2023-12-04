@@ -20,7 +20,7 @@ output "droplet_ssh_key_fingerprint" {
 
 output "droplet_dns_record" {
   description = "Public dns record for new droplet"
-  value       = var.droplet_dns_record ? digitalocean_record.record[0].fqdn : ""
+  value       = var.droplet_dns ? digitalocean_record.record[0].fqdn : ""
 }
 
 output "droplet_reserved_ip" {
@@ -35,10 +35,10 @@ output "droplet_private_ip" {
 
 output "persistent_data_path" {
   description = "The path to the directory for storing persistent information and configurations"
-  value       = var.persistent_data_path
+  value       = var.app_data
 }
 
 output "additional_volume" {
   description = "Additional volume for new droplet"
-  value       = var.additional_volume_size > 0 ? digitalocean_volume.volume[0].name : ""
+  value       = var.droplet_volume_size > 0 ? digitalocean_volume.volume[0].name : ""
 }

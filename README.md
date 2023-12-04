@@ -75,60 +75,61 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [consul_acl_policy.node_policy](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
-| [consul_acl_policy.service_policy](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
-| [consul_acl_token.acl_token](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_token) | resource |
+| [consul_acl_policy.node](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
+| [consul_acl_policy.service](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_policy) | resource |
+| [consul_acl_token.node](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/acl_token) | resource |
 | [consul_node.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/node) | resource |
 | [consul_service.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/resources/service) | resource |
-| [digitalocean_droplet.droplet](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
-| [digitalocean_project_resources.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/project_resources) | resource |
-| [digitalocean_record.record](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/record) | resource |
-| [digitalocean_reserved_ip.ip](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/reserved_ip) | resource |
-| [digitalocean_volume.volume](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume) | resource |
-| [digitalocean_volume_attachment.volume_attachment](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume_attachment) | resource |
-| [digitalocean_volume_snapshot.volume_snapshot](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume_snapshot) | resource |
+| [digitalocean_droplet.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/droplet) | resource |
+| [digitalocean_project_resources.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/project_resources) | resource |
+| [digitalocean_record.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/record) | resource |
+| [digitalocean_reserved_ip.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/reserved_ip) | resource |
+| [digitalocean_volume.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume) | resource |
+| [digitalocean_volume_attachment.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume_attachment) | resource |
+| [digitalocean_volume_snapshot.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/volume_snapshot) | resource |
+| [null_resource.additional_commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.cloudinit](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.copy_files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.exec_additional_commands](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.set_environment_variables](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.set_etc_hosts](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.setup_env_consul_agent_token](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [digitalocean_domain.domain](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
-| [digitalocean_project.project](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
-| [digitalocean_ssh_key.key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
-| [digitalocean_ssh_key.terraform_key](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
-| [digitalocean_vpc.vpc](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/vpc) | data source |
+| [null_resource.consul_token_enviroment](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.environment_variables](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.etc_hosts](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [consul_acl_token_secret_id.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/data-sources/acl_token_secret_id) | data source |
+| [digitalocean_domain.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
+| [digitalocean_project.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
+| [digitalocean_ssh_key.ci_cd](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_ssh_key.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_vpc.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/vpc) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_volume_size"></a> [additional\_volume\_size](#input\_additional\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
-| <a name="input_consul_agent"></a> [consul\_agent](#input\_consul\_agent) | Enable consul agent and registration service in Consul | `bool` | `true` | no |
-| <a name="input_consul_service_check"></a> [consul\_service\_check](#input\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
-| <a name="input_consul_service_port"></a> [consul\_service\_port](#input\_consul\_service\_port) | Port for registration service in consul | `number` | `80` | no |
-| <a name="input_domain_zone"></a> [domain\_zone](#input\_domain\_zone) | Name of the domain zone to create record | `string` | `""` | no |
+| <a name="input_app_configurations"></a> [app\_configurations](#input\_app\_configurations) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
+| <a name="input_app_data"></a> [app\_data](#input\_app\_data) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
 | <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |
 | <a name="input_droplet_backups"></a> [droplet\_backups](#input\_droplet\_backups) | Enable backups for droplet | `bool` | `false` | no |
-| <a name="input_droplet_dns_record"></a> [droplet\_dns\_record](#input\_droplet\_dns\_record) | Create a dns record for this droplet | `bool` | `true` | no |
+| <a name="input_droplet_dns"></a> [droplet\_dns](#input\_droplet\_dns) | Create an external dns record for this droplet in `droplet_dns_zone` | `bool` | `true` | no |
+| <a name="input_droplet_dns_zone"></a> [droplet\_dns\_zone](#input\_droplet\_dns\_zone) | Name of the domain zone to create an external dns record | `string` | `""` | no |
 | <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet | `string` | `"ubuntu-23-04-x64"` | no |
 | <a name="input_droplet_monitoring"></a> [droplet\_monitoring](#input\_droplet\_monitoring) | Enable monitoring for droplet | `bool` | `true` | no |
 | <a name="input_droplet_name"></a> [droplet\_name](#input\_droplet\_name) | The name of the droplet | `string` | `"server-0001"` | no |
-| <a name="input_droplet_project_name"></a> [droplet\_project\_name](#input\_droplet\_project\_name) | The target project for the droplet | `string` | n/a | yes |
+| <a name="input_droplet_project"></a> [droplet\_project](#input\_droplet\_project) | The target project for the droplet | `string` | n/a | yes |
 | <a name="input_droplet_region"></a> [droplet\_region](#input\_droplet\_region) | The region of the droplet | `string` | `"ams3"` | no |
 | <a name="input_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#input\_droplet\_reserved\_ip) | Link a reserved address to a droplet | `bool` | `false` | no |
 | <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet | `string` | `"s-1vcpu-1gb"` | no |
+| <a name="input_droplet_ssh_key"></a> [droplet\_ssh\_key](#input\_droplet\_ssh\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
 | <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
 | <a name="input_droplet_username"></a> [droplet\_username](#input\_droplet\_username) | Name for creating a new user | `string` | n/a | yes |
-| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | List with environmetn variables for server | `list(any)` | `null` | no |
-| <a name="input_etc_hosts"></a> [etc\_hosts](#input\_etc\_hosts) | List with etc hosts | `list(string)` | `null` | no |
-| <a name="input_nameserver_ips"></a> [nameserver\_ips](#input\_nameserver\_ips) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
-| <a name="input_packages_list"></a> [packages\_list](#input\_packages\_list) | List of packages to install | `list(string)` | `[]` | no |
-| <a name="input_persistent_data_path"></a> [persistent\_data\_path](#input\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
-| <a name="input_remote_commands"></a> [remote\_commands](#input\_remote\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
-| <a name="input_remote_files"></a> [remote\_files](#input\_remote\_files) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
-| <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
-| <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | VPC name | `string` | `"default"` | no |
+| <a name="input_droplet_volume_size"></a> [droplet\_volume\_size](#input\_droplet\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
+| <a name="input_droplet_vpc"></a> [droplet\_vpc](#input\_droplet\_vpc) | VPC name | `string` | `"default"` | no |
+| <a name="input_os_commands"></a> [os\_commands](#input\_os\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
+| <a name="input_os_consul_agent"></a> [os\_consul\_agent](#input\_os\_consul\_agent) | Enable consul agent and registration service in Consul | `bool` | `true` | no |
+| <a name="input_os_consul_service_check"></a> [os\_consul\_service\_check](#input\_os\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
+| <a name="input_os_consul_service_port"></a> [os\_consul\_service\_port](#input\_os\_consul\_service\_port) | Port for registration service in consul | `number` | `80` | no |
+| <a name="input_os_environment_variables"></a> [os\_environment\_variables](#input\_os\_environment\_variables) | List with environmetn variables for server | `list(any)` | `[]` | no |
+| <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
+| <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
+| <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
 
 ## Outputs
 

@@ -13,7 +13,7 @@ locals {
     ethernets = {
       eth1 = {
         mtu           = 1500
-        nameservers   = sort(var.nameserver_ips)
+        nameservers   = sort(var.os_nameservers)
         searchdomains = ["consul"]
         domain        = "consul"
       }
@@ -21,9 +21,9 @@ locals {
   }
 
   default_commands = [
-    "sudo mkdir -p ${var.persistent_data_path}/configs",
-    "sudo chown ${var.droplet_username}:terraform ${var.persistent_data_path}/configs",
-    "sudo chmod 775 ${var.persistent_data_path}/configs",
+    "sudo mkdir -p ${var.app_data}/${var.app_configurations}",
+    "sudo chown ${var.droplet_username}:terraform ${var.app_data}/${var.app_configurations}",
+    "sudo chmod 775 ${var.app_data}/${var.app_configurations}",
     "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
     "echo \"deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \"$(. /etc/os-release && echo \"$VERSION_CODENAME\")\" stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
     "DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical sudo apt-get -y update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
@@ -46,26 +46,26 @@ users:
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.key.public_key}
+      - ${data.digitalocean_ssh_key.default.public_key}
   - name: terraform
     groups:
       - sudo
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.terraform_key.public_key}
+      - ${data.digitalocean_ssh_key.ci_cd.public_key}
 
 write_files:
   - path: /etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf
     content: |
       [Resolve]
-      DNS=${join(" ", formatlist("%s", var.nameserver_ips))}
+      DNS=${join(" ", formatlist("%s", var.os_nameservers))}
       DNSSEC=false
       Domains=~consul
 
 packages:
 ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}
-${var.packages_list != null ? join("\n", formatlist("  - '%s'", var.packages_list)) : ""}
+${var.os_packages != null ? join("\n", formatlist("  - '%s'", var.os_packages)) : ""}
 
 runcmd:
   - systemctl restart systemd-resolved
@@ -73,22 +73,28 @@ ${local.default_commands != null ? join("\n", formatlist("  - '%s'", local.defau
 EOF
 }
 
-data "digitalocean_ssh_key" "key" {
+data "digitalocean_ssh_key" "default" {
   name = var.droplet_username
 }
 
-data "digitalocean_ssh_key" "terraform_key" {
+data "digitalocean_ssh_key" "ci_cd" {
   name = "terraform"
 }
 
-data "digitalocean_project" "project" {
-  name = var.droplet_project_name
+data "digitalocean_project" "default" {
+  name = var.droplet_project
 }
 
-data "digitalocean_domain" "domain" {
-  name = var.domain_zone
+data "digitalocean_domain" "default" {
+  name = var.droplet_dns_zone
 }
 
-data "digitalocean_vpc" "vpc" {
-  name = var.vpc_name
+data "digitalocean_vpc" "default" {
+  name = var.droplet_vpc
+}
+
+data "consul_acl_token_secret_id" "default" {
+  count = var.os_consul_agent ? 1 : 0
+
+  accessor_id = consul_acl_token.node[0].accessor_id
 }

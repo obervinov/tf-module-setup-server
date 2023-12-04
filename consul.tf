@@ -1,6 +1,6 @@
 # Create acl policy for registering nodes
-resource "consul_acl_policy" "node_policy" {
-  count = var.consul_agent ? 1 : 0
+resource "consul_acl_policy" "node" {
+  count = var.os_consul_agent ? 1 : 0
 
   name        = "register-policy-${var.droplet_name}"
   description = "Policy for ${var.droplet_name} server registration"
@@ -10,15 +10,15 @@ resource "consul_acl_policy" "node_policy" {
     }
   EOT
 
-  depends_on = [ 
+  depends_on = [
     null_resource.cloudinit,
-    null_resource.exec_additional_commands
+    null_resource.additional_commands
   ]
 }
 
 # Create acl policy for registering services
-resource "consul_acl_policy" "service_policy" {
-  count = var.consul_agent ? 1 : 0
+resource "consul_acl_policy" "service" {
+  count = var.os_consul_agent ? 1 : 0
 
   name        = "service-policy-${var.droplet_name}"
   description = "Policy for ${var.droplet_name} service registration"
@@ -28,21 +28,21 @@ resource "consul_acl_policy" "service_policy" {
     }
   EOT
 
-  depends_on = [ 
+  depends_on = [
     null_resource.cloudinit,
-    null_resource.exec_additional_commands
+    null_resource.additional_commands
   ]
 }
 
 # Create acl token for registering nodes and services
-resource "consul_acl_token" "acl_token" {
-  count = var.consul_agent ? 1 : 0
+resource "consul_acl_token" "node" {
+  count = var.os_consul_agent ? 1 : 0
 
   description = "ACL Token for ${var.droplet_name} register and service policies"
   local       = true
   policies = [
-    consul_acl_policy.node_policy[count.index].name,
-    consul_acl_policy.service_policy[count.index].name,
+    consul_acl_policy.node[count.index].name,
+    consul_acl_policy.service[count.index].name,
   ]
   node_identities {
     node_name  = var.droplet_name
@@ -52,34 +52,34 @@ resource "consul_acl_token" "acl_token" {
     service_name = var.droplet_name
   }
 
-  depends_on = [ 
+  depends_on = [
     null_resource.cloudinit,
-    null_resource.exec_additional_commands
+    null_resource.additional_commands
   ]
 }
 
 # Register the droplet as a Consul node and service
 resource "consul_node" "default" {
-  count = var.consul_agent ? 1 : 0
+  count = var.os_consul_agent ? 1 : 0
 
-  name       = digitalocean_droplet.droplet.name
-  address    = digitalocean_droplet.droplet.ipv4_address_private
+  name       = digitalocean_droplet.default.name
+  address    = digitalocean_droplet.default.ipv4_address_private
   datacenter = var.droplet_region
 
-  depends_on = [ 
+  depends_on = [
     null_resource.cloudinit,
-    null_resource.exec_additional_commands
+    null_resource.additional_commands
   ]
 }
 
 resource "consul_service" "default" {
-  count = var.consul_agent ? 1 : 0
+  count = var.os_consul_agent ? 1 : 0
 
   node       = consul_node.default[0].name
   name       = var.droplet_name
   tags       = var.droplet_tags
-  port       = var.consul_service_port
-  address    = digitalocean_droplet.droplet.ipv4_address_private
+  port       = var.os_consul_service_port
+  address    = digitalocean_droplet.default.ipv4_address_private
   datacenter = var.droplet_region
 
   check {
@@ -99,28 +99,28 @@ resource "consul_service" "default" {
   ]
 }
 
-resource "null_resource" "setup_env_consul_agent_token" {
-  count = var.consul_agent ? 1 : 0
+resource "null_resource" "consul_token_enviroment" {
+  count = var.os_consul_agent ? 1 : 0
 
   triggers = {
     always_run = timestamp()
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
   }
   provisioner "remote-exec" {
     inline = [
-      "echo 'CONSUL_HTTP_TOKEN=${consul_acl_token.acl_token[count.index].secret_id}' | sudo tee -a /etc/environment > /dev/null"
+      "echo 'CONSUL_HTTP_TOKEN=${data.consul_acl_token_secret_id.default[0].secret_id}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
 
   depends_on = [
-    consul_acl_token.acl_token
+    consul_acl_token.node
   ]
 }

@@ -7,12 +7,12 @@ resource "null_resource" "cloudinit" {
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
 
   }
   provisioner "remote-exec" {
@@ -22,30 +22,30 @@ resource "null_resource" "cloudinit" {
   }
 
   depends_on = [
-    digitalocean_droplet.droplet
+    digitalocean_droplet.default
   ]
 }
 
-resource "null_resource" "set_etc_hosts" {
-  count = var.etc_hosts != null && length(var.etc_hosts) > 0 ? 1 : 0
+resource "null_resource" "etc_hosts" {
+  count = var.os_hosts != null && length(var.os_hosts) > 0 ? 1 : 0
 
   triggers = {
-    hash = sha1(join(",", var.etc_hosts))
+    hash = sha1(join(",", var.os_hosts))
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
   }
 
   provisioner "remote-exec" {
     inline = [
-      "echo '${join("\n", var.etc_hosts)}' | sudo tee -a /etc/hosts > /dev/null",
-      "echo '${join("\n", var.etc_hosts)}' | sudo tee -a /etc/cloud/templates/hosts.debian.tmpl > /dev/null",
+      "echo '${join("\n", var.os_hosts)}' | sudo tee -a /etc/hosts > /dev/null",
+      "echo '${join("\n", var.os_hosts)}' | sudo tee -a /etc/cloud/templates/hosts.debian.tmpl > /dev/null",
     ]
   }
 
@@ -54,24 +54,24 @@ resource "null_resource" "set_etc_hosts" {
   ]
 }
 
-resource "null_resource" "set_environment_variables" {
-  count = var.environment_variables != null && length(var.environment_variables) > 0 ? 1 : 0
+resource "null_resource" "environment_variables" {
+  count = var.os_environment_variables != null && length(var.os_environment_variables) > 0 ? 1 : 0
 
   triggers = {
-    hash = sha1(join(",", var.environment_variables))
+    hash = sha1(join(",", var.os_environment_variables))
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
   }
   provisioner "remote-exec" {
     inline = [
-      "echo '${join("\n", var.environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
+      "echo '${join("\n", var.os_environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
 
@@ -80,24 +80,24 @@ resource "null_resource" "set_environment_variables" {
   ]
 }
 
-resource "null_resource" "copy_files" {
-  count = can(var.remote_files) && fileset(var.remote_files, "*") != [] ? 1 : 0
+resource "null_resource" "files" {
+  count = can(var.app_configurations) && fileset(var.app_configurations, "*") != [] ? 1 : 0
 
   triggers = {
     always_run = timestamp()
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
   }
   provisioner "file" {
-    source      = "${var.remote_files}/"
-    destination = "${var.persistent_data_path}/configs"
+    source      = "${var.app_configurations}/"
+    destination = "${var.app_data}/${var.app_configurations}"
   }
 
   depends_on = [
@@ -105,19 +105,19 @@ resource "null_resource" "copy_files" {
   ]
 }
 
-resource "null_resource" "exec_additional_commands" {
-  count = length(coalesce(var.remote_commands, [])) > 0 ? 1 : 0
+resource "null_resource" "additional_commands" {
+  count = length(coalesce(var.os_commands, [])) > 0 ? 1 : 0
   triggers = {
     always_run = timestamp()
   }
 
   connection {
-    host        = digitalocean_droplet.droplet.ipv4_address_private
+    host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.ssh_private_key)
+    private_key = base64decode(var.droplet_ssh_key)
   }
   provisioner "remote-exec" {
     inline = var.remote_commands
@@ -125,8 +125,8 @@ resource "null_resource" "exec_additional_commands" {
 
   depends_on = [
     null_resource.cloudinit,
-    null_resource.copy_files,
-    null_resource.set_etc_hosts,
-    null_resource.set_environment_variables
+    null_resource.files,
+    null_resource.etc_hosts,
+    null_resource.environment_variables
   ]
 }

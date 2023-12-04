@@ -3,30 +3,6 @@ variable "droplet_username" {
   type        = string
 }
 
-variable "packages_list" {
-  description = "List of packages to install"
-  type        = list(string)
-  default     = []
-}
-
-variable "persistent_data_path" {
-  description = "The path to the directory for storing persistent information and configurations"
-  type        = string
-  default     = "/opt"
-}
-
-variable "remote_commands" {
-  description = "List of commands to execute custom remote-exec"
-  type        = list(string)
-  default     = null
-}
-
-variable "remote_files" {
-  description = "The path to the directories with configurations that will be copied to the created server"
-  type        = string
-  default     = "configs/"
-}
-
 variable "droplet_name" {
   description = "The name of the droplet"
   type        = string
@@ -56,7 +32,7 @@ variable "droplet_tags" {
   type        = list(any)
 }
 
-variable "droplet_project_name" {
+variable "droplet_project" {
   description = "The target project for the droplet"
   type        = string
 }
@@ -67,28 +43,22 @@ variable "droplet_reserved_ip" {
   default     = false
 }
 
-variable "droplet_dns_record" {
-  description = "Create a dns record for this droplet"
+variable "droplet_dns" {
+  description = "Create an external dns record for this droplet in `droplet_dns_zone`"
   type        = bool
   default     = true
 }
 
-variable "domain_zone" {
-  description = "Name of the domain zone to create record"
+variable "droplet_dns_zone" {
+  description = "Name of the domain zone to create an external dns record"
   type        = string
   default     = ""
 }
 
-variable "additional_volume_size" {
+variable "droplet_volume_size" {
   description = "Additional volume size (if required)"
   type        = number
   default     = 0
-}
-
-variable "environment_variables" {
-  description = "List with environmetn variables for server"
-  type        = list(any)
-  default     = []
 }
 
 variable "droplet_backups" {
@@ -103,7 +73,7 @@ variable "droplet_monitoring" {
   default     = true
 }
 
-variable "ssh_private_key" {
+variable "droplet_ssh_key" {
   description = "Private key for ssh connection in Terraform Cloud (base64)"
   type        = string
 }
@@ -114,19 +84,43 @@ variable "droplet_agent" {
   default     = true
 }
 
-variable "consul_agent" {
+variable "droplet_vpc" {
+  description = "VPC name"
+  type        = string
+  default     = "default"
+}
+
+variable "os_packages" {
+  description = "List of packages to install"
+  type        = list(string)
+  default     = []
+}
+
+variable "os_commands" {
+  description = "List of commands to execute custom remote-exec"
+  type        = list(string)
+  default     = null
+}
+
+variable "os_environment_variables" {
+  description = "List with environmetn variables for server"
+  type        = list(any)
+  default     = []
+}
+
+variable "os_consul_agent" {
   description = "Enable consul agent and registration service in Consul"
   type        = bool
   default     = true
 }
 
-variable "consul_service_port" {
+variable "os_consul_service_port" {
   description = "Port for registration service in consul"
   type        = number
   default     = 80
 }
 
-variable "consul_service_check" {
+variable "os_consul_service_check" {
   description = "Check for registration service in consul"
   type = object({
     check_id                          = string
@@ -142,20 +136,27 @@ variable "consul_service_check" {
   default = null
 }
 
-variable "nameserver_ips" {
+variable "os_nameservers" {
   description = "Private IPs for cloudinit nameserver"
   type        = list(string)
   default     = ["8.8.8.8", "8.8.4.4"]
 }
 
-variable "vpc_name" {
-  description = "VPC name"
-  type        = string
-  default     = "default"
-}
-
-variable "etc_hosts" {
-  description = "List with etc hosts"
+variable "os_hosts" {
+  description = "List with /etc/hosts"
   type        = list(string)
   default     = []
+}
+
+
+variable "app_data" {
+  description = "The path to the directory for storing persistent information and configurations"
+  type        = string
+  default     = "/opt"
+}
+
+variable "app_configurations" {
+  description = "The path to the directories with configurations that will be copied to the created server"
+  type        = string
+  default     = "configs/"
 }
