@@ -120,7 +120,7 @@ resource "null_resource" "additional_commands" {
     private_key = base64decode(var.droplet_ssh_key)
   }
   provisioner "remote-exec" {
-    inline = var.remote_commands
+    inline = var.os_commands
   }
 
   depends_on = [
