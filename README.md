@@ -20,13 +20,20 @@
 
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/book.png" width="25" title="about"> About this project
-This module performs the initial creation of a server in digitalocean, as well as performs basic preparation of the environment:
+This terraform module is designed to simplify the deployment of droplets and all related components in DigitalOcean for my infrastructure.
 
-* create user
-* install packages
-* configuring sshd
-* copy files
-* custom remote commands
+It performs tasks such as:
+- Creating a droplet
+- Creating dns records
+- Creating reserved IP addresses
+- Creating additional volumes
+- Adding users and ssh keys
+- Configuring the OS environment 
+- Adding application configurations
+- Launching applications
+- Registration of servers and services in the consul
+
+
 
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
 ```hcl
