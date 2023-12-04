@@ -83,15 +83,15 @@ resource "consul_service" "default" {
   datacenter = var.droplet_region
 
   check {
-    check_id                          = var.consul_service_check.check_id
-    name                              = var.consul_service_check.name
-    http                              = var.consul_service_check.http
-    status                            = var.consul_service_check.status
-    tls_skip_verify                   = var.consul_service_check.tls_skip_verify
-    method                            = var.consul_service_check.method
-    interval                          = var.consul_service_check.interval
-    timeout                           = var.consul_service_check.timeout
-    deregister_critical_service_after = var.consul_service_check.deregister_critical_service_after
+    check_id                          = var.os_consul_service_check.check_id
+    name                              = var.os_consul_service_check.name
+    http                              = var.os_consul_service_check.http
+    status                            = var.os_consul_service_check.status
+    tls_skip_verify                   = var.os_consul_service_check.tls_skip_verify
+    method                            = var.os_consul_service_check.method
+    interval                          = var.os_consul_service_check.interval
+    timeout                           = var.os_consul_service_check.timeout
+    deregister_critical_service_after = var.os_consul_service_check.deregister_critical_service_after
   }
 
   depends_on = [
