@@ -1,5 +1,10 @@
 locals {
 
+  environment_variables = [
+    "DROPLET_INTERNAL_IP=${digitalocean_droplet.default.ipv4_address_private}",
+    "DROPLET_EXTERNAL_IP=${digitalocean_droplet.default.ipv4_address}",
+  ]
+
   default_packages = [
     "apt-transport-https",
     "ca-certificates",

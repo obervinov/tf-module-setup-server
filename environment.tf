@@ -71,6 +71,7 @@ resource "null_resource" "environment_variables" {
   }
   provisioner "remote-exec" {
     inline = [
+      "echo '${join("\n", local.environment_variables)}' | sudo tee -a /etc/environment > /dev/null",
       "echo '${join("\n", var.os_environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
