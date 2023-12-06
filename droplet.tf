@@ -47,7 +47,7 @@ resource "digitalocean_record" "default" {
 }
 
 resource "digitalocean_record" "additional" {
-  for_each = var.app_cname_records
+  for_each = var.app_cname_records != [] ? toset(var.app_cname_records) : {}
 
   domain = element(data.digitalocean_domain.default.*.id, 0)
   type   = "CNAME"
