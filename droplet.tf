@@ -46,6 +46,19 @@ resource "digitalocean_record" "default" {
   value  = var.droplet_reserved_ip ? digitalocean_reserved_ip.default[0].ip_address : digitalocean_droplet.default.ipv4_address
 }
 
+resource "digitalocean_record" "additional" {
+  for_each = var.app_cname_records != null ? var.app_cname_records : {}
+
+  domain = element(data.digitalocean_domain.default.*.id, 0)
+  type   = "CNAME"
+  name   = each.value
+  value  = digitalocean_record.default.fqdn
+
+  depends_on = [
+    digitalocean_record.default
+  ]
+}
+
 resource "digitalocean_volume" "default" {
   count = var.droplet_volume_size > 0 ? 1 : 0
 

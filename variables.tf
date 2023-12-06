@@ -160,3 +160,9 @@ variable "app_configurations" {
   type        = string
   default     = "configs/"
 }
+
+variable "app_cname_records" {
+  description = "List with CNAME records for droplet"
+  type        = list(string)
+  default     = []
+}
