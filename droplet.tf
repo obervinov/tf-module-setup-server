@@ -52,7 +52,7 @@ resource "digitalocean_record" "additional" {
   domain = element(data.digitalocean_domain.default.*.id, 0)
   type   = "CNAME"
   name   = each.value
-  value  = digitalocean_record.default[count.index].fqdn
+  value  = digitalocean_record.default[each.key].fqdn
 
   depends_on = [
     digitalocean_record.default
