@@ -44,5 +44,5 @@ output "additional_volume" {
 }
 
 output "app_cname_records" {
-  value = "${var.app_cname_records} in zone ${data.digitalocean_domain.default.name}"
+  value = join(", ", [for item in var.app_cname_records : "${item}.${data.digitalocean_domain.default.name}"])
 }
