@@ -44,6 +44,5 @@ output "additional_volume" {
 }
 
 output "app_cname_records" {
-  description = "CNAME records for new droplet"
-  value       = "${var.app_cname_records} in zone ${data.digitalocean_domain.default[0].name}"
+  value = "${var.app_cname_records} in zone ${data.digitalocean_domain.default.name}"
 }
