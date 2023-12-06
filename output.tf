@@ -42,3 +42,8 @@ output "additional_volume" {
   description = "Additional volume for new droplet"
   value       = var.droplet_volume_size > 0 ? digitalocean_volume.default[0].name : ""
 }
+
+output "app_cname_records" {
+  description = "CNAME records for new droplet"
+  value       = "${var.app_cname_records} in zone ${data.digitalocean_domain.default[0].name}"
+}
