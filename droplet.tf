@@ -47,12 +47,12 @@ resource "digitalocean_record" "default" {
 }
 
 resource "digitalocean_record" "additional" {
-  for_each = var.app_cname_records != null ? var.app_cname_records : {}
+  for_each = length(var.app_cname_records) > 0 ? var.app_cname_records : tolist([])
 
   domain = element(data.digitalocean_domain.default.*.id, 0)
   type   = "CNAME"
   name   = each.value
-  value  = digitalocean_record.default.fqdn
+  value  = digitalocean_record.default[count.index].fqdn
 
   depends_on = [
     digitalocean_record.default
