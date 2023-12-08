@@ -58,7 +58,7 @@ resource "null_resource" "environment_variables" {
   count = var.os_environment_variables != null && length(var.os_environment_variables) > 0 ? 1 : 0
 
   triggers = {
-    hash = sha1(join(",", var.os_environment_variables))
+    always_run = timestamp()
   }
 
   connection {
