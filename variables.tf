@@ -114,24 +114,15 @@ variable "os_consul_agent" {
   default     = true
 }
 
-variable "os_consul_service_port" {
-  description = "Port for registration service in consul"
-  type        = number
-  default     = 80
-}
-
-variable "os_consul_service_check" {
-  description = "Check for registration service in consul"
+variable "os_consul_registration_service" {
+  description = "Service for registration in consul: name and port"
   type = object({
-    check_id                          = string
-    name                              = string
-    http                              = string
-    status                            = string
-    tls_skip_verify                   = bool
-    method                            = string
-    interval                          = string
-    timeout                           = string
-    deregister_critical_service_after = string
+    name = string
+    port = number
+    check = object({
+      http   = string
+      status = string
+    })
   })
   default = null
 }

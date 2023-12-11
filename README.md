@@ -1,64 +1,3 @@
-# tf-module-setup-server
-[![Release](https://github.com/obervinov/tf-module-setup-server/actions/workflows/release.yml/badge.svg)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/release.yml)
-[![CodeQL](https://github.com/obervinov/tf-module-setup-server/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/github-code-scanning/codeql)
-[![Tests and checks](https://github.com/obervinov/tf-module-setup-server/actions/workflows/tests.yml/badge.svg?branch=main&event=pull_request)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/tests.yml)
-[![Build](https://github.com/obervinov/tf-module-setup-server/actions/workflows/build.yml/badge.svg?branch=main&event=pull_request)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/build.yml)
-
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/obervinov/tf-module-setup-server?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/obervinov/tf-module-setup-server?style=for-the-badge)
-![GitHub Release Date](https://img.shields.io/github/release-date/obervinov/tf-module-setup-server?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/obervinov/tf-module-setup-server?style=for-the-badge)
-![GitHub repo size](https://img.shields.io/github/repo-size/obervinov/tf-module-setup-server?style=for-the-badge)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/instaloader?style=for-the-badge)
-
-
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/github-actions.png" width="25" title="github-actions"> GitHub Actions
-
-| Name  | Version |
-| ------------------------ | ----------- |
-| GitHub Actions Templates | [v1.0.5](https://github.com/obervinov/_templates/tree/v1.0.5) |
-
-
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/book.png" width="25" title="about"> About this project
-This terraform module is designed to simplify the deployment of droplets and all related components in DigitalOcean for my infrastructure.
-
-It performs tasks such as:
-- Creating a droplet
-- Creating dns records
-- Creating reserved IP addresses
-- Creating additional volumes
-- Adding users and ssh keys
-- Configuring the OS environment 
-- Adding application configurations
-- Launching applications
-- Registration of servers and services in the consul
-
-
-
-## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
-```hcl
-module "prepare_environment" {
-  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
-
-  droplet_username         = var.ssh_username
-  droplet_ssh_key          = var.ssh_private_key
-  droplet_name             = "consul"
-  droplet_tags             = ["ssh", "nginx"]
-  droplet_project          = "myproject1"
-  droplet_size             = "s-1vcpu-512mb-1gb"
-  droplet_image            = data.digitalocean_droplet_snapshot.default.id
-  domain_dns_zone          = var.domain_zone
-  droplet_vpc              = "default-vpc"
-  droplet_volume_size      = 10
-  os_consul_agent          = false
-  os_environment_variables = ["ENV1=value1", "ENV2=value2"]
-  os_commands = [
-    "hostname -a",
-    "lsb_release"
-  ]
-}
-```
-
 ## Requirements
 
 | Name | Version |
@@ -134,8 +73,7 @@ No modules.
 | <a name="input_droplet_vpc"></a> [droplet\_vpc](#input\_droplet\_vpc) | VPC name | `string` | `"default"` | no |
 | <a name="input_os_commands"></a> [os\_commands](#input\_os\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
 | <a name="input_os_consul_agent"></a> [os\_consul\_agent](#input\_os\_consul\_agent) | Enable consul agent and registration service in Consul | `bool` | `true` | no |
-| <a name="input_os_consul_service_check"></a> [os\_consul\_service\_check](#input\_os\_consul\_service\_check) | Check for registration service in consul | <pre>object({<br>    check_id                          = string<br>    name                              = string<br>    http                              = string<br>    status                            = string<br>    tls_skip_verify                   = bool<br>    method                            = string<br>    interval                          = string<br>    timeout                           = string<br>    deregister_critical_service_after = string<br>  })</pre> | `null` | no |
-| <a name="input_os_consul_service_port"></a> [os\_consul\_service\_port](#input\_os\_consul\_service\_port) | Port for registration service in consul | `number` | `80` | no |
+| <a name="input_os_consul_registration_service"></a> [os\_consul\_registration\_service](#input\_os\_consul\_registration\_service) | Service for registration in consul: name and port | <pre>object({<br>    name = string<br>    port = number<br>    check = object({<br>      http   = string<br>      status = string<br>    })<br>  })</pre> | `null` | no |
 | <a name="input_os_environment_variables"></a> [os\_environment\_variables](#input\_os\_environment\_variables) | List with environmetn variables for server | `list(any)` | `[]` | no |
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
 | <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
@@ -146,7 +84,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
-| <a name="output_app_cname_records"></a> [app\_cname\_records](#output\_app\_cname\_records) | CNAME records for new droplet |
+| <a name="output_app_cname_records"></a> [app\_cname\_records](#output\_app\_cname\_records) | n/a |
 | <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
 | <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
 | <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |

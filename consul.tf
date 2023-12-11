@@ -20,8 +20,8 @@ resource "consul_acl_policy" "node" {
 resource "consul_acl_policy" "service" {
   count = var.os_consul_agent ? 1 : 0
 
-  name        = "service-policy-${var.droplet_name}"
-  description = "Policy for ${var.droplet_name} service registration"
+  name        = "service-policy-${var.os_consul_registration_service.name}"
+  description = "Policy for ${var.os_consul_registration_service.name} service registration"
   rules       = <<-EOT
     service_prefix "" {
       policy = "write"
@@ -49,7 +49,7 @@ resource "consul_acl_token" "node" {
     datacenter = var.droplet_region
   }
   service_identities {
-    service_name = var.droplet_name
+    service_name = var.os_consul_registration_service.name
   }
 
   depends_on = [
@@ -76,22 +76,21 @@ resource "consul_service" "default" {
   count = var.os_consul_agent ? 1 : 0
 
   node       = consul_node.default[0].name
-  name       = var.droplet_name
+  name       = var.os_consul_registration_service.name
   tags       = var.droplet_tags
-  port       = var.os_consul_service_port
+  port       = var.os_consul_registration_service.port
   address    = digitalocean_droplet.default.ipv4_address_private
   datacenter = var.droplet_region
 
   check {
-    check_id                          = var.os_consul_service_check.check_id
-    name                              = var.os_consul_service_check.name
-    http                              = var.os_consul_service_check.http
-    status                            = var.os_consul_service_check.status
-    tls_skip_verify                   = var.os_consul_service_check.tls_skip_verify
-    method                            = var.os_consul_service_check.method
-    interval                          = var.os_consul_service_check.interval
-    timeout                           = var.os_consul_service_check.timeout
-    deregister_critical_service_after = var.os_consul_service_check.deregister_critical_service_after
+    check_id                          = var.os_consul_registration_service.name
+    name                              = "HTTP on port ${var.os_consul_registration_service.port} for ${var.os_consul_registration_service.name}"
+    http                              = var.os_consul_registration_service.check.http
+    status                            = var.os_consul_registration_service.check.status
+    method                            = "GET"
+    interval                          = "10s"
+    timeout                           = "1s"
+    deregister_critical_service_after = "30s"
   }
 
   depends_on = [
