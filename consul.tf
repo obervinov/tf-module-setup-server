@@ -2,8 +2,8 @@
 resource "consul_acl_policy" "node" {
   count = var.os_consul_agent ? 1 : 0
 
-  name        = "register-policy-${var.droplet_name}"
-  description = "Policy for ${var.droplet_name} server registration"
+  name        = "node-policy-${var.droplet_name}"
+  description = "Policy for ${var.droplet_name} server"
   rules       = <<-EOT
     node_prefix "" {
       policy = "write"
@@ -21,7 +21,7 @@ resource "consul_acl_policy" "service" {
   count = var.os_consul_agent ? 1 : 0
 
   name        = "service-policy-${var.os_consul_registration_service.name}"
-  description = "Policy for ${var.os_consul_registration_service.name} service registration"
+  description = "Policy for ${var.os_consul_registration_service.name} service"
   rules       = <<-EOT
     service_prefix "" {
       policy = "write"
