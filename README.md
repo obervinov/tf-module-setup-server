@@ -1,3 +1,77 @@
+# tf-module-setup-server
+[![Release](https://github.com/obervinov/tf-module-setup-server/actions/workflows/release.yml/badge.svg)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/release.yml)
+[![CodeQL](https://github.com/obervinov/tf-module-setup-server/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/github-code-scanning/codeql)
+[![Tests and checks](https://github.com/obervinov/tf-module-setup-server/actions/workflows/tests.yml/badge.svg?branch=main&event=pull_request)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/tests.yml)
+[![Build](https://github.com/obervinov/tf-module-setup-server/actions/workflows/build.yml/badge.svg?branch=main&event=pull_request)](https://github.com/obervinov/tf-module-setup-server/actions/workflows/build.yml)
+
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/obervinov/tf-module-setup-server?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/obervinov/tf-module-setup-server?style=for-the-badge)
+![GitHub Release Date](https://img.shields.io/github/release-date/obervinov/tf-module-setup-server?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/obervinov/tf-module-setup-server?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/obervinov/tf-module-setup-server?style=for-the-badge)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/instaloader?style=for-the-badge)
+
+
+## <img src="https://github.com/obervinov/_templates/blob/main/icons/github-actions.png" width="25" title="github-actions"> GitHub Actions
+
+| Name  | Version |
+| ------------------------ | ----------- |
+| GitHub Actions Templates | [v1.0.5](https://github.com/obervinov/_templates/tree/v1.0.5) |
+
+
+## <img src="https://github.com/obervinov/_templates/blob/main/icons/book.png" width="25" title="about"> About this project
+This module performs the initial creation of a server in digitalocean, as well as performs basic preparation of the environment:
+
+* create user
+* install packages
+* configuring sshd
+* copy files
+* custom remote commands
+
+## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
+```hcl
+module "prepare_environment" {
+  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
+
+  droplet_username    = var.ssh_username
+  droplet_ssh_key     = var.ssh_private_key
+  droplet_name        = local.name
+  droplet_tags        = ["web", "ssh", "ubuntu"]
+  droplet_project     = "myproject1"
+  droplet_size        = "s-1vcpu-1gb"
+  droplet_image       = "ubuntu-23-10-x64"
+  droplet_dns_zone    = var.domain_zone
+  droplet_vpc         = "default-vpc"
+  droplet_volume_size = 5
+  droplet_reserved_ip = true
+
+  os_consul_registration_service = {
+    name = "webapp1"
+    port = 443
+    check = {
+      http   = "http://webapp.exaple.com:443/health"
+      status = "passing"
+    }
+  }
+
+  os_environment_variables = [
+    "ACME_DOMAIN=${var.domain_zone}",
+    "ACME_EMAIL=${var.acme_email}"
+  ]
+  os_commands = [
+    "sudo docker compose -f /opt/configs/docker-compose.yml up -d --remove-orphans --force-recreate",
+  ]
+
+  app_cname_records = [
+    "webapp1",
+    "webapp2"
+  ]
+}
+```
+
+
+
+
 ## Requirements
 
 | Name | Version |
@@ -41,6 +115,7 @@ No modules.
 | [null_resource.environment_variables](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.etc_hosts](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.swap](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [consul_acl_token_secret_id.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/data-sources/acl_token_secret_id) | data source |
 | [digitalocean_domain.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
 | [digitalocean_project.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
@@ -78,6 +153,7 @@ No modules.
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
 | <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
 | <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
+| <a name="input_os_swap"></a> [os\_swap](#input\_os\_swap) | Size of swap in GB | `number` | `0` | no |
 
 ## Outputs
 

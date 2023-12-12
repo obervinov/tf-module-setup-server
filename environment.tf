@@ -54,6 +54,39 @@ resource "null_resource" "etc_hosts" {
   ]
 }
 
+resource "null_resource" "swap" {
+  count = var.os_swap != null && length(var.os_swap) > 0 ? 1 : 0
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  connection {
+    host        = digitalocean_droplet.default.ipv4_address_private
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.droplet_ssh_key)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo fallocate -l ${var.os_swap}G /swapfile",
+      "sudo chmod 600 /swapfile",
+      "sudo mkswap /swapfile",
+      "sudo swapon /swapfile",
+      "new_line='/swapfile none swap sw 0 0' && grep -q $new_line /etc/fstab || echo $new_line | sudo tee -a /etc/fstab",
+      "new_line='vm.swappiness=10' && grep -q $new_line /etc/sysctl.conf || echo $new_line | sudo tee -a /etc/sysctl.conf",
+      "sudo sysctl -p > /dev/null"
+    ]
+  }
+
+  depends_on = [
+    null_resource.cloudinit
+  ]
+}
+
 resource "null_resource" "environment_variables" {
   count = var.os_environment_variables != null && length(var.os_environment_variables) > 0 ? 1 : 0
 

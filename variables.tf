@@ -127,6 +127,12 @@ variable "os_consul_registration_service" {
   default = null
 }
 
+variable "os_swap" {
+  description = "Size of swap in GB"
+  type        = number
+  default     = 0
+}
+
 variable "os_nameservers" {
   description = "Private IPs for cloudinit nameserver"
   type        = list(string)
