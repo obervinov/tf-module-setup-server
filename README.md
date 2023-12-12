@@ -45,6 +45,7 @@ module "prepare_environment" {
   droplet_volume_size = 5
   droplet_reserved_ip = true
 
+  os_swap_size = 1
   os_consul_registration_service = {
     name = "webapp1"
     port = 443
@@ -153,7 +154,7 @@ No modules.
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
 | <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
 | <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
-| <a name="input_os_swap"></a> [os\_swap](#input\_os\_swap) | Size of swap in GB | `number` | `0` | no |
+| <a name="input_os_swap_size"></a> [os\_swap\_size](#input\_os\_swap\_size) | Size of swap in GB | `number` | `0` | no |
 
 ## Outputs
 

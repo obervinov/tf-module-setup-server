@@ -127,7 +127,7 @@ variable "os_consul_registration_service" {
   default = null
 }
 
-variable "os_swap" {
+variable "os_swap_size" {
   description = "Size of swap in GB"
   type        = number
   default     = 0
