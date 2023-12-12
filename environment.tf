@@ -55,7 +55,7 @@ resource "null_resource" "etc_hosts" {
 }
 
 resource "null_resource" "swap" {
-  count = var.os_swap_size != null && length(var.os_swap_size) > 0 ? 1 : 0
+  count = can(var.os_swap_size) && var.os_swap_size > 0 ? 1 : 0
 
   triggers = {
     always_run = timestamp()
