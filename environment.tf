@@ -167,7 +167,7 @@ resource "null_resource" "additional_commands" {
 }
 
 resource "null_resource" "loki" {
-  count = can(var.os_loki_driver) && var.os_loki_driver == 1 ? 1 : 0
+  count = can(var.os_loki.enabled) && var.os_loki.enabled == 1 ? 1 : 0
 
   triggers = {
     always_run = timestamp()
@@ -184,7 +184,7 @@ resource "null_resource" "loki" {
 
   provisioner "remote-exec" {
     inline = [
-      "docker plugin install grafana/loki-docker-driver:${var.os_loki_driver_version} --alias loki --grant-all-permissions",
+      "docker plugin install grafana/loki-docker-driver:${var.os_loki.version} --alias loki --grant-all-permissions",
       "docker plugin enable loki",
       "systemctl restart docker"
     ]
@@ -196,7 +196,7 @@ resource "null_resource" "loki" {
     "debug" : true,
     "log-driver": "loki",
     "log-opts": {
-        "loki-url": "${var.os_loki_driver_url}",
+        "loki-url": "${var.os_loki.url}",
         "loki-batch-size": "400"
     }
 }

@@ -70,9 +70,6 @@ module "prepare_environment" {
 }
 ```
 
-
-
-
 ## Requirements
 
 | Name | Version |
@@ -149,13 +146,10 @@ No modules.
 | <a name="input_droplet_volume_size"></a> [droplet\_volume\_size](#input\_droplet\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
 | <a name="input_droplet_vpc"></a> [droplet\_vpc](#input\_droplet\_vpc) | VPC name | `string` | `"default"` | no |
 | <a name="input_os_commands"></a> [os\_commands](#input\_os\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
-| <a name="input_os_consul_agent"></a> [os\_consul\_agent](#input\_os\_consul\_agent) | Enable consul agent and registration service in Consul | `bool` | `true` | no |
-| <a name="input_os_consul_registration_service"></a> [os\_consul\_registration\_service](#input\_os\_consul\_registration\_service) | Service for registration in consul: name and port | <pre>object({<br>    name = string<br>    port = number<br>    check = object({<br>      http   = string<br>      status = string<br>    })<br>  })</pre> | `null` | no |
+| <a name="input_os_consul_agent"></a> [os\_consul\_agent](#input\_os\_consul\_agent) | Consul agent configuration for services registration | <pre>object({<br>    enabled = bool<br>    services = list(object({<br>      name = string<br>      port = number<br>      check = object({<br>        http   = string<br>        status = string<br>      })<br>    }))<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "services": []<br>}</pre> | no |
 | <a name="input_os_environment_variables"></a> [os\_environment\_variables](#input\_os\_environment\_variables) | List with environmetn variables for server | `list(any)` | `[]` | no |
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
-| <a name="input_os_loki_driver"></a> [os\_loki\_driver](#input\_os\_loki\_driver) | Enable loki driver for docker | `bool` | `false` | no |
-| <a name="input_os_loki_driver_url"></a> [os\_loki\_driver\_url](#input\_os\_loki\_driver\_url) | URL of loki driver for docker | `string` | `"http://loki:3100/loki/api/v1/push"` | no |
-| <a name="input_os_loki_driver_version"></a> [os\_loki\_driver\_version](#input\_os\_loki\_driver\_version) | Version of loki driver for docker | `string` | `"latest"` | no |
+| <a name="input_os_loki"></a> [os\_loki](#input\_os\_loki) | n/a | <pre>map(object({<br>    enabled = bool<br>    version = string<br>    url     = string<br>    })<br>  )</pre> | <pre>{<br>  "enabled": false,<br>  "url": "http://loki:3100",<br>  "version": "2.8.7"<br>}</pre> | no |
 | <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
 | <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
 | <a name="input_os_swap_size"></a> [os\_swap\_size](#input\_os\_swap\_size) | Size of swap in GB | `number` | `0` | no |

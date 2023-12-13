@@ -1,9 +1,10 @@
-# Create acl policy for registering nodes
-resource "consul_acl_policy" "node" {
-  count = var.os_consul_agent ? 1 : 0
 
-  name        = "node-policy-${var.droplet_name}"
-  description = "Policy for ${var.droplet_name} server"
+# Create acl policies, tokens, nodes, and services based on os_consul_agent
+resource "consul_acl_policy" "node" {
+  count = var.consul_agent.enabled ? 1 : 0
+
+  name        = "node-policy-${var.os_consul_agent[count.index].name}"
+  description = "Policy for ${var.os_consul_agent[count.index].name} server"
   rules       = <<-EOT
     node_prefix "" {
       policy = "write"
@@ -18,7 +19,7 @@ resource "consul_acl_policy" "node" {
 
 # Create acl policy for registering services
 resource "consul_acl_policy" "service" {
-  count = var.os_consul_agent ? 1 : 0
+  count = var.consul_agent.enabled ? 1 : 0
 
   name        = "service-policy-${var.os_consul_registration_service.name}"
   description = "Policy for ${var.os_consul_registration_service.name} service"
@@ -36,7 +37,7 @@ resource "consul_acl_policy" "service" {
 
 # Create acl token for registering nodes and services
 resource "consul_acl_token" "node" {
-  count = var.os_consul_agent ? 1 : 0
+  count = var.consul_agent.enabled ? 1 : 0
 
   description = "ACL Token for ${var.droplet_name} register and service policies"
   local       = true
@@ -60,7 +61,7 @@ resource "consul_acl_token" "node" {
 
 # Register the droplet as a Consul node and service
 resource "consul_node" "default" {
-  count = var.os_consul_agent ? 1 : 0
+  count = var.consul_agent.enabled ? 1 : 0
 
   name       = digitalocean_droplet.default.name
   address    = digitalocean_droplet.default.ipv4_address_private
@@ -73,20 +74,20 @@ resource "consul_node" "default" {
 }
 
 resource "consul_service" "default" {
-  count = var.os_consul_agent ? 1 : 0
+  for_each = { for service in var.os_consul_agent.services : service.name => service }
 
   node       = consul_node.default[0].name
-  name       = var.os_consul_registration_service.name
+  name       = each.value.name
   tags       = var.droplet_tags
-  port       = var.os_consul_registration_service.port
+  port       = each.value.port
   address    = digitalocean_droplet.default.ipv4_address_private
   datacenter = var.droplet_region
 
   check {
-    check_id                          = var.os_consul_registration_service.name
-    name                              = "HTTP on port ${var.os_consul_registration_service.port} for ${var.os_consul_registration_service.name}"
-    http                              = var.os_consul_registration_service.check.http
-    status                            = var.os_consul_registration_service.check.status
+    check_id                          = each.value.name
+    name                              = "HTTP on port ${each.value.port} for ${each.value.name}"
+    http                              = each.value.check.http
+    status                            = each.value.check.status
     method                            = "GET"
     interval                          = "10s"
     timeout                           = "1s"
@@ -99,7 +100,7 @@ resource "consul_service" "default" {
 }
 
 resource "null_resource" "consul_token_enviroment" {
-  count = var.os_consul_agent ? 1 : 0
+  count = var.consul_agent.enabled ? 1 : 0
 
   triggers = {
     always_run = timestamp()

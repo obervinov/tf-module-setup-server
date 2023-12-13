@@ -109,23 +109,24 @@ variable "os_environment_variables" {
 }
 
 variable "os_consul_agent" {
-  description = "Enable consul agent and registration service in Consul"
-  type        = bool
-  default     = true
+  description = "Consul agent configuration for services registration"
+  type = object({
+    enabled = bool
+    services = list(object({
+      name = string
+      port = number
+      check = object({
+        http   = string
+        status = string
+      })
+    }))
+  })
+  default = {
+    enabled  = false
+    services = []
+  }
 }
 
-variable "os_consul_registration_service" {
-  description = "Service for registration in consul: name and port"
-  type = object({
-    name = string
-    port = number
-    check = object({
-      http   = string
-      status = string
-    })
-  })
-  default = null
-}
 
 variable "os_swap_size" {
   description = "Size of swap in GB"
@@ -145,22 +146,18 @@ variable "os_hosts" {
   default     = []
 }
 
-variable "os_loki_driver" {
-  description = "Enable loki driver for docker"
-  type        = bool
-  default     = false
-}
-
-variable "os_loki_driver_version" {
-  description = "Version of loki driver for docker"
-  type        = string
-  default     = "latest"
-}
-
-variable "os_loki_driver_url" {
-  description = "URL of loki driver for docker"
-  type        = string
-  default     = "http://loki:3100/loki/api/v1/push"
+variable "os_loki" {
+  type = map(object({
+    enabled = bool
+    version = string
+    url     = string
+    })
+  )
+  default = {
+    enabled = false
+    version = "2.8.7"
+    url     = "http://loki:3100"
+  }
 }
 
 variable "app_data" {
