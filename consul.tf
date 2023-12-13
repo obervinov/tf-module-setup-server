@@ -3,8 +3,8 @@
 resource "consul_acl_policy" "node" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
-  name        = "node-policy-${var.os_consul_agent[count.index].name}"
-  description = "Policy for ${var.os_consul_agent[count.index].name} server"
+  name        = "node-policy-${var.droplet_name}"
+  description = "Policy for ${var.droplet_name} server"
   rules       = <<-EOT
     node_prefix "" {
       policy = "write"
@@ -21,8 +21,8 @@ resource "consul_acl_policy" "node" {
 resource "consul_acl_policy" "service" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
-  name        = "service-policy-${var.os_consul_agent[count.index].name}"
-  description = "Policy for ${var.os_consul_agent[count.index].name} service"
+  name        = "service-policy-${var.droplet_name}"
+  description = "Policy for ${var.droplet_name} service"
   rules       = <<-EOT
     service_prefix "" {
       policy = "write"
@@ -49,8 +49,13 @@ resource "consul_acl_token" "node" {
     node_name  = var.droplet_name
     datacenter = var.droplet_region
   }
-  service_identities {
-    service_name = var.os_consul_agent[count.index].name
+  # Dynamically generate service_identities based on os_consul_agent.services
+  dynamic "service_identities" {
+    for_each = var.os_consul_agent.services
+    content {
+      service_name = service_identities.value.name
+      datacenters  = ["${var.droplet_region}"]
+    }
   }
 
   depends_on = [
