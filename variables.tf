@@ -122,7 +122,7 @@ variable "os_consul_agent" {
     }))
   })
   default = {
-    enabled = false
+    enabled  = false
     services = []
   }
 }
@@ -147,18 +147,15 @@ variable "os_hosts" {
 }
 
 variable "os_loki" {
-  type = map(object({
+  type = object({
     enabled = bool
     version = string
     url     = string
-    })
-  )
+  })
   default = {
-    "default" = {
-      enabled = false
-      version = "2.8.7"
-      url     = "http://loki:3100"
-    }
+    enabled = false
+    version = "2.8.7"
+    url     = "http://loki:3100"
   }
 }
 
