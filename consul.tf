@@ -21,8 +21,8 @@ resource "consul_acl_policy" "node" {
 resource "consul_acl_policy" "service" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
-  name        = "service-policy-${var.os_consul_agent.name}"
-  description = "Policy for ${var.os_consul_agent.name} service"
+  name        = "service-policy-${var.os_consul_agent[count.index].name}"
+  description = "Policy for ${var.os_consul_agent[count.index].name} service"
   rules       = <<-EOT
     service_prefix "" {
       policy = "write"
@@ -50,7 +50,7 @@ resource "consul_acl_token" "node" {
     datacenter = var.droplet_region
   }
   service_identities {
-    service_name = var.os_consul_agent.name
+    service_name = var.os_consul_agent[count.index].name
   }
 
   depends_on = [
