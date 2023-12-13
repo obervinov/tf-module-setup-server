@@ -154,9 +154,11 @@ variable "os_loki" {
     })
   )
   default = {
-    enabled = false
-    version = "2.8.7"
-    url     = "http://loki:3100"
+    "default" = {
+      enabled = false
+      version = "2.8.7"
+      url     = "http://loki:3100"
+    }
   }
 }
 
