@@ -1,7 +1,7 @@
 
 # Create acl policies, tokens, nodes, and services based on os_consul_agent
 resource "consul_acl_policy" "node" {
-  count = var.consul_agent.enabled ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   name        = "node-policy-${var.os_consul_agent[count.index].name}"
   description = "Policy for ${var.os_consul_agent[count.index].name} server"
@@ -19,7 +19,7 @@ resource "consul_acl_policy" "node" {
 
 # Create acl policy for registering services
 resource "consul_acl_policy" "service" {
-  count = var.consul_agent.enabled ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   name        = "service-policy-${var.os_consul_registration_service.name}"
   description = "Policy for ${var.os_consul_registration_service.name} service"
@@ -37,7 +37,7 @@ resource "consul_acl_policy" "service" {
 
 # Create acl token for registering nodes and services
 resource "consul_acl_token" "node" {
-  count = var.consul_agent.enabled ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   description = "ACL Token for ${var.droplet_name} register and service policies"
   local       = true
@@ -61,7 +61,7 @@ resource "consul_acl_token" "node" {
 
 # Register the droplet as a Consul node and service
 resource "consul_node" "default" {
-  count = var.consul_agent.enabled ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   name       = digitalocean_droplet.default.name
   address    = digitalocean_droplet.default.ipv4_address_private
@@ -100,7 +100,7 @@ resource "consul_service" "default" {
 }
 
 resource "null_resource" "consul_token_enviroment" {
-  count = var.consul_agent.enabled ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   triggers = {
     always_run = timestamp()
