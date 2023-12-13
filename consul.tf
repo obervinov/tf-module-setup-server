@@ -54,7 +54,6 @@ resource "consul_acl_token" "node" {
     for_each = var.os_consul_agent.services
     content {
       service_name = service_identities.value.name
-      datacenters  = ["${var.droplet_region}"]
     }
   }
 
