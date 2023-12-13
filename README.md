@@ -70,7 +70,6 @@ module "prepare_environment" {
 }
 ```
 
-
 ## Requirements
 
 | Name | Version |
