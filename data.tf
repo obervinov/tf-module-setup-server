@@ -95,7 +95,7 @@ data "digitalocean_vpc" "default" {
 }
 
 data "consul_acl_token_secret_id" "default" {
-  count = var.os_consul_agent ? 1 : 0
+  count = var.os_consul_agent.enabled ? 1 : 0
 
   accessor_id = consul_acl_token.node[0].accessor_id
 }
