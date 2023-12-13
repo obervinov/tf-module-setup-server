@@ -122,10 +122,8 @@ variable "os_consul_agent" {
     }))
   })
   default = {
-    "default" = {
-      enabled = false
-      services = []
-    }
+    enabled = false
+    services = []
   }
 }
 
