@@ -145,6 +145,23 @@ variable "os_hosts" {
   default     = []
 }
 
+variable "os_loki_driver" {
+  description = "Enable loki driver for docker"
+  type        = bool
+  default     = false
+}
+
+variable "os_loki_driver_version" {
+  description = "Version of loki driver for docker"
+  type        = string
+  default     = "latest"
+}
+
+variable "os_loki_driver_url" {
+  description = "URL of loki driver for docker"
+  type        = string
+  default     = "http://loki:3100/loki/api/v1/push"
+}
 
 variable "app_data" {
   description = "The path to the directory for storing persistent information and configurations"

@@ -58,7 +58,7 @@ resource "null_resource" "swap" {
   count = can(var.os_swap_size) && var.os_swap_size > 0 ? 1 : 0
 
   triggers = {
-    always_run = timestamp()
+    os_swap_size = var.os_swap_size
   }
 
   connection {
@@ -163,5 +163,48 @@ resource "null_resource" "additional_commands" {
     null_resource.files,
     null_resource.etc_hosts,
     null_resource.environment_variables
+  ]
+}
+
+resource "null_resource" "loki" {
+  count = can(var.os_loki_driver) && var.os_loki_driver == 1 ? 1 : 0
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  connection {
+    host        = digitalocean_droplet.default.ipv4_address_private
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.droplet_ssh_key)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "docker plugin install grafana/loki-docker-driver:${var.os_loki_driver_version} --alias loki --grant-all-permissions",
+      "docker plugin enable loki",
+      "systemctl restart docker"
+    ]
+  }
+
+  provisioner "file" {
+    content     = <<EOF
+{
+    "debug" : true,
+    "log-driver": "loki",
+    "log-opts": {
+        "loki-url": "${var.os_loki_driver_url}",
+        "loki-batch-size": "400"
+    }
+}
+EOF
+    destination = "/etc/docker/daemon.json"
+  }
+
+  depends_on = [
+    null_resource.cloudinit
   ]
 }
