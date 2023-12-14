@@ -78,7 +78,7 @@ resource "consul_node" "default" {
 }
 
 resource "consul_service" "default" {
-  for_each = { for service in var.os_consul_agent.services : service.name => service }
+  for_each = var.os_consul_agent.enabled ? { for service in var.os_consul_agent.services : service.name => service } : {}
 
   node       = consul_node.default[0].name
   name       = each.value.name
