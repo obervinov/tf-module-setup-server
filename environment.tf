@@ -219,7 +219,7 @@ resource "null_resource" "resolved_conf" {
   provisioner "file" {
     content     = <<EOF
 [Resolve]
-DNS=${join(" ", formatlist("%s", var.os_resolved_conf.nameservers))}
+DNS=${var.os_resolved_conf.nameservers}
 DNSSEC=false
 Domains=${var.os_resolved_conf.domains}
 EOF

@@ -136,7 +136,7 @@ variable "os_swap_size" {
 variable "os_resolved_conf" {
   description = "List with DNS servers and domains for /etc/systemd/resolved.conf"
   type = object({
-    nameservers = list(string),
+    nameservers = string,
     domains     = string
   })
   default = null
