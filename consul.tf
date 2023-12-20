@@ -27,7 +27,7 @@ resource "consul_acl_token" "node" {
   description = "ACL Token for ${var.droplet_name} register and service policies"
   local       = true
   policies = [
-    consul_acl_policy.node[count.index].name,
+    consul_acl_policy.default[count.index].name,
   ]
   node_identities {
     node_name  = var.droplet_name
