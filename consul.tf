@@ -3,7 +3,7 @@
 resource "consul_acl_policy" "default" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
-  name        = "node-policy-${var.droplet_name}-server"
+  name        = "${var.droplet_name}-server-policy"
   description = "Policy for ${var.droplet_name} server"
   rules       = <<-EOT
     node_prefix "" {
