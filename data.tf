@@ -56,14 +56,6 @@ users:
     ssh-authorized-keys:
       - ${data.digitalocean_ssh_key.ci_cd.public_key}
 
-write_files:
-  - path: /etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf
-    content: |
-      [Resolve]
-      DNS=${join(" ", formatlist("%s", var.os_nameservers))}
-      DNSSEC=false
-      Domains=~consul
-
 packages:
 ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}
 ${var.os_packages != null ? join("\n", formatlist("  - '%s'", var.os_packages)) : ""}

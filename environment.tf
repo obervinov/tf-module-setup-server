@@ -2,10 +2,6 @@
 # Set the environment variables, copy the files and execute the commands
 
 resource "null_resource" "cloudinit" {
-  triggers = {
-    run_always = timestamp()
-  }
-
   connection {
     host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
@@ -30,7 +26,7 @@ resource "null_resource" "etc_hosts" {
   count = var.os_hosts != null && length(var.os_hosts) > 0 ? 1 : 0
 
   triggers = {
-    hash = sha1(join(",", var.os_hosts))
+    hosts = sha1(join(",", var.os_hosts))
   }
 
   connection {
@@ -58,7 +54,7 @@ resource "null_resource" "swap" {
   count = can(var.os_swap_size) && var.os_swap_size > 0 ? 1 : 0
 
   triggers = {
-    os_swap_size = var.os_swap_size
+    swap_size = var.os_swap_size
   }
 
   connection {
@@ -91,7 +87,7 @@ resource "null_resource" "environment_variables" {
   count = var.os_environment_variables != null && length(var.os_environment_variables) > 0 ? 1 : 0
 
   triggers = {
-    always_run = timestamp()
+    environments = sha1(join(",", var.os_environment_variables))
   }
 
   connection {
@@ -168,11 +164,6 @@ resource "null_resource" "additional_commands" {
 
 resource "null_resource" "loki" {
   count = can(var.os_loki.enabled) && var.os_loki.enabled == 1 ? 1 : 0
-
-  triggers = {
-    always_run = timestamp()
-  }
-
   connection {
     host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
@@ -202,6 +193,43 @@ resource "null_resource" "loki" {
 }
 EOF
     destination = "/etc/docker/daemon.json"
+  }
+
+  depends_on = [
+    null_resource.cloudinit
+  ]
+}
+
+resource "null_resource" "resolved_conf" {
+  count = var.os_resolved_conf != null && length(var.os_resolved_conf) > 0 ? 1 : 0
+
+  triggers = {
+    resolved_conf = var.os_resolved_conf
+  }
+
+  connection {
+    host        = digitalocean_droplet.default.ipv4_address_private
+    user        = "terraform"
+    type        = "ssh"
+    agent       = false
+    timeout     = "3m"
+    private_key = base64decode(var.droplet_ssh_key)
+  }
+
+  provisioner "file" {
+    content     = <<EOF
+[Resolve]
+DNS=${join(" ", formatlist("%s", var.os_resolved_conf.nameservers))}
+DNSSEC=false
+Domains=${var.os_resolved_conf.domains}
+EOF
+    destination = "/etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo systemctl restart systemd-resolved"
+    ]
   }
 
   depends_on = [

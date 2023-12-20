@@ -133,10 +133,13 @@ variable "os_swap_size" {
   default     = 0
 }
 
-variable "os_nameservers" {
-  description = "Private IPs for cloudinit nameserver"
-  type        = list(string)
-  default     = ["8.8.8.8", "8.8.4.4"]
+variable "os_resolved_conf" {
+  description = "List with DNS servers and domains for /etc/systemd/resolved.conf"
+  type = object({
+    nameservers = list(string),
+    domains     = string
+  })
+  default = null
 }
 
 variable "os_hosts" {

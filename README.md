@@ -113,6 +113,7 @@ No modules.
 | [null_resource.etc_hosts](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.files](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.loki](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.resolved_conf](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.swap](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [consul_acl_token_secret_id.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/data-sources/acl_token_secret_id) | data source |
 | [digitalocean_domain.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
@@ -149,8 +150,8 @@ No modules.
 | <a name="input_os_environment_variables"></a> [os\_environment\_variables](#input\_os\_environment\_variables) | List with environmetn variables for server | `list(any)` | `[]` | no |
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
 | <a name="input_os_loki"></a> [os\_loki](#input\_os\_loki) | n/a | <pre>object({<br>    enabled = bool<br>    version = string<br>    url     = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "url": "http://loki:3100",<br>  "version": "2.8.7"<br>}</pre> | no |
-| <a name="input_os_nameservers"></a> [os\_nameservers](#input\_os\_nameservers) | Private IPs for cloudinit nameserver | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "8.8.4.4"<br>]</pre> | no |
 | <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
+| <a name="input_os_resolved_conf"></a> [os\_resolved\_conf](#input\_os\_resolved\_conf) | List with DNS servers and domains for /etc/systemd/resolved.conf | <pre>object({<br>    nameservers = list(string),<br>    domains     = string<br>  })</pre> | `null` | no |
 | <a name="input_os_swap_size"></a> [os\_swap\_size](#input\_os\_swap\_size) | Size of swap in GB | `number` | `0` | no |
 
 ## Outputs
