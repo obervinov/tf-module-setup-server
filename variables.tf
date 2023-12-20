@@ -127,7 +127,6 @@ variable "os_consul_agent" {
   }
 }
 
-
 variable "os_swap_size" {
   description = "Size of swap in GB"
   type        = number

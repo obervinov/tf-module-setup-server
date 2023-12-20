@@ -1,6 +1,6 @@
 
 # Create acl policies, tokens, nodes, and services based on os_consul_agent
-resource "consul_acl_policy" "node" {
+resource "consul_acl_policy" "default" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
   name        = "node-policy-${var.droplet_name}-server"
@@ -9,21 +9,6 @@ resource "consul_acl_policy" "node" {
     node_prefix "" {
       policy = "write"
     }
-  EOT
-
-  depends_on = [
-    null_resource.cloudinit,
-    null_resource.additional_commands
-  ]
-}
-
-# Create acl policy for registering services
-resource "consul_acl_policy" "service" {
-  count = var.os_consul_agent.enabled ? 1 : 0
-
-  name        = "service-policy-${var.droplet_name}-server"
-  description = "Policy for ${var.droplet_name} service"
-  rules       = <<-EOT
     service_prefix "" {
       policy = "write"
     }
@@ -43,7 +28,6 @@ resource "consul_acl_token" "node" {
   local       = true
   policies = [
     consul_acl_policy.node[count.index].name,
-    consul_acl_policy.service[count.index].name,
   ]
   node_identities {
     node_name  = var.droplet_name
