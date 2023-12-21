@@ -100,7 +100,7 @@ resource "null_resource" "consul_token_enviroment" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
   provisioner "remote-exec" {
     inline = [

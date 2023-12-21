@@ -1,5 +1,5 @@
 locals {
-  environment_variables = [
+  default_environment_variables = [
     "DROPLET_INTERNAL_IP=${digitalocean_droplet.default.ipv4_address_private}",
     "DROPLET_EXTERNAL_IP=${digitalocean_droplet.default.ipv4_address}",
   ]
@@ -15,7 +15,7 @@ locals {
 
   default_commands = [
     "sudo mkdir -p ${var.app_data}/${var.app_configurations}",
-    "sudo chown ${var.droplet_username}:terraform ${var.app_data}/${var.app_configurations}",
+    "sudo chown ${var.droplet_user}:terraform ${var.app_data}/${var.app_configurations}",
     "sudo chmod 775 ${var.app_data}/${var.app_configurations}",
   ]
 
@@ -29,7 +29,7 @@ package_upgrade: true
 manage_etc_hosts: true
 
 users:
-  - name: ${var.droplet_username}
+  - name: ${var.droplet_user}
     groups:
       - sudo
     sudo:
@@ -49,16 +49,15 @@ ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.defau
 ${var.os_packages != null ? join("\n", formatlist("  - '%s'", var.os_packages)) : ""}
 
 runcmd:
-  - systemctl restart systemd-resolved
 ${local.default_commands != null ? join("\n", formatlist("  - '%s'", local.default_commands)) : ""}
 EOF
 }
 
-data "digitalocean_ssh_key" "default" {
-  name = var.droplet_username
+data "digitalocean_ssh_key" "user" {
+  name = var.droplet_user
 }
 
-data "digitalocean_ssh_key" "ci_cd" {
+data "digitalocean_ssh_key" "remote_provisioner" {
   name = "terraform"
 }
 
@@ -71,7 +70,7 @@ data "digitalocean_domain" "default" {
 }
 
 data "digitalocean_vpc" "default" {
-  name = var.droplet_vpc
+  name = "${var.droplet_region}-vpc-${var.droplet_project}"
 }
 
 data "consul_acl_token_secret_id" "default" {

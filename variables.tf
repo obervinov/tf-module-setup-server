@@ -1,34 +1,33 @@
-variable "droplet_username" {
-  description = "Name for creating a new user"
+variable "droplet_user" {
+  description = "Name for creating a new user on the server (must be unique)"
   type        = string
 }
 
 variable "droplet_name" {
-  description = "The name of the droplet"
+  description = "The name of the droplet (must be unique)"
   type        = string
-  default     = "server-0001"
 }
 
 variable "droplet_image" {
-  description = "The image of the droplet"
+  description = "The image of the droplet (must be available in the region). Default: 145589051 (packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1)"
   type        = string
-  default     = "ubuntu-23-04-x64"
+  default     = "145589051"
 }
 
 variable "droplet_region" {
-  description = "The region of the droplet"
+  description = "The region of the droplet (must be available)"
   type        = string
   default     = "ams3"
 }
 
 variable "droplet_size" {
-  description = "The size of the droplet"
+  description = "The size of the droplet (must be available in the region)"
   type        = string
-  default     = "s-1vcpu-1gb"
+  default     = "s-1vcpu-512mb-10gb"
 }
 
 variable "droplet_tags" {
-  description = "The tags of the droplet"
+  description = "The tags of the droplet (for firewall rules and registration in the consul)"
   type        = list(any)
 }
 
@@ -43,16 +42,15 @@ variable "droplet_reserved_ip" {
   default     = false
 }
 
-variable "droplet_dns" {
+variable "droplet_dns_record" {
   description = "Create an external dns record for this droplet in `droplet_dns_zone`"
   type        = bool
   default     = true
 }
 
 variable "droplet_dns_zone" {
-  description = "Name of the domain zone to create an external dns record"
+  description = "Name of the domain zone to create an external dns record for this droplet"
   type        = string
-  default     = ""
 }
 
 variable "droplet_volume_size" {
@@ -67,27 +65,21 @@ variable "droplet_backups" {
   default     = false
 }
 
-variable "droplet_monitoring" {
-  description = "Enable monitoring for droplet"
+variable "droplet_do_monitoring" {
+  description = "Enable monitoring for droplet (for graphs and alerts)"
   type        = bool
   default     = true
 }
 
-variable "droplet_ssh_key" {
-  description = "Private key for ssh connection in Terraform Cloud (base64)"
+variable "droplet_provisioner_ssh_key" {
+  description = "Private key for provisioner connection to droplet (must be base64 encoded)"
   type        = string
 }
 
-variable "droplet_agent" {
-  description = "Enable agent for droplet"
+variable "droplet_do_agent" {
+  description = "Enable DigitalOcean agent for droplet (for monitoring and backups)"
   type        = bool
   default     = true
-}
-
-variable "droplet_vpc" {
-  description = "VPC name"
-  type        = string
-  default     = "default"
 }
 
 variable "os_packages" {

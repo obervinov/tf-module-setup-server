@@ -11,7 +11,7 @@ resource "null_resource" "cloudinit" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
 
   }
   provisioner "remote-exec" {
@@ -39,7 +39,7 @@ resource "null_resource" "etc_hosts" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
 
   provisioner "remote-exec" {
@@ -68,7 +68,7 @@ resource "null_resource" "swap" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
 
   provisioner "remote-exec" {
@@ -102,12 +102,12 @@ resource "null_resource" "environment_variables" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
   provisioner "remote-exec" {
     inline = [
       "echo PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' | sudo tee /etc/environment > /dev/null",
-      "echo '${join("\n", local.environment_variables)}' | sudo tee -a /etc/environment > /dev/null",
+      "echo '${join("\n", local.default_environment_variables)}' | sudo tee -a /etc/environment > /dev/null",
       "echo '${join("\n", var.os_environment_variables)}' | sudo tee -a /etc/environment > /dev/null"
     ]
   }
@@ -130,7 +130,7 @@ resource "null_resource" "files" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
   provisioner "file" {
     source      = "${var.app_configurations}/"
@@ -154,7 +154,7 @@ resource "null_resource" "additional_commands" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
   provisioner "remote-exec" {
     inline = var.os_commands
@@ -181,7 +181,7 @@ resource "null_resource" "loki" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
 
   provisioner "remote-exec" {
@@ -226,7 +226,7 @@ resource "null_resource" "resolved_conf" {
     type        = "ssh"
     agent       = false
     timeout     = "3m"
-    private_key = base64decode(var.droplet_ssh_key)
+    private_key = base64decode(var.droplet_provisioner_ssh_key)
   }
 
   provisioner "file" {

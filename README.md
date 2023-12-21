@@ -70,6 +70,7 @@ module "prepare_environment" {
 }
 ```
 
+
 ## Requirements
 
 | Name | Version |
@@ -118,8 +119,8 @@ No modules.
 | [consul_acl_token_secret_id.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/data-sources/acl_token_secret_id) | data source |
 | [digitalocean_domain.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
 | [digitalocean_project.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
-| [digitalocean_ssh_key.ci_cd](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
-| [digitalocean_ssh_key.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_ssh_key.remote_provisioner](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
+| [digitalocean_ssh_key.user](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 | [digitalocean_vpc.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/vpc) | data source |
 
 ## Inputs
@@ -129,22 +130,21 @@ No modules.
 | <a name="input_app_cname_records"></a> [app\_cname\_records](#input\_app\_cname\_records) | List with CNAME records for droplet | `list(string)` | `[]` | no |
 | <a name="input_app_configurations"></a> [app\_configurations](#input\_app\_configurations) | The path to the directories with configurations that will be copied to the created server | `string` | `"configs/"` | no |
 | <a name="input_app_data"></a> [app\_data](#input\_app\_data) | The path to the directory for storing persistent information and configurations | `string` | `"/opt"` | no |
-| <a name="input_droplet_agent"></a> [droplet\_agent](#input\_droplet\_agent) | Enable agent for droplet | `bool` | `true` | no |
 | <a name="input_droplet_backups"></a> [droplet\_backups](#input\_droplet\_backups) | Enable backups for droplet | `bool` | `false` | no |
-| <a name="input_droplet_dns"></a> [droplet\_dns](#input\_droplet\_dns) | Create an external dns record for this droplet in `droplet_dns_zone` | `bool` | `true` | no |
-| <a name="input_droplet_dns_zone"></a> [droplet\_dns\_zone](#input\_droplet\_dns\_zone) | Name of the domain zone to create an external dns record | `string` | `""` | no |
-| <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet | `string` | `"ubuntu-23-04-x64"` | no |
-| <a name="input_droplet_monitoring"></a> [droplet\_monitoring](#input\_droplet\_monitoring) | Enable monitoring for droplet | `bool` | `true` | no |
-| <a name="input_droplet_name"></a> [droplet\_name](#input\_droplet\_name) | The name of the droplet | `string` | `"server-0001"` | no |
+| <a name="input_droplet_dns_record"></a> [droplet\_dns\_record](#input\_droplet\_dns\_record) | Create an external dns record for this droplet in `droplet_dns_zone` | `bool` | `true` | no |
+| <a name="input_droplet_dns_zone"></a> [droplet\_dns\_zone](#input\_droplet\_dns\_zone) | Name of the domain zone to create an external dns record for this droplet | `string` | n/a | yes |
+| <a name="input_droplet_do_agent"></a> [droplet\_do\_agent](#input\_droplet\_do\_agent) | Enable DigitalOcean agent for droplet (for monitoring and backups) | `bool` | `true` | no |
+| <a name="input_droplet_do_monitoring"></a> [droplet\_do\_monitoring](#input\_droplet\_do\_monitoring) | Enable monitoring for droplet (for graphs and alerts) | `bool` | `true` | no |
+| <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet (must be available in the region). Default: 145589051 (packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1) | `string` | `"145589051"` | no |
+| <a name="input_droplet_name"></a> [droplet\_name](#input\_droplet\_name) | The name of the droplet (must be unique) | `string` | n/a | yes |
 | <a name="input_droplet_project"></a> [droplet\_project](#input\_droplet\_project) | The target project for the droplet | `string` | n/a | yes |
-| <a name="input_droplet_region"></a> [droplet\_region](#input\_droplet\_region) | The region of the droplet | `string` | `"ams3"` | no |
+| <a name="input_droplet_provisioner_ssh_key"></a> [droplet\_provisioner\_ssh\_key](#input\_droplet\_provisioner\_ssh\_key) | Private key for provisioner connection to droplet (must be base64 encoded) | `string` | n/a | yes |
+| <a name="input_droplet_region"></a> [droplet\_region](#input\_droplet\_region) | The region of the droplet (must be available) | `string` | `"ams3"` | no |
 | <a name="input_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#input\_droplet\_reserved\_ip) | Link a reserved address to a droplet | `bool` | `false` | no |
-| <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet | `string` | `"s-1vcpu-1gb"` | no |
-| <a name="input_droplet_ssh_key"></a> [droplet\_ssh\_key](#input\_droplet\_ssh\_key) | Private key for ssh connection in Terraform Cloud (base64) | `string` | n/a | yes |
-| <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet | `list(any)` | n/a | yes |
-| <a name="input_droplet_username"></a> [droplet\_username](#input\_droplet\_username) | Name for creating a new user | `string` | n/a | yes |
+| <a name="input_droplet_size"></a> [droplet\_size](#input\_droplet\_size) | The size of the droplet (must be available in the region) | `string` | `"s-1vcpu-512mb-10gb"` | no |
+| <a name="input_droplet_tags"></a> [droplet\_tags](#input\_droplet\_tags) | The tags of the droplet (for firewall rules and registration in the consul) | `list(any)` | n/a | yes |
+| <a name="input_droplet_user"></a> [droplet\_user](#input\_droplet\_user) | Name for creating a new user on the server (must be unique) | `string` | n/a | yes |
 | <a name="input_droplet_volume_size"></a> [droplet\_volume\_size](#input\_droplet\_volume\_size) | Additional volume size (if required) | `number` | `0` | no |
-| <a name="input_droplet_vpc"></a> [droplet\_vpc](#input\_droplet\_vpc) | VPC name | `string` | `"default"` | no |
 | <a name="input_os_commands"></a> [os\_commands](#input\_os\_commands) | List of commands to execute custom remote-exec | `list(string)` | `null` | no |
 | <a name="input_os_consul_agent"></a> [os\_consul\_agent](#input\_os\_consul\_agent) | Consul agent configuration for services registration | <pre>object({<br>    enabled = bool<br>    services = list(object({<br>      name = string<br>      port = number<br>      check = object({<br>        http   = string<br>        status = string<br>      })<br>    }))<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "services": []<br>}</pre> | no |
 | <a name="input_os_environment_variables"></a> [os\_environment\_variables](#input\_os\_environment\_variables) | List with environmetn variables for server | `list(any)` | `[]` | no |
@@ -158,14 +158,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_additional_volume"></a> [additional\_volume](#output\_additional\_volume) | Additional volume for new droplet |
-| <a name="output_app_cname_records"></a> [app\_cname\_records](#output\_app\_cname\_records) | n/a |
-| <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
-| <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
-| <a name="output_droplet_id"></a> [droplet\_id](#output\_droplet\_id) | Droplet id |
-| <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
-| <a name="output_droplet_private_ip"></a> [droplet\_private\_ip](#output\_droplet\_private\_ip) | Private ip for new droplet |
-| <a name="output_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#output\_droplet\_reserved\_ip) | Reserved ip for new droplet |
-| <a name="output_droplet_ssh_key_fingerprint"></a> [droplet\_ssh\_key\_fingerprint](#output\_droplet\_ssh\_key\_fingerprint) | SSH Key fingerprint |
-| <a name="output_droplet_username"></a> [droplet\_username](#output\_droplet\_username) | Username for new user |
-| <a name="output_persistent_data_path"></a> [persistent\_data\_path](#output\_persistent\_data\_path) | The path to the directory for storing persistent information and configurations |
+| <a name="output_droplet_dns"></a> [droplet\_dns](#output\_droplet\_dns) | Droplet dns record info |
+| <a name="output_droplet_info"></a> [droplet\_info](#output\_droplet\_info) | Droplet base info |
+| <a name="output_droplet_networks"></a> [droplet\_networks](#output\_droplet\_networks) | Droplet networks addresses |
+| <a name="output_droplet_user"></a> [droplet\_user](#output\_droplet\_user) | Created user for ssh droplet |
+| <a name="output_droplet_volume"></a> [droplet\_volume](#output\_droplet\_volume) | Droplet additional volume info |

@@ -6,17 +6,15 @@ resource "digitalocean_droplet" "default" {
   region        = var.droplet_region
   size          = var.droplet_size
   backups       = var.droplet_backups
-  monitoring    = var.droplet_monitoring
-  droplet_agent = var.droplet_agent
+  monitoring    = var.droplet_do_monitoring
+  droplet_agent = var.droplet_do_agent
   vpc_uuid      = data.digitalocean_vpc.default.id
-
+  tags          = var.droplet_tags
+  user_data     = local.user_data
   ssh_keys = [
     data.digitalocean_ssh_key.default.id,
     data.digitalocean_ssh_key.ci_cd.id
   ]
-
-  tags      = var.droplet_tags
-  user_data = local.user_data
 }
 
 resource "digitalocean_project_resources" "default" {
@@ -38,9 +36,9 @@ resource "digitalocean_reserved_ip" "default" {
 }
 
 resource "digitalocean_record" "default" {
-  count = var.droplet_dns ? 1 : 0
+  count = var.droplet_dns_record ? 1 : 0
 
-  domain = var.droplet_dns ? element(data.digitalocean_domain.default.*.id, 0) : null
+  domain = var.droplet_dns_record ? element(data.digitalocean_domain.default.*.id, 0) : null
   type   = "A"
   name   = var.droplet_name
   value  = var.droplet_reserved_ip ? digitalocean_reserved_ip.default[0].ip_address : digitalocean_droplet.default.ipv4_address
