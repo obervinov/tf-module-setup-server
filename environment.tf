@@ -201,7 +201,7 @@ EOF
 }
 
 resource "null_resource" "resolved_conf" {
-  count = var.os_resolved_conf != null && length(var.os_resolved_conf) > 0 ? 1 : 0
+  count = var.os_resolved_conf != null
 
   triggers = {
     nameservers = var.os_resolved_conf.nameservers
