@@ -70,7 +70,6 @@ module "prepare_environment" {
 }
 ```
 
-
 ## Requirements
 
 | Name | Version |
@@ -163,6 +162,7 @@ No modules.
 | <a name="output_app_cname_records"></a> [app\_cname\_records](#output\_app\_cname\_records) | n/a |
 | <a name="output_droplet_dns_record"></a> [droplet\_dns\_record](#output\_droplet\_dns\_record) | Public dns record for new droplet |
 | <a name="output_droplet_external_ip"></a> [droplet\_external\_ip](#output\_droplet\_external\_ip) | Droplet external ip-address |
+| <a name="output_droplet_id"></a> [droplet\_id](#output\_droplet\_id) | Droplet id |
 | <a name="output_droplet_name"></a> [droplet\_name](#output\_droplet\_name) | Droplet name |
 | <a name="output_droplet_private_ip"></a> [droplet\_private\_ip](#output\_droplet\_private\_ip) | Private ip for new droplet |
 | <a name="output_droplet_reserved_ip"></a> [droplet\_reserved\_ip](#output\_droplet\_reserved\_ip) | Reserved ip for new droplet |

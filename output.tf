@@ -1,3 +1,8 @@
+output "droplet_id" {
+  description = "Droplet id"
+  value       = digitalocean_droplet.default.id
+}
+
 output "droplet_name" {
   description = "Droplet name"
   value       = digitalocean_droplet.default.name
