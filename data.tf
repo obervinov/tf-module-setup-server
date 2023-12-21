@@ -14,17 +14,6 @@ locals {
     "gpg"
   ]
 
-  network = {
-    ethernets = {
-      eth1 = {
-        mtu           = 1500
-        nameservers   = sort(var.os_nameservers)
-        searchdomains = ["consul"]
-        domain        = "consul"
-      }
-    }
-  }
-
   default_commands = [
     "sudo mkdir -p ${var.app_data}/${var.app_configurations}",
     "sudo chown ${var.droplet_username}:terraform ${var.app_data}/${var.app_configurations}",
