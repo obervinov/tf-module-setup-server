@@ -2,6 +2,9 @@
 # Set the environment variables, copy the files and execute the commands
 
 resource "null_resource" "cloudinit" {
+  triggers = {
+    droplet = digitalocean_droplet.default.id
+  }
   connection {
     host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
@@ -26,7 +29,8 @@ resource "null_resource" "etc_hosts" {
   count = var.os_hosts != null && length(var.os_hosts) > 0 ? 1 : 0
 
   triggers = {
-    hosts = sha1(join(",", var.os_hosts))
+    hosts   = sha1(join(",", var.os_hosts))
+    droplet = digitalocean_droplet.default.id
   }
 
   connection {
@@ -55,6 +59,7 @@ resource "null_resource" "swap" {
 
   triggers = {
     swap_size = var.os_swap_size
+    droplet   = digitalocean_droplet.default.id
   }
 
   connection {
@@ -88,6 +93,7 @@ resource "null_resource" "environment_variables" {
 
   triggers = {
     environments = sha1(join(",", var.os_environment_variables))
+    droplet      = digitalocean_droplet.default.id
   }
 
   connection {
@@ -164,6 +170,11 @@ resource "null_resource" "additional_commands" {
 
 resource "null_resource" "loki" {
   count = can(var.os_loki.enabled) && var.os_loki.enabled == 1 ? 1 : 0
+
+  triggers = {
+    droplet = digitalocean_droplet.default.id
+  }
+
   connection {
     host        = digitalocean_droplet.default.ipv4_address_private
     user        = "terraform"
@@ -206,6 +217,7 @@ resource "null_resource" "resolved_conf" {
   triggers = {
     nameservers = var.os_resolved_conf.nameservers
     domains     = var.os_resolved_conf.domains
+    droplet     = digitalocean_droplet.default.id
   }
 
   connection {

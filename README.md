@@ -70,6 +70,7 @@ module "prepare_environment" {
 }
 ```
 
+
 ## Requirements
 
 | Name | Version |
@@ -151,7 +152,7 @@ No modules.
 | <a name="input_os_hosts"></a> [os\_hosts](#input\_os\_hosts) | List with /etc/hosts | `list(string)` | `[]` | no |
 | <a name="input_os_loki"></a> [os\_loki](#input\_os\_loki) | n/a | <pre>object({<br>    enabled = bool<br>    version = string<br>    url     = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "url": "http://loki:3100",<br>  "version": "2.8.7"<br>}</pre> | no |
 | <a name="input_os_packages"></a> [os\_packages](#input\_os\_packages) | List of packages to install | `list(string)` | `[]` | no |
-| <a name="input_os_resolved_conf"></a> [os\_resolved\_conf](#input\_os\_resolved\_conf) | List with DNS servers and domains for /etc/systemd/resolved.conf | <pre>object({<br>    nameservers = list(string),<br>    domains     = string<br>  })</pre> | `null` | no |
+| <a name="input_os_resolved_conf"></a> [os\_resolved\_conf](#input\_os\_resolved\_conf) | List with DNS servers and domains for /etc/systemd/resolved.conf | <pre>object({<br>    nameservers = string,<br>    domains     = string<br>  })</pre> | `null` | no |
 | <a name="input_os_swap_size"></a> [os\_swap\_size](#input\_os\_swap\_size) | Size of swap in GB | `number` | `0` | no |
 
 ## Outputs
