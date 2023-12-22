@@ -35,14 +35,14 @@ users:
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.default.public_key}
+      - ${data.digitalocean_ssh_key.user.public_key}
   - name: terraform
     groups:
       - sudo
     sudo:
       - ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ${data.digitalocean_ssh_key.ci_cd.public_key}
+      - ${data.digitalocean_ssh_key.remote_provisioner.public_key}
 
 packages:
 ${local.default_packages != null ? join("\n", formatlist("  - '%s'", local.default_packages)) : ""}

@@ -19,7 +19,7 @@ output "droplet_user" {
   description = "Created user for ssh droplet"
   value = {
     name    = var.droplet_user
-    ssh_key = data.digitalocean_ssh_key.default.fingerprint
+    ssh_key = data.digitalocean_ssh_key.user.fingerprint
   }
 }
 
