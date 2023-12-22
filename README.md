@@ -118,6 +118,7 @@ No modules.
 | [null_resource.swap](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [consul_acl_token_secret_id.default](https://registry.terraform.io/providers/hashicorp/consul/2.20.0/docs/data-sources/acl_token_secret_id) | data source |
 | [digitalocean_domain.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/domain) | data source |
+| [digitalocean_droplet_snapshot.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/droplet_snapshot) | data source |
 | [digitalocean_project.default](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/project) | data source |
 | [digitalocean_ssh_key.remote_provisioner](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
 | [digitalocean_ssh_key.user](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/data-sources/ssh_key) | data source |
@@ -135,7 +136,7 @@ No modules.
 | <a name="input_droplet_dns_zone"></a> [droplet\_dns\_zone](#input\_droplet\_dns\_zone) | Name of the domain zone to create an external dns record for this droplet | `string` | n/a | yes |
 | <a name="input_droplet_do_agent"></a> [droplet\_do\_agent](#input\_droplet\_do\_agent) | Enable DigitalOcean agent for droplet (for monitoring and backups) | `bool` | `true` | no |
 | <a name="input_droplet_do_monitoring"></a> [droplet\_do\_monitoring](#input\_droplet\_do\_monitoring) | Enable monitoring for droplet (for graphs and alerts) | `bool` | `true` | no |
-| <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet (must be available in the region). Default: 145589051 (packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1) | `string` | `"145589051"` | no |
+| <a name="input_droplet_image"></a> [droplet\_image](#input\_droplet\_image) | The image of the droplet (must be available in the region). Default: packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1 | `string` | `"packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1"` | no |
 | <a name="input_droplet_name"></a> [droplet\_name](#input\_droplet\_name) | The name of the droplet (must be unique) | `string` | n/a | yes |
 | <a name="input_droplet_project"></a> [droplet\_project](#input\_droplet\_project) | The target project for the droplet | `string` | n/a | yes |
 | <a name="input_droplet_provisioner_ssh_key"></a> [droplet\_provisioner\_ssh\_key](#input\_droplet\_provisioner\_ssh\_key) | Private key for provisioner connection to droplet (must be base64 encoded) | `string` | n/a | yes |

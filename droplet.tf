@@ -4,7 +4,7 @@ resource "digitalocean_droplet" "default" {
   name          = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
   image         = var.droplet_image
   region        = var.droplet_region
-  size          = var.droplet_size
+  size          = data.digitalocean_droplet_snapshot.default.id
   backups       = var.droplet_backups
   monitoring    = var.droplet_do_monitoring
   droplet_agent = var.droplet_do_agent

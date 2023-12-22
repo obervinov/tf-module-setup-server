@@ -73,6 +73,12 @@ data "digitalocean_vpc" "default" {
   name = "${var.droplet_region}-vpc-${var.droplet_project}"
 }
 
+data "digitalocean_droplet_snapshot" "default" {
+  name        = var.droplet_image
+  region      = var.droplet_region
+  most_recent = true
+}
+
 data "consul_acl_token_secret_id" "default" {
   count = var.os_consul_agent.enabled ? 1 : 0
 
