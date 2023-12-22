@@ -12,8 +12,8 @@ resource "digitalocean_droplet" "default" {
   tags          = var.droplet_tags
   user_data     = local.user_data
   ssh_keys = [
-    data.digitalocean_ssh_key.default.id,
-    data.digitalocean_ssh_key.ci_cd.id
+    data.digitalocean_ssh_key.user.id,
+    data.digitalocean_ssh_key.remote_provisioner.id
   ]
 }
 
