@@ -31,41 +31,32 @@ This module performs the initial creation of a server in digitalocean, as well a
 ## <img src="https://github.com/obervinov/_templates/blob/main/icons/config.png" width="25" title="usage"> Usage example
 ```hcl
 module "prepare_environment" {
-  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=release/v1.0.0"
+  source                 = "git@github.com:obervinov/tf-module-setup-server.git/?ref=v1.0.0"
 
-  droplet_username    = var.ssh_username
-  droplet_ssh_key     = var.ssh_private_key
-  droplet_name        = local.name
-  droplet_tags        = ["web", "ssh", "ubuntu"]
-  droplet_project     = "myproject1"
-  droplet_size        = "s-1vcpu-1gb"
-  droplet_image       = "ubuntu-23-10-x64"
-  droplet_dns_zone    = var.domain_zone
-  droplet_vpc         = "default-vpc"
-  droplet_volume_size = 5
-  droplet_reserved_ip = true
+  droplet_user                = "username1"
+  droplet_provisioner_ssh_key = var.terraform_ssh_private_key
+  droplet_name                = "server1"
+  droplet_tags                = ["web", "ssh", "ubuntu"]
+  droplet_project             = "project1"
+  droplet_dns_zone            = "example.com"
+  droplet_volume_size         = 5
 
   os_swap_size = 1
-  os_consul_registration_service = {
-    name = "webapp1"
-    port = 443
-    check = {
-      http   = "http://webapp.exaple.com:443/health"
-      status = "passing"
-    }
+  os_loki = {
+    enabled = true
+    version = local.loki_version
+    url     = "http://loki:3100/loki/api/v1/push"
   }
-
   os_environment_variables = [
-    "ACME_DOMAIN=${var.domain_zone}",
-    "ACME_EMAIL=${var.acme_email}"
+    "ACME_DOMAIN=${var.external_domain}",
+    "ACME_EMAIL=${var.caddy_acme_email}",
   ]
   os_commands = [
-    "sudo docker compose -f /opt/configs/docker-compose.yml up -d --remove-orphans --force-recreate",
+    "sudo docker compose -f /opt/configs/docker-compose.yml up -d --remove-orphans"
   ]
 
   app_cname_records = [
-    "webapp1",
-    "webapp2"
+    "web"
   ]
 }
 ```
