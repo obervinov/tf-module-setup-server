@@ -145,7 +145,7 @@ resource "null_resource" "files" {
 resource "null_resource" "additional_commands" {
   count = length(coalesce(var.os_commands, [])) > 0 ? 1 : 0
   triggers = {
-    files_changed    = "${filemd5(join(",", fileset(var.app_configurations, "*")))}"
+    files_changed = join(",", [for file in fileset(var.app_configurations, "*") : filemd5("${var.app_configurations}/${file}")])
     commands_changed = sha1(join(",", coalesce(var.os_commands, [])))
   }
 
