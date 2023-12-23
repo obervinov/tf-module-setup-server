@@ -1,5 +1,6 @@
-
-# Create acl policies, tokens, nodes, and services based on os_consul_agent
+# Provising resources in Consul
+# Create acl policy and token
+# Registration node and service in consul-service
 resource "consul_acl_policy" "default" {
   count = var.os_consul_agent.enabled ? 1 : 0
 

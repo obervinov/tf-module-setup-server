@@ -1,6 +1,6 @@
-# Prepare the environment for the application
-# Set the environment variables, copy the files and execute the commands
-
+# Prepare the os environment
+# Set the environment variables, copy configuration files and execute the manually commands
+# Set consul and dns settings
 resource "null_resource" "cloudinit" {
   triggers = {
     droplet = digitalocean_droplet.default.id
@@ -121,7 +121,7 @@ resource "null_resource" "files" {
   count = can(var.app_configurations) && fileset(var.app_configurations, "*") != [] ? 1 : 0
 
   triggers = {
-    always_run = timestamp()
+    files_changed = "${filemd5(join(",", fileset(var.app_configurations, "*")))}"
   }
 
   connection {
@@ -145,7 +145,8 @@ resource "null_resource" "files" {
 resource "null_resource" "additional_commands" {
   count = length(coalesce(var.os_commands, [])) > 0 ? 1 : 0
   triggers = {
-    always_run = timestamp()
+    files_changed    = "${filemd5(join(",", fileset(var.app_configurations, "*")))}"
+    commands_changed = sha1(join(",", coalesce(var.os_commands, [])))
   }
 
   connection {
