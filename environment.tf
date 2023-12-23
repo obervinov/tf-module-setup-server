@@ -121,7 +121,7 @@ resource "null_resource" "files" {
   count = can(var.app_configurations) && fileset(var.app_configurations, "*") != [] ? 1 : 0
 
   triggers = {
-    files_changed = "${filemd5(join(",", fileset(var.app_configurations, "*")))}"
+    files_changed = join(",", [for file in fileset(var.app_configurations, "*") : filemd5("${var.app_configurations}/${file}")])
   }
 
   connection {
