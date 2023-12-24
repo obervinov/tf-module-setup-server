@@ -237,11 +237,12 @@ DNS=${var.os_resolved_conf.nameservers}
 DNSSEC=false
 Domains=${var.os_resolved_conf.domains}
 EOF
-    destination = "/etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf"
+    destination = "/tmp/terraform-module-setup-environment.conf"
   }
 
   provisioner "remote-exec" {
     inline = [
+      "sudo mv /tmp/terraform-module-setup-environment.conf /etc/systemd/resolved.conf.d/terraform-module-setup-environment.conf",
       "sudo systemctl restart systemd-resolved"
     ]
   }
