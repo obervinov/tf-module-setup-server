@@ -256,8 +256,7 @@ resource "null_resource" "volume_mount" {
   count = var.droplet_volume_size > 0 ? 1 : 0
 
   triggers = {
-    volume_size_changed = var.droplet_volume_size
-    droplet             = digitalocean_droplet.default.id
+    droplet = digitalocean_droplet.default.id
   }
 
   connection {
@@ -272,7 +271,7 @@ resource "null_resource" "volume_mount" {
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /mnt/${var.droplet_name}-${var.droplet_region}-volume",
-      "new_line='/mnt/${var.droplet_name}-${var.droplet_region}-volume /dev/sda ext4 defaults,nofail,discard,noatime 0 2' && grep -q $new_line /etc/fstab || echo $new_line | sudo tee -a /etc/fstab",
+      "echo '/mnt/${var.droplet_name}-${var.droplet_region}-volume /dev/sda ext4 defaults,nofail,discard,noatime 0 2' | sudo tee -a /etc/fstab",
       "mount -a"
     ]
   }
