@@ -272,7 +272,7 @@ resource "null_resource" "volume_mount" {
     inline = [
       "sudo mkdir -p /mnt/${var.droplet_name}-${var.droplet_region}-volume",
       "echo '/mnt/${var.droplet_name}-${var.droplet_region}-volume /dev/sda ext4 defaults,nofail,discard,noatime 0 2' | sudo tee -a /etc/fstab",
-      "mount -a"
+      "sudo mount -a"
     ]
   }
 
