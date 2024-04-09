@@ -9,9 +9,9 @@ variable "droplet_name" {
 }
 
 variable "droplet_image" {
-  description = "The image of the droplet (must be available in the region). Default: packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1"
+  description = "The image of the droplet (must be available in the region). Default: packer-ubuntu-x64-1vcpu-512mb-10gb-rev.1"
   type        = string
-  default     = "packer-ubuntu-23-10-x64-1vcpu-512mb-10gb-rev.1"
+  default     = "packer-ubuntu-x64-1vcpu-512mb-10gb-rev.1"
 }
 
 variable "droplet_region" {
