@@ -122,6 +122,7 @@ resource "null_resource" "files" {
 
   triggers = {
     files_changed = join(",", [for file in fileset(var.app_configurations, "*") : filemd5("${var.app_configurations}/${file}")])
+    droplet       = digitalocean_droplet.default.id
   }
 
   connection {
@@ -147,6 +148,7 @@ resource "null_resource" "additional_commands" {
   triggers = {
     files_changed = join(",", [for file in fileset(var.app_configurations, "*") : filemd5("${var.app_configurations}/${file}")])
     commands_changed = sha1(join(",", coalesce(var.os_commands, [])))
+    droplet = digitalocean_droplet.default.id
   }
 
   connection {
