@@ -4,7 +4,12 @@ locals {
     "DROPLET_EXTERNAL_IP=${digitalocean_droplet.default.ipv4_address}",
   ]
 
-  default_packages = []
+  default_packages = [
+    "curl",
+    "jq",
+    "unzip",
+    "zip"
+  ]
 
   default_commands = [
     "sudo mkdir -p ${var.app_data}/${var.app_configurations}",
