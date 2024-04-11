@@ -16,8 +16,7 @@ resource "null_resource" "cloudinit" {
   provisioner "remote-exec" {
     inline = [
       "cloud-init status --wait",
-      "cloud-init status --long",
-      "sudo cloud-init schema --system"
+      "cloud-init status --long"
     ]
   }
 

@@ -8,7 +8,8 @@ locals {
     "curl",
     "jq",
     "unzip",
-    "zip"
+    "zip",
+    "net-tools"
   ]
 
   default_commands = [
