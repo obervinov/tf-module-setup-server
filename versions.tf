@@ -4,11 +4,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = ">= 2.28.1"
-    }
-    consul = {
-      source  = "hashicorp/consul"
-      version = "2.20.0"
+      version = ">= 2.36.0"
     }
   }
 }

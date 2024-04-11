@@ -27,7 +27,7 @@ variable "droplet_size" {
 }
 
 variable "droplet_tags" {
-  description = "The tags of the droplet (for firewall rules and registration in the consul)"
+  description = "The tags of the droplet (for firewall rules)"
   type        = list(any)
 }
 
@@ -100,25 +100,6 @@ variable "os_environment_variables" {
   default     = []
 }
 
-variable "os_consul_agent" {
-  description = "Consul agent configuration for services registration"
-  type = object({
-    enabled = bool
-    services = list(object({
-      name = string
-      port = number
-      check = object({
-        http   = string
-        status = string
-      })
-    }))
-  })
-  default = {
-    enabled  = false
-    services = []
-  }
-}
-
 variable "os_swap_size" {
   description = "Size of swap in GB"
   type        = number
@@ -138,19 +119,6 @@ variable "os_hosts" {
   description = "List with /etc/hosts"
   type        = list(string)
   default     = []
-}
-
-variable "os_loki" {
-  type = object({
-    enabled = bool
-    version = string
-    url     = string
-  })
-  default = {
-    enabled = false
-    version = "2.8.7"
-    url     = "http://loki:3100"
-  }
 }
 
 variable "app_data" {
