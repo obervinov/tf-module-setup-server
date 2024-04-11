@@ -11,7 +11,7 @@ variable "droplet_name" {
 variable "droplet_image" {
   description = "The image of the droplet (must be available in the region). Default: packer-ubuntu-x64-1vcpu-512mb-10gb-rev.1"
   type        = string
-  default     = "packer-ubuntu-x64-1vcpu-512mb-10gb-rev.1"
+  default     = "ubuntu-1vcpu-512mb.rev1"
 }
 
 variable "droplet_region" {
@@ -130,7 +130,7 @@ variable "app_data" {
 variable "app_configurations" {
   description = "The path to the directories with configurations that will be copied to the created server"
   type        = string
-  default     = "configs/"
+  default     = "configurations/"
 }
 
 variable "app_cname_records" {
