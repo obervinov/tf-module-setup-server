@@ -1,7 +1,7 @@
 # Provising resources in DigitalOcean
 # Droplet, reserved IP, DNS record, volume, volume snapshot
 resource "digitalocean_droplet" "default" {
-  name          = "${var.droplet_name}-${var.droplet_size}-${var.droplet_region}"
+  name          = "${var.droplet_name}-${var.droplet_region}"
   image         = data.digitalocean_droplet_snapshot.default.id
   region        = var.droplet_region
   size          = var.droplet_size
