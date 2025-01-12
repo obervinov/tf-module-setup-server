@@ -6,9 +6,7 @@ locals {
 
   default_packages = [
     "curl",
-    "jq",
-    "unzip",
-    "zip",
+    "mc",
     "net-tools"
   ]
 
@@ -60,19 +58,19 @@ data "digitalocean_ssh_key" "remote_provisioner" {
   name = "terraform"
 }
 
-data "digitalocean_project" "default" {
+data "digitalocean_project" "this" {
   name = var.droplet_project
 }
 
-data "digitalocean_domain" "default" {
+data "digitalocean_domain" "this" {
   name = var.droplet_dns_zone
 }
 
-data "digitalocean_vpc" "default" {
+data "digitalocean_vpc" "this" {
   name = "${var.droplet_region}-vpc-${var.droplet_project}"
 }
 
-data "digitalocean_droplet_snapshot" "default" {
+data "digitalocean_droplet_snapshot" "this" {
   name        = var.droplet_image
   region      = var.droplet_region
   most_recent = true

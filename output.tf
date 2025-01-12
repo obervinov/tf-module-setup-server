@@ -1,17 +1,17 @@
 output "droplet_info" {
   description = "Droplet base info"
   value = {
-    id   = digitalocean_droplet.default.id
-    name = digitalocean_droplet.default.name
+    id   = digitalocean_droplet.this.id
+    name = digitalocean_droplet.this.name
   }
 }
 
 output "droplet_networks" {
   description = " Droplet networks addresses"
   value = {
-    internal_v4 = digitalocean_droplet.default.ipv4_address_private
-    external_v4 = digitalocean_droplet.default.ipv4_address
-    reserved_v4 = var.droplet_reserved_ip ? digitalocean_reserved_ip.default[0].ip_address : ""
+    internal_v4 = digitalocean_droplet.this.ipv4_address_private
+    external_v4 = digitalocean_droplet.this.ipv4_address
+    reserved_v4 = var.droplet_reserved_ip ? digitalocean_reserved_ip.this[0].ip_address : ""
   }
 }
 
@@ -26,15 +26,15 @@ output "droplet_user" {
 output "droplet_dns" {
   description = "Droplet dns record info"
   value = {
-    dns_record    = var.droplet_dns_record ? digitalocean_record.default[0].fqdn : ""
-    cname_records = join(", ", [for item in var.app_cname_records : "${item}.${data.digitalocean_domain.default.name}"])
+    dns_record    = var.droplet_dns_record ? digitalocean_record.this[0].fqdn : ""
+    cname_records = join(", ", [for item in var.app_cname_records : "${item}.${data.digitalocean_domain.this.name}"])
   }
 }
 
 output "droplet_volume" {
   description = "Droplet additional volume info"
   value = {
-    name = var.droplet_volume_size > 0 ? digitalocean_volume.default[0].name : ""
+    name = var.droplet_volume_size > 0 ? digitalocean_volume.this[0].name : ""
     size = var.droplet_volume_size
   }
 }

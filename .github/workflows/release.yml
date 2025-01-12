@@ -1,10 +1,14 @@
 ---
-name: Create GitHub Release
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  create-release:
-    uses: obervinov/_templates/.github/workflows/create.release.yml@release/v1.0.5
+  name: Release
+  
+  on:
+    pull_request:
+      branches:
+        - main
+      types:
+        - closed
+  
+  jobs:
+    create-release:
+      if: github.event.pull_request.merged == true
+      uses: obervinov/_templates/.github/workflows/release.yaml@v2.0.2
