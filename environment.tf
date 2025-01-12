@@ -3,7 +3,7 @@
 resource "null_resource" "cloudinit" {
   depends_on = [digitalocean_droplet.this]
 
-  triggers = {droplet = digitalocean_droplet.this.id}
+  triggers = { droplet = digitalocean_droplet.this.id }
 
   connection {
     host        = digitalocean_droplet.this.ipv4_address_private
@@ -49,7 +49,7 @@ resource "null_resource" "etc_hosts" {
 }
 
 resource "null_resource" "swap" {
-  depends_on = [null_resource.cloudinit] 
+  depends_on = [null_resource.cloudinit]
 
   count = can(var.os_swap_size) && var.os_swap_size > 0 ? 1 : 0
 
@@ -164,7 +164,7 @@ resource "null_resource" "volume_mount" {
 
   count = var.droplet_volume_size > 0 ? 1 : 0
 
-  triggers = {droplet = digitalocean_droplet.this.id}
+  triggers = { droplet = digitalocean_droplet.this.id }
 
   connection {
     host        = digitalocean_droplet.this.ipv4_address_private

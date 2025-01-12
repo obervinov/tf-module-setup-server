@@ -20,7 +20,7 @@ resource "digitalocean_droplet" "this" {
 resource "digitalocean_project_resources" "this" {
   depends_on = [digitalocean_droplet.this]
 
-  project = data.digitalocean_project.this.id
+  project   = data.digitalocean_project.this.id
   resources = [digitalocean_droplet.this.urn]
 }
 
@@ -42,7 +42,7 @@ resource "digitalocean_record" "this" {
 
 resource "digitalocean_record" "additional" {
   depends_on = [digitalocean_record.this]
-  
+
   for_each = length(var.app_cname_records) > 0 ? toset(var.app_cname_records) : toset([])
 
   domain = element(data.digitalocean_domain.this.*.id, 0)
