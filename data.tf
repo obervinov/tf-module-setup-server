@@ -1,7 +1,7 @@
 locals {
   default_environment_variables = [
-    "DROPLET_INTERNAL_IP=${digitalocean_droplet.default.ipv4_address_private}",
-    "DROPLET_EXTERNAL_IP=${digitalocean_droplet.default.ipv4_address}",
+    "DROPLET_INTERNAL_IP=${digitalocean_droplet.this.ipv4_address_private}",
+    "DROPLET_EXTERNAL_IP=${digitalocean_droplet.this.ipv4_address}",
   ]
 
   default_packages = [

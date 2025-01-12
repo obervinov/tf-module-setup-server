@@ -7,3 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 **Full Changelog**: https://github.com/obervinov/terraform-setup-environment/commits/v1.0.0 by @obervinov
 #### 💥 Breaking Changes
 * first release of the module
+
+## v1.0.1 - 2025-01-12
+### What's Changed
+**Full Changelog**: https://github.com/obervinov/terraform-setup-environment/compare/v1.0.0...v1.0.1 by @obervinov
+#### 🐛 Bug Fixes
+* fix typos
