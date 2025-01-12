@@ -4,6 +4,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## v1.0.0 - 2025-01-12
 ### What's Changed
-**Full Changelog**: https://github.com/obervinov/terraform-setup-environment/commits/v1.0.0 by @obervinov in
+**Full Changelog**: https://github.com/obervinov/terraform-setup-environment/commits/v1.0.0 by @obervinov
 #### 💥 Breaking Changes
 * **Module release**
