@@ -16,5 +16,5 @@
     pr:
       uses: obervinov/_templates/.github/workflows/pr.yaml@v2.0.2
 
-    terraform-check:
+    terraform:
       uses: obervinov/_templates/.github/workflows/terraform.yaml@v2.0.2
