@@ -6,7 +6,7 @@ resource "null_resource" "cloudinit" {
   triggers = { droplet = digitalocean_droplet.this.id }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -33,7 +33,7 @@ resource "null_resource" "etc_hosts" {
   }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -59,7 +59,7 @@ resource "null_resource" "swap" {
   }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -90,7 +90,7 @@ resource "null_resource" "environment_variables" {
   }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -117,7 +117,7 @@ resource "null_resource" "files" {
   }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -147,7 +147,7 @@ resource "null_resource" "additional_commands" {
   }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false
@@ -167,7 +167,7 @@ resource "null_resource" "volume_mount" {
   triggers = { droplet = digitalocean_droplet.this.id }
 
   connection {
-    host        = digitalocean_droplet.this.ipv4_address_private
+    host        = local.remote_provisioner_host
     user        = "terraform"
     type        = "ssh"
     agent       = false

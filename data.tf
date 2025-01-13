@@ -1,21 +1,19 @@
 locals {
+  remote_provisioner_host = var.droplet_provisioner_external_ip ? digitalocean_droplet.this.ipv4_address : digitalocean_droplet.this.ipv4_address_private
   default_environment_variables = [
     "DROPLET_INTERNAL_IP=${digitalocean_droplet.this.ipv4_address_private}",
     "DROPLET_EXTERNAL_IP=${digitalocean_droplet.this.ipv4_address}",
   ]
-
   default_packages = [
     "curl",
     "mc",
     "net-tools"
   ]
-
   default_commands = [
     "sudo mkdir -p ${var.app_data}/${var.app_configurations}",
     "sudo chown ${var.droplet_user}:terraform ${var.app_data}/${var.app_configurations}",
     "sudo chmod 775 ${var.app_data}/${var.app_configurations}",
   ]
-
   user_data = <<EOF
 #cloud-config
 
