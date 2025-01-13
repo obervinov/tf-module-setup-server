@@ -76,6 +76,12 @@ variable "droplet_provisioner_ssh_key" {
   type        = string
 }
 
+variable "droplet_provisioner_external_ip" {
+  description = "External IP for provisioner connection to droplet"
+  type        = bool
+  default     = false
+}
+
 variable "droplet_do_agent" {
   description = "Enable DigitalOcean agent for droplet (for monitoring and backups)"
   type        = bool
