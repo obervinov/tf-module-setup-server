@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### What's Changed
 **Full Changelog**: https://github.com/obervinov/terraform-setup-environment/compare/v1.0.1...v1.1.0 by @obervinov
 #### 🚀 Features
-* add support `external_ip` variable for remote provisioner
+* add support for the droplet_provisioner_external_ip variable for the remote provider
 
 
 ## v1.0.1 - 2025-01-12
